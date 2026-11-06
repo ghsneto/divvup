@@ -24,7 +24,7 @@ App Android (Kotlin + Jetpack Compose + Firebase) de divisão gamificada de tare
 
 ## Design
 - Design system **divvup** (Claude Design): https://claude.ai/artifact/UjULqNSrf5z5nr8z4KdEQq — leia `project/README.md` e `project/tokens.json` dele antes de mexer em UI.
-- As telas vêm do Claude Design; implemente fielmente em Compose.
+- As telas vêm do Claude Design; implemente fielmente em Compose. Comportamento, estados e navegação de cada tela estão em [TELAS.md](TELAS.md).
 - Toda cor, tipografia, forma e espaçamento vem de `DivvupTheme` em `:core:designsystem`. **Nada de valores literais nas telas.**
 - Swipe aceitar = `accent` (lima); passar = `danger`. Lima nunca como texto sobre fundo claro.
 - Títulos em minúsculas, sem emoji na UI, números no formato pt-BR, todos os textos em `strings.xml`.

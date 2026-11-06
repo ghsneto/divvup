@@ -196,6 +196,8 @@ reports/{id}                 houseId, reporterId, reason, createdAt   ← v1.1
 
 ## 6. Inventário de telas
 
+> **Especificação detalhada de cada tela** (conteúdo, ações, estados, navegação, componentes e ícones): **[TELAS.md](TELAS.md)**. A tabela abaixo é o resumo; em caso de diferença, vale o TELAS.md.
+
 Cada tela deve ter os estados **carregando, vazio, erro e sem permissão** (quando aplicável).
 
 ### v1.0
