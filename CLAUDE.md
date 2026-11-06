@@ -34,3 +34,17 @@ App Android (Kotlin + Jetpack Compose + Firebase) de divisão gamificada de tare
 - Antes de declarar algo pronto: build + testes unitários + testes do Emulator relevantes passando.
 - Regras de domínio e Functions: escreva o teste junto (de preferência antes).
 - Commits pequenos, mensagem em português, referenciando `R-xx` quando aplicável.
+
+## Agent skills
+
+### Issue tracker
+
+Issues e tickets ficam no GitHub Issues de `ghsneto/divvup`, operados com o `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Vocabulário padrão de cinco rótulos (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: um `GLOSSARY.md` e `docs/adr/` na raiz. See `docs/agents/domain.md`.
