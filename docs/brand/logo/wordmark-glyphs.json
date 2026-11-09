@@ -1,0 +1,122 @@
+{
+ "units": "wordmark: cap height 100, cap top y=0, baseline y=100, x from the pen origin; index = data-glyph",
+ "text": "divvup",
+ "glyphs": [
+  {
+   "index": 1,
+   "char": "d",
+   "x0": 2.88,
+   "x1": 73.18,
+   "pen_x": 0.0,
+   "advance": 77.58,
+   "cap_top": 0,
+   "baseline": 100,
+   "stems": [
+    [
+     2.88,
+     27.28
+    ],
+    [
+     49.24,
+     73.18
+    ]
+   ]
+  },
+  {
+   "index": 2,
+   "char": "i",
+   "x0": 75.3,
+   "x1": 103.64,
+   "pen_x": 73.03,
+   "advance": 33.03,
+   "cap_top": 0,
+   "baseline": 100,
+   "stems": [
+    [
+     77.42,
+     101.52
+    ]
+   ]
+  },
+  {
+   "index": 3,
+   "char": "v",
+   "x0": 101.82,
+   "x1": 174.09,
+   "pen_x": 101.52,
+   "advance": 74.39,
+   "cap_top": 0,
+   "baseline": 100,
+   "stems": [
+    [
+     112.27,
+     134.36
+    ],
+    [
+     142.25,
+     163.64
+    ]
+   ]
+  },
+  {
+   "index": 4,
+   "char": "v",
+   "x0": 171.67,
+   "x1": 243.94,
+   "pen_x": 171.36,
+   "advance": 72.88,
+   "cap_top": 0,
+   "baseline": 100,
+   "stems": [
+    [
+     182.12,
+     204.21
+    ],
+    [
+     212.1,
+     233.48
+    ]
+   ]
+  },
+  {
+   "index": 5,
+   "char": "u",
+   "x0": 243.64,
+   "x1": 310.76,
+   "pen_x": 239.7,
+   "advance": 75.45,
+   "cap_top": 0,
+   "baseline": 100,
+   "stems": [
+    [
+     243.64,
+     267.73
+    ],
+    [
+     286.48,
+     310.76
+    ]
+   ]
+  },
+  {
+   "index": 6,
+   "char": "p",
+   "x0": 315.0,
+   "x1": 385.3,
+   "pen_x": 310.61,
+   "advance": 77.58,
+   "cap_top": 0,
+   "baseline": 100,
+   "stems": [
+    [
+     315.0,
+     338.94
+    ],
+    [
+     360.91,
+     385.3
+    ]
+   ]
+  }
+ ]
+}
