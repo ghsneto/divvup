@@ -20,7 +20,9 @@ App Android (Kotlin + Jetpack Compose + Firebase) de divisão gamificada de tare
 - Módulos: `:app`, `:core:{designsystem,model,domain,data,testing}`, `:feature:{auth,onboarding,house,deck,tasks,ranking,notifications,profile,discover}`.
 - `:core:domain` é Kotlin puro (sem Android/Firebase): toda regra de cálculo mora lá e é testada por unidade.
 - Cloud Functions em TypeScript em `functions/`, testadas no Emulator.
-- minSdk 26. Flavors `dev` / `prod`.
+- minSdk 26, compileSdk 37, targetSdk 37, JDK 21. Flavors `dev` / `prod` (dimensão `ambiente`).
+- Convenções de build em `build-logic/` (`divvup.android.application`, `.library`, `.compose`, `.feature`, `divvup.hilt`, `divvup.jvm.library`); versões em `gradle/libs.versions.toml`. Só adote versões publicadas há pelo menos duas semanas.
+- Verificação completa (a mesma da CI): `./gradlew check assembleDevDebug assembleProdDebug`. `check` roda lint estrito (aviso = erro), testes unitários dos dois flavors e a guarda `verificarDominioPuro`.
 
 ## Design
 - **O app tem que ficar igual ao desenho.** A referência está versionada em [`docs/design/`](docs/design/README.md): leia o README dela antes de mexer em qualquer UI. Ela traz o mapa código da TELAS.md → artboard, os PNGs claro/escuro de cada tela, o HTML-fonte com as medidas exatas, tokens, ícones, ilustrações e avatares.

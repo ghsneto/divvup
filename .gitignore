@@ -1,2 +1,19 @@
 # Arquivos de trabalho da ferramenta de identidade visual (a entrega fica em docs/brand)
 brand-identity/
+
+# Gradle / Android
+.gradle/
+build/
+local.properties
+.kotlin/
+*.iml
+.idea/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Segredos: nunca commitar (CLAUDE.md)
+google-services.json
+*.jks
+*.keystore
+keystore.properties

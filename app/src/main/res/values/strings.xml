@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">divvup</string>
+    <!-- Tela provisória do esqueleto (issue #1); some quando a Splash (A1) existir. -->
+    <string name="placeholder_titulo">divvup</string>
+</resources>
