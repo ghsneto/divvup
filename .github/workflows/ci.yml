@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  android:
+    name: Build, lint e testes
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      # `check` = lint (todas as variantes, aviso vira erro) + testes unitários
+      # (dev e prod) + guarda de :core:domain Kotlin puro.
+      - name: Build e verificação
+        run: ./gradlew check assembleDevDebug assembleProdDebug --stacktrace
+
+      - name: Relatórios
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorios
+          path: |
+            **/build/reports/
+            **/build/test-results/
+          retention-days: 7

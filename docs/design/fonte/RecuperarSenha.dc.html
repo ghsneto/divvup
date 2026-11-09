@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>recuperar senha</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar" style="padding-left:8px"><a class="iconbtn" href="{{L.Entrar}}" data-to="Entrar" aria-label="Voltar"><span class="ic i-chev-l"></span></a></header>
+
+<sc-if value="{{form}}" hint-placeholder-val="{{true}}">
+<div style="padding:12px 16px 0;flex:1;display:flex;flex-direction:column">
+<span class="label muted">acontece</span>
+<h1 class="h1" style="font-size:57px">esqueceu a senha?</h1>
+<p class="txt muted" style="margin:16px 0 28px;max-width:280px">Manda seu e-mail que a gente envia um link pra criar outra.</p>
+<div class="field"><label class="label" for="r-mail">e-mail</label><input id="r-mail" class="in" type="email" value="{{mail}}" onChange="{{setMail}}" autocomplete="email"></div>
+<button type="button" class="btn btn-p btn-w" style="margin-top:20px" onClick="{{send}}"><span class="ic i-email"></span>Enviar link</button>
+</div>
+</sc-if>
+
+<sc-if value="{{sent}}" hint-placeholder-val="{{false}}">
+<div style="padding:12px 16px 0;flex:1;display:flex;flex-direction:column">
+<div class="a-r" style="position:relative;width:200px;height:132px;margin:8px 0 28px" aria-hidden="true">
+<div style="position:absolute;inset:0;background:var(--ultramarino);border-radius:12px"></div>
+<svg width="200" height="132" viewBox="0 0 200 132" style="position:absolute;inset:0"><path d="M0 12 L100 76 L200 12" fill="none" stroke="#f5f5f0" stroke-width="4"/></svg>
+<span style="position:absolute;right:-18px;top:-16px;width:52px;height:52px;border-radius:999px;background:var(--lima);color:var(--tinta);display:flex;align-items:center;justify-content:center" class="a-pop d4"><span class="ic i-check"></span></span>
+</div>
+<span class="label muted">enviado</span>
+<h1 class="h1" style="font-size:57px">olha sua caixa de entrada</h1>
+<p class="txt" style="margin:16px 0 0">Mandamos um link para <b>{{mail}}</b>.</p>
+<p class="small muted" style="margin-top:8px">Não chegou em 5 minutos? Confere o spam.</p>
+<div style="margin-top:auto;padding-bottom:24px;display:flex;flex-direction:column;gap:8px">
+<a class="btn btn-p btn-w" href="{{L.Entrar}}" data-to="Entrar">Voltar para entrar</a>
+<button type="button" class="btn btn-t" onClick="{{again}}">Usar outro e-mail</button>
+</div>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"enviado":{"editor":"boolean","default":false},"$preview":{"width":360,"height":800}}'>
+var __GO = false;
+var __T = ['Entrar'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = Object.assign({ mail: 'iane@email.com' }, this.state || {});
+    var sent = s.sent == null ? !!this.props.enviado : s.sent;
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      mail: s.mail, form: !sent, sent: sent,
+      setMail: function (e) { self.setState({ mail: e.target.value }); },
+      send: function () { self.setState({ sent: true }); },
+      again: function () { self.setState({ sent: false }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

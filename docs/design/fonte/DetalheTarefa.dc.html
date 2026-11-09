@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>detalhe da tarefa</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<div class="scroll">
+<div style="height:248px;position:relative;border-bottom:1px solid var(--border)">
+<img src="{{t.img}}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">
+<a class="iconbtn" href="{{L.Main}}" data-to="Main" aria-label="Voltar" style="position:absolute;left:8px;top:8px;background:var(--surface);color:var(--text);border:1px solid var(--border)"><span class="ic i-chev-l"></span></a>
+<sc-if value="{{canEdit}}" hint-placeholder-val="{{false}}"><a class="iconbtn" href="{{L.NovaTarefa}}" data-to="NovaTarefa" aria-label="Editar tarefa" style="position:absolute;right:8px;top:8px;background:var(--surface);color:var(--text);border:1px solid var(--border)"><span class="ic i-editar"></span></a></sc-if>
+<span style="position:absolute;left:16px;bottom:-15px;display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 12px;border-radius:999px;background:var(--surface);border:1px solid var(--border)"><span class="ic ic-xs {{t.icon}}"></span><span class="label" style="font-size:12px">{{t.cat}}</span></span>
+</div>
+
+<div style="padding:32px 16px 24px">
+<span class="st {{st.cls}}"><span class="ic {{st.icon}}"></span>{{st.txt}}</span>
+<h1 class="h3" style="margin-top:12px">{{t.title}}</h1>
+<p class="txt muted" style="margin-top:12px">{{t.desc}}</p>
+
+<dl style="margin:24px 0 0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border-top:1px solid var(--border)">
+<div style="padding:16px 12px 16px 0;border-bottom:1px solid var(--border);border-right:1px solid var(--border)"><dt class="label muted">pontos</dt><dd style="margin:8px 0 0;display:flex;align-items:center;gap:8px"><span class="pb" style="font-size:20px">{{ptsShown}}<small>pts</small></span><sc-if value="{{half}}" hint-placeholder-val="{{false}}"><span class="small muted" style="text-decoration:line-through">{{t.pts}}</span></sc-if></dd></div>
+<div style="padding:16px 0 16px 16px;border-bottom:1px solid var(--border)"><dt class="label muted">prazo</dt><dd style="margin:8px 0 0"><span class="txt" style="font-weight:600;display:block">{{t.dueAbs}}</span><span class="small" style="color:{{dueColor}};font-weight:600">{{t.dueRel}}</span></dd></div>
+<div style="padding:16px 12px 16px 0;border-bottom:1px solid var(--border);border-right:1px solid var(--border)"><dt class="label muted">dono</dt><dd style="margin:8px 0 0;display:flex;align-items:center;gap:8px"><span class="av" style="width:24px;height:24px;border:1px dashed {{ownerBorder}}"><img src="{{t.ownerAv}}" alt="" style="opacity:{{ownerOp}}"></span><span class="txt" style="font-weight:600">{{t.owner}}</span></dd></div>
+<div style="padding:16px 0 16px 16px;border-bottom:1px solid var(--border)"><dt class="label muted">como</dt><dd class="txt" style="margin:8px 0 0;font-weight:600">{{t.via}}</dd></div>
+</dl>
+<p class="small muted" style="margin-top:12px;display:flex;align-items:center;gap:8px"><span class="av" style="width:24px;height:24px"><img src="{{t.byAv}}" alt=""></span>criada por {{t.by}} · {{t.when}}</p>
+
+<sc-if value="{{note}}" hint-placeholder-val="{{false}}">
+<p class="small" style="margin-top:20px;background:{{noteBg}};color:{{noteFg}};border-radius:4px;padding:12px;display:flex;gap:8px;font-weight:600"><span class="ic ic-s {{noteIcon}}" style="margin-top:4px"></span>{{noteTxt}}</p>
+</sc-if>
+</div>
+</div>
+
+<sc-if value="{{hasActions}}" hint-placeholder-val="{{true}}">
+<div style="flex:none;padding:12px 16px 16px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--background)">
+<sc-if value="{{aDevolver}}" hint-placeholder-val="{{false}}"><button type="button" class="btn btn-o" onClick="{{askReturn}}"><span class="ic i-devolver"></span>Devolver</button></sc-if>
+<sc-if value="{{aConcluir}}" hint-placeholder-val="{{true}}"><a class="btn btn-p" href="{{L.Concluida}}" data-to="Concluida" style="flex:1"><span class="ic i-check"></span>Concluir</a></sc-if>
+<sc-if value="{{aAssumir}}" hint-placeholder-val="{{false}}"><button type="button" class="btn btn-a" style="flex:1" onClick="{{take}}"><span class="ic i-check"></span>{{assumirLabel}}</button></sc-if>
+<sc-if value="{{aCancelar}}" hint-placeholder-val="{{false}}"><button type="button" class="btn btn-d" style="flex:1" onClick="{{askCancel}}"><span class="ic i-x"></span>Cancelar tarefa</button></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{snack}}" hint-placeholder-val="{{false}}">
+<div class="snack" role="status" style="bottom:88px"><span class="ic ic-s i-check" style="color:var(--lima)"></span><span style="flex:1;font-weight:600;font-size:14px">{{snackTxt}}</span><button class="act" type="button" onClick="{{undoSnack}}">Desfazer</button><span class="bar"></span></div>
+</sc-if>
+
+<sc-if value="{{dlg}}" hint-placeholder-val="{{false}}">
+<div class="scrim" style="justify-content:center">
+<div class="dialog" role="alertdialog" aria-labelledby="d-t">
+<p class="h3" id="d-t" style="font-size:28px">{{dlgTitle}}</p>
+<p class="small muted" style="margin-top:8px">{{dlgBody}}</p>
+<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
+<button type="button" class="btn btn-t" onClick="{{closeDlg}}">Voltar</button>
+<button type="button" class="btn {{dlgCls}}" onClick="{{confirm}}">{{dlgOk}}</button>
+</div>
+</div>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"situacao":{"editor":"enum","options":["aberta","sua","sua24","atrasada","outra","concluida"],"default":"sua"},"admin":{"editor":"boolean","default":true},"$preview":{"width":360,"height":800}}'>
+var EU = '/_blob/e00900d46e0a7e6fc26a8968881f87ba';
+var D = {
+  aberta: { title: 'Passear com o Thor', cat: 'Pets', icon: 'i-pets', img: '/_blob/0308c7d9b996da922b199e0e6807091e', pts: 50, desc: 'Volta no quarteirão, uns 30 minutos. A coleira fica atrás da porta e tem saquinho no bolso dela.', dueAbs: 'sex., 7 nov · 19:00', dueRel: 'vence amanhã', owner: 'ninguém ainda', ownerAv: EU, via: 'no deck', by: 'Bruno', byAv: '/_blob/e17b5e45674dae4c695a8db8214f810e', when: 'hoje às 9h' },
+  sua: { title: 'Limpar o banheiro de cima', cat: 'Banheiro', icon: 'i-banheiro', img: '/_blob/e4af932dd4ca6b9c21d747d7e2502d09', pts: 100, desc: 'Box, pia, vaso e chão. Os produtos ficam no armário do corredor, a luva amarela é a do banheiro.', dueAbs: 'sáb., 8 nov · 18:00', dueRel: 'em 2 dias', owner: 'você', ownerAv: EU, via: 'pelo swipe', by: 'Caio', byAv: '/_blob/394e7cecdc16acb58863ca5eafa147e8', when: 'ontem às 20h' },
+  sua24: { title: 'Tirar o lixo reciclável', cat: 'Lixo', icon: 'i-lixo', img: '/_blob/33f60ac1dc7ce7619f3dfa3b293f5398', pts: 25, desc: 'O caminhão da coleta seletiva passa cedo. Vidro separado, por favor.', dueAbs: 'sex., 7 nov · 07:00', dueRel: 'em 19 h', owner: 'você', ownerAv: EU, via: 'automaticamente', by: 'Bruno', byAv: '/_blob/e17b5e45674dae4c695a8db8214f810e', when: 'segunda' },
+  atrasada: { title: 'Trocar a lâmpada da cozinha', cat: 'Manutenção', icon: 'i-manutencao', img: '/_blob/e22b27595c0f31a27b2076cf823420f3', pts: 50, desc: 'Lâmpada de LED E27 já comprada, tá na gaveta da sala. A escada fica na lavanderia.', dueAbs: 'qua., 5 nov · 20:00', dueRel: 'venceu há 1 dia', owner: 'você', ownerAv: EU, via: 'pelo swipe', by: 'Caio', byAv: '/_blob/394e7cecdc16acb58863ca5eafa147e8', when: 'domingo' },
+  outra: { title: 'Fazer a feira da semana', cat: 'Compras', icon: 'i-compras', img: '/_blob/bf447b271b996a4a7ac4a6baa25b0423', pts: 100, desc: 'A lista tá colada na geladeira. Nota fiscal no grupo pra dividir.', dueAbs: 'sáb., 8 nov · 12:00', dueRel: 'em 2 dias', owner: 'Davi', ownerAv: '/_blob/8b7d1fe2f3912dc58ba9b4909ecce4dd', via: 'pelo swipe', by: 'Davi', byAv: '/_blob/8b7d1fe2f3912dc58ba9b4909ecce4dd', when: 'hoje às 8h' },
+  concluida: { title: 'Lavar a louça do jantar', cat: 'Cozinha', icon: 'i-cozinha', img: '/_blob/97dde59cea6e32f9b1a823e6d64bcd93', pts: 50, desc: 'Pratos, panelas e a forma do bolo.', dueAbs: 'concluída hoje · 21:40', dueRel: 'no prazo', owner: 'você', ownerAv: EU, via: 'pelo swipe', by: 'Ana', byAv: '/_blob/f990b1328564f59bb8c0c4b6947416ec', when: 'hoje às 12h' }
+};
+var ST = {
+  aberta: ['st-p', 'i-deck', 'aberta'], sua: ['st-n', 'i-check', 'sua'], sua24: ['st-info', 'i-raio', 'atribuída a você'],
+  atrasada: ['st-bad', 'i-alerta', 'atrasada'], outra: ['st-n', 'i-perfil', 'de Davi'], concluida: ['st-ok', 'i-check', 'concluída'], cancelada: ['st-n', 'i-x', 'cancelada']
+};
+var __GO = false;
+var __T = ['Concluida', 'Main', 'NovaTarefa'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.state || {}, sit = this.props.situacao || 'sua', admin = this.props.admin !== false;
+    if (s.sit && s.base === sit) sit = s.sit;
+    var t = D[sit] || D[(this.props.situacao || 'sua')], st = ST[sit];
+    var note = null;
+    if (sit === 'sua24') note = ['var(--info-bg)', 'var(--info)', 'i-info', 'Falta menos de 24 h: não dá mais para devolver. Ela veio pra você por ter menos pontos no mês.'];
+    if (sit === 'atrasada') note = ['var(--danger-bg)', 'var(--danger)', 'i-alerta', 'Concluindo agora você ganha ' + (t.pts / 2) + ' pts, metade do valor.'];
+    if (sit === 'outra' && admin) note = ['var(--surface-alt)', 'var(--text)', 'i-cadeado', 'Só leitura. Como admin, você pode cancelar a tarefa.'];
+    if (sit === 'concluida') note = ['var(--success-bg)', 'var(--success)', 'i-check', 'Você ganhou ' + t.pts + ' pts com esta tarefa. Ela já está no histórico da casa.'];
+    if (sit === 'cancelada') note = ['var(--surface-alt)', 'var(--text)', 'i-x', 'Cancelada por você. Ninguém ganha pontos por ela.'];
+    var mine = sit === 'sua' || sit === 'sua24' || sit === 'atrasada';
+    var dlg = s.dlg;
+    var base = this.props.situacao || 'sua';
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      t: t, st: { cls: st[0], icon: st[1], txt: st[2] },
+      ptsShown: sit === 'atrasada' ? t.pts / 2 : (sit === 'concluida' ? '+' + t.pts : t.pts), half: sit === 'atrasada',
+      dueColor: sit === 'atrasada' ? 'var(--danger)' : (sit === 'sua24' ? 'var(--warning)' : 'var(--text-muted)'),
+      ownerOp: sit === 'aberta' ? 0 : 1, ownerBorder: sit === 'aberta' ? 'var(--text-muted)' : 'transparent',
+      canEdit: sit === 'aberta' && admin,
+      note: !!note, noteBg: note ? note[0] : '', noteFg: note ? note[1] : '', noteIcon: note ? note[2] : '', noteTxt: note ? note[3] : '',
+      hasActions: sit !== 'concluida' && sit !== 'cancelada' && !(sit === 'outra' && !admin),
+      aDevolver: sit === 'sua', aConcluir: mine, aAssumir: sit === 'aberta', aCancelar: sit === 'outra' && admin,
+      assumirLabel: 'Assumir · ' + t.pts + ' pts',
+      snack: !!s.snack, snackTxt: s.snack || '',
+      take: function () { self.setState({ sit: 'sua', base: base, snack: 'Tarefa assumida' }); },
+      undoSnack: function () { self.setState({ sit: null, snack: null }); },
+      askReturn: function () { self.setState({ dlg: 'ret' }); },
+      askCancel: function () { self.setState({ dlg: 'cancel' }); },
+      closeDlg: function () { self.setState({ dlg: null }); },
+      confirm: function () { self.setState(dlg === 'ret' ? { dlg: null, sit: 'aberta', base: base, snack: 'Devolvida ao deck' } : { dlg: null, sit: 'cancelada', base: base, snack: 'Tarefa cancelada' }); },
+      dlg: !!dlg,
+      dlgTitle: dlg === 'ret' ? 'Devolver ao deck?' : 'Cancelar esta tarefa?',
+      dlgBody: dlg === 'ret' ? 'Ela volta pra pilha de todo mundo. Você pode devolver enquanto faltar mais de 24 h.' : 'Davi perde a tarefa e ninguém ganha pontos por ela.',
+      dlgOk: dlg === 'ret' ? 'Devolver' : 'Cancelar tarefa', dlgCls: dlg === 'ret' ? 'btn-p' : 'btn-dd'
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>entrar com código</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header style="display:flex;align-items:center;gap:12px;padding:12px 16px 0 8px;flex:none">
+<a class="iconbtn" href="{{L.OnbCasa}}" data-to="OnbCasa" aria-label="Voltar"><span class="ic i-chev-l"></span></a>
+<div style="display:flex;gap:4px;flex:1" aria-label="Passo 3 de 5"><span style="flex:1;height:4px;border-radius:4px;background:var(--text)"></span><span style="flex:1;height:4px;border-radius:4px;background:var(--text)"></span><span style="flex:1;height:4px;border-radius:4px;background:var(--primary)"></span><span style="flex:1;height:4px;border-radius:4px;background:var(--border)"></span><span style="flex:1;height:4px;border-radius:4px;background:var(--border)"></span></div>
+<span class="small muted tnum">3/5</span>
+</header>
+
+<div style="padding:20px 16px 0;flex:1;display:flex;flex-direction:column">
+<span class="label muted">convite</span>
+<h1 class="h1" style="font-size:57px">digita o código</h1>
+<p class="txt muted" style="margin-top:12px;max-width:280px">São 6 caracteres. Vale por 24 h e só pra uma pessoa.</p>
+
+<div class="{{shake}}" style="position:relative;margin-top:28px">
+<div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px" aria-hidden="true">
+<sc-for list="{{boxes}}" as="b" hint-placeholder-count="6"><span style="height:64px;border-radius:4px;border:{{b.bw}} solid {{b.bc}};background:{{b.bg}};display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--text)">{{b.ch}}</span></sc-for>
+</div>
+<label for="cod" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Código de convite</label>
+<input id="cod" value="{{code}}" onChange="{{type}}" maxlength="6" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false" style="position:absolute;inset:0;opacity:0;width:100%;height:64px;cursor:text;font-size:16px">
+</div>
+
+<sc-if value="{{err}}" hint-placeholder-val="{{false}}">
+<div class="a-up" style="margin-top:16px">
+<p class="errmsg"><span class="ic i-alerta"></span>{{errTxt}}</p>
+<sc-if value="{{errMore}}" hint-placeholder-val="{{false}}"><p class="small muted" style="margin-top:4px">{{errMore}}</p></sc-if>
+<sc-if value="{{leave}}" hint-placeholder-val="{{false}}"><a href="{{L.MinhaCasa}}" data-to="MinhaCasa" class="btn btn-d" style="margin-top:12px">Sair da casa atual</a></sc-if>
+</div>
+</sc-if>
+
+<button type="button" class="btn btn-o" onClick="{{paste}}" style="align-self:flex-start;margin-top:16px"><span class="ic ic-s i-copiar"></span>Colar código</button>
+
+<div style="margin:auto 0 24px">
+<sc-if value="{{okLink}}" hint-placeholder-val="{{false}}"><a class="btn btn-p btn-w" href="{{L.BemVindo}}" data-to="BemVindo">Entrar na casa</a></sc-if>
+<sc-if value="{{noLink}}" hint-placeholder-val="{{true}}"><button type="button" class="btn btn-p btn-w {{off}}" onClick="{{submit}}">Entrar na casa</button></sc-if>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"resultado":{"editor":"enum","options":["valido","invalido","expirado","usado","ja-na-casa"],"default":"expirado"},"$preview":{"width":360,"height":800}}'>
+var ERR = {
+  invalido: ['Esse código não existe.', 'Confere letra por letra com quem te mandou.'],
+  expirado: ['Esse código expirou.', 'Peça um novo código para quem te convidou.'],
+  usado: ['Esse código já foi usado.', 'Cada código serve pra uma pessoa só.'],
+  'ja-na-casa': ['Você já está numa casa.', 'Pra entrar nesta, saia da Rep. Cajueiro primeiro.']
+};
+var __GO = false;
+var __T = ['BemVindo', 'MinhaCasa', 'OnbCasa'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = Object.assign({ code: 'K7PQ2X', tried: true, shakeN: 0 }, this.state || {});
+    var res = this.props.resultado || 'expirado';
+    var code = s.code;
+    var boxes = [];
+    for (var i = 0; i < 6; i++) {
+      var ch = code[i] || '', act = i === Math.min(code.length, 5) && code.length < 6;
+      var bad = s.tried && res !== 'valido' && code.length === 6;
+      boxes.push({ ch: ch, bw: act || bad ? '1px' : '1px', bc: bad ? 'var(--danger)' : (act ? 'var(--primary)' : 'var(--border)'), bg: ch ? 'var(--surface)' : 'var(--surface-alt)' });
+    }
+    var err = s.tried && code.length === 6 && res !== 'valido' ? ERR[res] : null;
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      boxes: boxes, code: code, err: !!err, errTxt: err ? err[0] : '', errMore: err ? err[1] : '', leave: !!err && res === 'ja-na-casa',
+      shake: err && s.shakeN ? 'a-shake' : '',
+      off: code.length === 6 ? '' : 'off', okLink: res === 'valido' && code.length === 6, noLink: !(res === 'valido' && code.length === 6),
+      type: function (e) { var v = e.target.value.toUpperCase().replace(/[^A-Z2-9]|[OIL]/g, '').slice(0, 6); self.setState({ code: v, tried: false }); },
+      paste: function () { self.setState({ code: 'K7PQ2X', tried: false }); },
+      submit: function () {
+        if (code.length < 6) return;
+        self.setState({ tried: true, shakeN: (s.shakeN || 0) + 1 });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

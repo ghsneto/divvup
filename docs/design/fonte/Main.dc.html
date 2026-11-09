@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>deck</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+
+<header class="topbar">
+<span class="av" style="width:40px;height:40px"><img src="/_blob/d9c92a38909b721c330d5ebc54fd0207" alt=""></span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column">
+<span class="ttl" style="font-size:16px">rep. cajueiro</span>
+<span class="label muted" style="font-size:12px;white-space:nowrap">novembro · faltam 24 dias</span>
+</div>
+<a class="iconbtn" href="{{L.Notificacoes}}" data-to="Notificacoes" aria-label="Notificações, 3 não lidas"><span class="ic i-sino"></span><span class="count">3</span></a>
+</header>
+
+<div style="position:relative;padding:0 16px 8px;height:52px;flex:none;overflow:hidden">
+<sc-if value="{{noSnack}}" hint-placeholder-val="{{true}}">
+<div class="{{statsCls}}" style="display:flex;align-items:center;gap:16px;height:44px">
+<div style="display:flex;flex-direction:column;line-height:1"><span class="pts" style="white-space:nowrap">325 pts</span><span class="label muted" style="white-space:nowrap">no mês</span></div>
+<span class="st st-n" title="Sequência diária"><span class="ic i-raio"></span>4 dias</span>
+<div style="margin-left:auto;display:flex;align-items:center;gap:8px" aria-label="{{mine}} de 5 tarefas abertas">
+<div style="display:flex;gap:4px">
+<sc-for list="{{segs}}" as="sg" hint-placeholder-count="5"><span style="width:10px;height:14px;border-radius:4px;background:{{sg.bg}}"></span></sc-for>
+</div>
+<span class="small tnum" style="font-weight:600">{{mine}}/5</span>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{snack}}" hint-placeholder-val="{{false}}">
+<div class="snack a-r" role="status" style="position:relative;left:auto;right:auto;bottom:auto;min-height:44px;animation-duration:.32s">
+<span class="ic ic-s {{snackIcon}}" style="color:var(--lima)"></span>
+<span style="flex:1;min-width:0;font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{snackTxt}} <span style="font-weight:400;color:#9ea1aa">· {{snackSub}}</span></span>
+<sc-if value="{{snackUndo}}" hint-placeholder-val="{{true}}"><button class="act" type="button" onClick="{{undo}}"><span class="ic ic-s i-desfazer"></span>Desfazer</button></sc-if>
+<span class="bar"></span>
+</div>
+</sc-if>
+</div>
+
+<main style="flex:1;min-height:0;position:relative;padding:4px 16px 0">
+
+<sc-if value="{{limit}}" hint-placeholder-val="{{false}}">
+<div class="{{limitCls}}" style="position:relative;z-index:4;background:var(--warning-bg);color:var(--text);border-radius:12px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:12px">
+<span class="ic i-cadeado" style="color:var(--warning);margin-top:4px"></span>
+<div style="flex:1"><p class="small" style="font-weight:600">Você já tem 5 tarefas abertas. Conclua uma para pegar outra.</p>
+<a href="{{L.MinhasTarefas}}" data-to="MinhasTarefas" class="small" style="font-weight:600;color:var(--warning)">Ver minhas tarefas</a></div>
+</div>
+</sc-if>
+
+<sc-if value="{{offline}}" hint-placeholder-val="{{false}}">
+<div style="position:relative;z-index:4;background:var(--info-bg);border-radius:12px;padding:12px 16px;display:flex;gap:12px;align-items:center;margin-bottom:12px">
+<span class="ic i-offline" style="color:var(--info)"></span>
+<p class="small" style="font-weight:600;flex:1">Sem conexão. Você vê o que já estava salvo, mas não dá pra deslizar agora.</p>
+</div>
+</sc-if>
+
+<sc-if value="{{showStack}}" hint-placeholder-val="{{true}}">
+<div style="position:relative;height:{{stackH}}px">
+<sc-for list="{{stack}}" as="c" hint-placeholder-count="3">
+<div style="position:absolute;left:0;right:0;top:0;bottom:24px;z-index:{{c.z}};transform:{{c.tf}};transition:{{c.tr}};opacity:{{c.op}};transform-origin:50% 100%;touch-action:none;cursor:{{c.cursor}};pointer-events:{{c.pe}};will-change:transform" onPointerDown="{{c.down}}" onPointerMove="{{c.move}}" onPointerUp="{{c.up}}" onPointerCancel="{{c.up}}" aria-hidden="{{c.hidden}}">
+<article class="card {{c.cls}}" style="height:100%;overflow:hidden;position:relative;display:flex;flex-direction:column" aria-label="{{c.t.title}}, {{c.t.pts}} pontos, {{c.t.due}}">
+<div style="height:200px;position:relative;flex:none;border-bottom:1px solid var(--border)">
+<img src="{{c.t.img}}" alt="" draggable="false" style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none">
+<span style="position:absolute;left:12px;top:12px;display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 12px;border-radius:999px;background:var(--surface);color:var(--text);border:1px solid var(--border)"><span class="ic ic-xs {{c.t.icon}}"></span><span class="label" style="font-size:12px">{{c.t.cat}}</span></span>
+<sc-if value="{{c.t.urgent}}" hint-placeholder-val="{{true}}"><span class="st st-warn" style="position:absolute;right:12px;top:15px"><span class="ic i-relogio"></span>urgente</span></sc-if>
+</div>
+<div style="padding:20px 20px 16px;display:flex;flex-direction:column;flex:1;min-height:0">
+<p class="h3" style="font-size:28px">{{c.t.title}}</p>
+<p class="small muted" style="margin-top:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{c.t.desc}}</p>
+<div style="margin-top:auto;display:flex;align-items:flex-end;gap:12px">
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+<span class="txt" style="font-weight:600;display:flex;align-items:center;gap:8px"><span class="ic ic-s i-relogio"></span>{{c.t.due}}</span>
+<span class="small muted" style="display:flex;align-items:center;gap:8px"><span class="av" style="width:24px;height:24px"><img src="{{c.t.av}}" alt=""></span><span style="white-space:nowrap">por {{c.t.by}} ·</span> <a href="{{L.DetalheAberta}}" data-to="DetalheAberta" style="color:var(--link);font-weight:600">detalhes</a></span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+<span class="label muted" style="font-size:12px">{{c.t.peso}}</span>
+<span class="pb" style="font-size:28px;padding:8px 16px">{{c.t.pts}}<small>pts</small></span>
+</div>
+</div>
+</div>
+
+<div style="position:absolute;inset:0;background:var(--accent);opacity:{{c.okOp}};transition:{{c.ovTr}};pointer-events:none;display:flex;align-items:flex-start;padding:28px 24px">
+<span style="border:1px solid var(--on-accent);color:var(--on-accent);border-radius:4px;padding:4px 12px;transform:rotate(-8deg) scale({{c.okS}});transition:{{c.ovTr}};font-size:36px;font-weight:800;letter-spacing:.12em;font-variation-settings:'opsz' 96,'wdth' 90">É MINHA</span>
+</div>
+<div style="position:absolute;inset:0;background:var(--danger);opacity:{{c.noOp}};transition:{{c.ovTr}};pointer-events:none;display:flex;justify-content:flex-end;align-items:flex-start;padding:28px 24px">
+<span style="border:1px solid var(--on-danger);color:var(--on-danger);border-radius:4px;padding:4px 12px;transform:rotate(8deg) scale({{c.noS}});transition:{{c.ovTr}};font-size:36px;font-weight:800;letter-spacing:.12em;font-variation-settings:'opsz' 96,'wdth' 90">PASSO</span>
+</div>
+<div style="position:absolute;inset:0;background:var(--background);opacity:{{c.shade}};transition:opacity .4s cubic-bezier(.2,.8,.2,1);pointer-events:none"></div>
+
+<sc-if value="{{c.conflict}}" hint-placeholder-val="{{false}}">
+<div class="a-up" style="position:absolute;inset:0;background:var(--tinta);color:#f2f3f5;display:flex;flex-direction:column;justify-content:flex-end;padding:24px;gap:12px">
+<span class="label" style="color:var(--lima)">foi por pouco</span>
+<p class="h2" style="font-size:36px">alguém já pegou essa</p>
+<p class="small" style="display:flex;align-items:center;gap:8px;color:#9ea1aa"><span class="av" style="width:24px;height:24px"><img src="/_blob/8b7d1fe2f3912dc58ba9b4909ecce4dd" alt=""></span>Davi assumiu 1 segundo antes de você</p>
+</div>
+</sc-if>
+</article>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{isLoading}}" hint-placeholder-val="{{false}}">
+<div class="card" style="height:470px;overflow:hidden" aria-busy="true" aria-label="Carregando tarefas">
+<div class="skel" style="height:200px;border-radius:0"></div>
+<div style="padding:20px;display:flex;flex-direction:column;gap:12px">
+<div class="skel" style="height:28px;width:78%"></div>
+<div class="skel" style="height:14px;width:92%"></div>
+<div class="skel" style="height:14px;width:60%"></div>
+<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:92px"><div class="skel" style="height:18px;width:46%"></div><div class="skel" style="height:44px;width:96px;border-radius:999px"></div></div>
+</div>
+</div>
+<div class="shuttle" style="margin-top:20px"></div>
+</sc-if>
+
+<sc-if value="{{isErr}}" hint-placeholder-val="{{false}}">
+<div style="padding:40px 4px 0;display:flex;flex-direction:column;gap:16px">
+<span class="label" style="color:var(--danger);display:flex;align-items:center;gap:8px"><span class="ic ic-s i-alerta"></span>erro</span>
+<p class="h2" style="font-size:36px">o deck não carregou</p>
+<p class="txt muted" style="max-width:280px">A conexão caiu no meio do caminho. Suas tarefas estão salvas, é só tentar de novo.</p>
+<div><button class="btn btn-p" type="button" onClick="{{retry}}"><span class="ic i-refresh"></span>Tentar de novo</button></div>
+</div>
+</sc-if>
+
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}">
+<div class="a-up" style="padding:24px 4px 0;display:flex;flex-direction:column;gap:16px">
+<div style="position:relative;height:150px;margin-bottom:8px" aria-hidden="true">
+<div style="position:absolute;left:0;top:30px;width:150px;height:100px;border:1px dashed var(--border);border-radius:12px;transform:rotate(-6deg)"></div>
+<div style="position:absolute;left:46px;top:14px;width:150px;height:100px;border:1px dashed var(--border);border-radius:12px;transform:rotate(3deg)"></div>
+<div style="position:absolute;left:180px;top:46px;width:44px;height:44px;border-radius:999px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:var(--on-accent)"><span class="ic i-check"></span></div>
+</div>
+<span class="label muted">deck limpo</span>
+<p class="h2" style="font-size:57px">nada pendente por aqui</p>
+<p class="txt muted" style="max-width:260px">A casa tá em dia. Lembrou de algo? Coloca no deck.</p>
+<div><a class="btn btn-p" href="{{L.NovaTarefa}}" data-to="NovaTarefa"><span class="ic i-mais"></span>Criar tarefa</a></div>
+</div>
+</sc-if>
+
+<sc-if value="{{isPassed}}" hint-placeholder-val="{{false}}">
+<div class="a-up" style="padding:24px 4px 0;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;gap:8px;margin-bottom:12px" aria-hidden="true">
+<sc-for list="{{passedThumbs}}" as="pt" hint-placeholder-count="4"><span style="width:64px;height:84px;border-radius:12px;overflow:hidden;border:1px solid var(--border);transform:rotate({{pt.rot}}deg);display:block"><img src="{{pt.img}}" alt="" style="width:100%;height:100%;object-fit:cover"></span></sc-for>
+</div>
+<span class="label muted">fim do deck</span>
+<p class="h2" style="font-size:57px">você passou {{passedN}} tarefas</p>
+<p class="txt muted" style="max-width:270px">Elas voltam sozinhas em 12 h. Quer dar mais uma olhada agora?</p>
+<div style="display:flex;gap:8px"><button class="btn btn-p" type="button" onClick="{{rever}}"><span class="ic i-desfazer"></span>Rever</button><a class="btn btn-o" href="{{L.NovaTarefa}}" data-to="NovaTarefa">Criar tarefa</a></div>
+</div>
+</sc-if>
+</main>
+
+<sc-if value="{{showActions}}" hint-placeholder-val="{{true}}">
+<div style="flex:none;display:grid;grid-template-columns:96px minmax(0,1fr) 56px;gap:8px;padding:12px 16px 12px">
+<button class="btn btn-d {{passOff}}" type="button" onClick="{{passar}}" style="min-height:56px;padding:0;flex-direction:column;gap:0;font-size:14px"><span class="ic i-x"></span>Passar</button>
+<button class="btn btn-a {{takeOff}}" type="button" onClick="{{assumir}}" style="min-height:56px;font-size:16px"><span class="ic {{takeIcon}}"></span>{{takeLabel}}</button>
+<a class="btn btn-p" href="{{L.NovaTarefa}}" data-to="NovaTarefa" aria-label="Nova tarefa" style="min-height:56px;padding:0;border-radius:4px"><span class="ic ic-l i-mais"></span></a>
+</div>
+</sc-if>
+
+
+
+<nav class="tabbar" aria-label="Navegação principal">
+<a class="tab on" href="{{L.Main}}" data-to="Main" aria-current="page"><span class="ic i-deck"></span>Deck</a>
+<a class="tab" href="{{L.MinhasTarefas}}" data-to="MinhasTarefas"><span class="ic i-tarefas"></span>Minhas tarefas</a>
+<a class="tab" href="{{L.Ranking}}" data-to="Ranking"><span class="ic i-ranking"></span>Ranking</a>
+<a class="tab" href="{{L.Perfil}}" data-to="Perfil"><span class="ic i-perfil"></span>Perfil</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"estado":{"editor":"enum","options":["normal","carregando","vazio","passadas","limite","offline","erro"],"default":"normal"},"$preview":{"width":360,"height":800}}'>
+var IMG = {
+  louca: '/_blob/97dde59cea6e32f9b1a823e6d64bcd93', lixo: '/_blob/33f60ac1dc7ce7619f3dfa3b293f5398',
+  banheiro: '/_blob/e4af932dd4ca6b9c21d747d7e2502d09', roupa: '/_blob/fedd6f71ffcd53e0f5649a76694aaf49',
+  mercado: '/_blob/bf447b271b996a4a7ac4a6baa25b0423', pet: '/_blob/0308c7d9b996da922b199e0e6807091e',
+  plantas: '/_blob/0ce9043a42d924421ef5725dd81bb316', lampada: '/_blob/e22b27595c0f31a27b2076cf823420f3',
+  vassoura: '/_blob/95053c824273e7686a9b157ad9538b3b', encomenda: '/_blob/b83e59282e2b53e90b3d4137e4490e73'
+};
+var AV = { ana: '/_blob/f990b1328564f59bb8c0c4b6947416ec', bruno: '/_blob/e17b5e45674dae4c695a8db8214f810e', caio: '/_blob/394e7cecdc16acb58863ca5eafa147e8', davi: '/_blob/8b7d1fe2f3912dc58ba9b4909ecce4dd' };
+function tasks() {
+  return [
+    { id: 1, title: 'Lavar a louça do jantar', cat: 'Cozinha', icon: 'i-cozinha', img: IMG.louca, pts: 50, peso: 'média', due: 'vence hoje às 22h', urgent: true, by: 'Ana', av: AV.ana, desc: 'Pratos, panelas e a forma do bolo. O detergente novo tá embaixo da pia.' },
+    { id: 2, title: 'Tirar o lixo reciclável', cat: 'Lixo', icon: 'i-lixo', img: IMG.lixo, pts: 25, peso: 'leve', due: 'vence amanhã às 7h', urgent: true, by: 'Bruno', av: AV.bruno, desc: 'O caminhão da coleta seletiva passa cedo. Vidro separado, por favor.' },
+    { id: 3, title: 'Limpar o banheiro de cima', cat: 'Banheiro', icon: 'i-banheiro', img: IMG.banheiro, pts: 100, peso: 'pesada', due: 'vence sáb. às 18h', urgent: false, by: 'Caio', av: AV.caio, desc: 'Box, pia, vaso e chão. Os produtos ficam no armário do corredor.' },
+    { id: 4, title: 'Fazer a feira da semana', cat: 'Compras', icon: 'i-compras', img: IMG.mercado, pts: 100, peso: 'pesada', due: 'vence sáb. às 12h', urgent: false, by: 'Davi', av: AV.davi, desc: 'A lista tá colada na geladeira. Nota fiscal no grupo pra dividir.', conflict: true },
+    { id: 5, title: 'Estender a roupa', cat: 'Lavanderia', icon: 'i-lavanderia', img: IMG.roupa, pts: 25, peso: 'leve', due: 'vence amanhã às 18h', urgent: false, by: 'Ana', av: AV.ana, desc: 'A máquina termina às 16h. Pregadores no balde azul.' },
+    { id: 6, title: 'Passear com o Thor', cat: 'Pets', icon: 'i-pets', img: IMG.pet, pts: 50, peso: 'média', due: 'vence amanhã às 19h', urgent: false, by: 'Bruno', av: AV.bruno, desc: 'Volta no quarteirão, 30 minutos. Leva saquinho.' },
+    { id: 7, title: 'Regar as plantas da varanda', cat: 'Plantas', icon: 'i-plantas', img: IMG.plantas, pts: 25, peso: 'leve', due: 'vence dom. às 10h', urgent: false, by: 'Davi', av: AV.davi, desc: 'Menos a suculenta, ela só bebe uma vez por semana.' },
+    { id: 8, title: 'Trocar a lâmpada da cozinha', cat: 'Manutenção', icon: 'i-manutencao', img: IMG.lampada, pts: 50, peso: 'média', due: 'vence seg. às 20h', urgent: false, by: 'Caio', av: AV.caio, desc: 'Lâmpada de LED E27 já comprada, tá na gaveta da sala.' },
+    { id: 9, title: 'Varrer a sala', cat: 'Limpeza geral', icon: 'i-limpeza', img: IMG.vassoura, pts: 50, peso: 'média', due: 'vence seg. às 21h', urgent: false, by: 'Ana', av: AV.ana, desc: 'Inclui embaixo do sofá. Pano no chão depois, se der.' },
+    { id: 10, title: 'Receber a encomenda', cat: 'Outros', icon: 'i-outros', img: IMG.encomenda, pts: 25, peso: 'leve', due: 'vence ter. às 14h', urgent: false, by: 'Bruno', av: AV.bruno, desc: 'Entrega entre 9h e 14h. Alguém precisa estar em casa.' }
+  ];
+}
+var __GO = false;
+var __T = ['DetalheAberta', 'Main', 'MinhasTarefas', 'Notificacoes', 'NovaTarefa', 'Perfil', 'Ranking'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  initial() {
+    var est = this.props.estado || 'normal';
+    var all = tasks();
+    var s = { cards: all, passed: [], mine: 3, dx: 0, dy: 0, drag: false, leave: null, settle: false, enter: 0, snack: null, last: null, conflict: false, touched: false, est: est, shake: 0 };
+    if (est === 'vazio') s.cards = [];
+    if (est === 'passadas') { s.passed = all.slice(0, 4); s.cards = []; }
+    if (est === 'limite') s.mine = 5;
+    return s;
+  }
+  S() { return this.state && this.state.cards ? this.state : this.initial(); }
+  componentDidMount() { this.setState(this.initial()); }
+  componentDidUpdate(p) { if (p.estado !== this.props.estado) this.setState(this.initial()); }
+  componentWillUnmount() { clearTimeout(this.t1); clearTimeout(this.t2); clearTimeout(this.t3); }
+  locked(s) { return s.est === 'offline' || s.est === 'carregando' || s.est === 'erro' || !!s.leave || s.conflict || !!s.enter; }
+  arm() { var self = this; clearTimeout(this.t2); this.t2 = setTimeout(function () { self.setState({ snack: null, last: null }); }, 3000); }
+  // depois de trocar o conteúdo, um quadro sem transição e então tudo volta a animar
+  settle(up) {
+    var self = this; up.settle = true; this.setState(up);
+    clearTimeout(this.t3); this.t3 = setTimeout(function () { self.setState({ settle: false }); }, 40);
+  }
+  commit(dir) {
+    var self = this, s = this.S(), c = s.cards[0];
+    if (!c || this.locked(s)) return;
+    if (dir === 'r' && s.mine >= 5) { this.setState({ dx: 0, dy: 0, drag: false, shake: s.shake + 1, touched: true }); return; }
+    if (dir === 'r' && c.conflict) {
+      this.setState({ dx: 0, dy: 0, drag: false, conflict: true, touched: true });
+      clearTimeout(this.t1);
+      this.t1 = setTimeout(function () {
+        self.setState({ leave: 'x' });
+        self.t1 = setTimeout(function () {
+          var s2 = self.S();
+          self.settle({ leave: null, conflict: false, cards: s2.cards.slice(1), snack: { txt: 'Alguém já pegou essa', sub: 'saiu do deck', undo: false, icon: 'i-alerta' } });
+          self.arm();
+        }, 360);
+      }, 1500);
+      return;
+    }
+    this.setState({ leave: dir, drag: false, touched: true });
+    clearTimeout(this.t1);
+    this.t1 = setTimeout(function () {
+      var s2 = self.S();
+      var up = { leave: null, dx: 0, dy: 0, cards: s2.cards.slice(1), last: { card: c, dir: dir } };
+      if (dir === 'r') { up.mine = s2.mine + 1; up.snack = { txt: 'Tarefa assumida', sub: '+' + c.pts + ' pts ao concluir', undo: true, icon: 'i-check' }; }
+      else { up.passed = s2.passed.concat([c]); up.snack = { txt: 'Você passou', sub: 'volta em 12 h', undo: true, icon: 'i-x' }; }
+      self.settle(up);
+      self.arm();
+    }, 420);
+  }
+  undo() {
+    var self = this, s = this.S(); if (!s.last || s.leave) return;
+    var c = s.last.card, dir = s.last.dir;
+    // quadro 1: o cartão reaparece fora da tela, do lado por onde saiu, e a pilha ainda está promovida
+    var up = { cards: [c].concat(s.cards), snack: null, last: null, enter: dir === 'r' ? 1 : -1, dx: 0, dy: 0 };
+    if (dir === 'r') up.mine = s.mine - 1; else up.passed = s.passed.filter(function (x) { return x.id !== c.id; });
+    clearTimeout(this.t2);
+    this.setState(up);
+    // quadro 2: ele desliza de volta e a pilha desce um degrau
+    clearTimeout(this.t3); this.t3 = setTimeout(function () { self.setState({ enter: 0 }); }, 40);
+  }
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.S();
+    var est = s.est;
+    var limit = s.mine >= 5;
+    var stackOn = s.cards.length > 0 && est !== 'carregando' && est !== 'erro';
+    var segs = [];
+    for (var i = 0; i < 5; i++) segs.push({ bg: i < s.mine ? 'var(--text)' : 'var(--border)' });
+    var thumbs = s.passed.slice(0, 4).map(function (t, i) { return { img: t.img, rot: [-6, 3, -2, 5][i] }; });
+    var banner = limit || est === 'offline';
+
+    // pilha: frente, 2º e 3º visíveis; o 4º espera invisível no lugar do 3º
+    var POSE = [[0, 1, 0], [12, 0.95, 0.12], [24, 0.9, 0.24], [24, 0.9, 0.24]];
+    var lerp = function (a, b, t) { return a + (b - a) * t; };
+    var EASE = 'cubic-bezier(.2,.8,.2,1)';
+    var p = Math.min(Math.abs(s.dx) / 120, 1);
+    var dir = s.leave === 'r' ? 1 : s.leave === 'l' ? -1 : 0;
+    var still = s.drag || s.settle || !!s.enter;
+    var stack = s.cards.slice(0, 4).map(function (t, k) {
+      var tf, tr, op = 1, shade = 0, okOp = 0, noOp = 0;
+      if (k === 0) {
+        if (s.leave === 'x') {
+          tf = 'translateY(40px) scale(.9)'; op = 0; tr = 'transform .36s ' + EASE + ', opacity .36s ' + EASE;
+        } else if (dir) {
+          // continua o arremesso na direção do gesto, girando um pouco mais
+          tf = 'translate(' + (dir * (460 + Math.abs(s.dx))) + 'px,' + Math.round(s.dy * 0.5 + 40) + 'px) rotate(' + (dir * 24) + 'deg)';
+          tr = 'transform .42s cubic-bezier(.3,.5,.4,1)';
+          okOp = dir > 0 ? 1 : 0; noOp = dir < 0 ? 1 : 0;
+        } else if (s.enter) {
+          tf = 'translate(' + (s.enter * 480) + 'px,40px) rotate(' + (s.enter * 24) + 'deg)'; tr = 'none';
+          okOp = s.enter > 0 ? 1 : 0; noOp = s.enter < 0 ? 1 : 0;
+        } else {
+          tf = 'translate(' + s.dx + 'px,' + Math.round(s.dy * 0.35) + 'px) rotate(' + (s.dx / 18).toFixed(2) + 'deg)';
+          // volta com mola quando o gesto não passou do limite
+          tr = still ? 'none' : 'transform .55s cubic-bezier(.34,1.45,.55,1)';
+          okOp = s.dx > 0 ? p : 0; noOp = s.dx < 0 ? p : 0;
+        }
+      } else {
+        // os de trás sobem um degrau junto com o gesto e terminam o caminho quando o da frente sai
+        var tt = (dir || s.leave === 'x' || s.enter) ? 1 : (s.drag ? p * 0.45 : 0);
+        var a = POSE[k], b = POSE[k - 1];
+        var y = lerp(a[0], b[0], tt), sc = lerp(a[1], b[1], tt);
+        shade = lerp(a[2], b[2], tt);
+        if (k === 3) op = tt >= 1 ? 1 : 0;
+        tf = 'translateY(' + y.toFixed(1) + 'px) scale(' + sc.toFixed(4) + ')';
+        tr = still ? 'none' : 'transform .42s ' + EASE + ', opacity .3s ' + EASE;
+      }
+      return {
+        t: t, z: 10 - k, tf: tf, tr: tr, op: op, shade: shade.toFixed(3),
+        okOp: okOp.toFixed ? okOp.toFixed(2) : okOp, noOp: noOp.toFixed ? noOp.toFixed(2) : noOp,
+        okS: (0.8 + 0.2 * Math.min(okOp * 1.4, 1)).toFixed(3), noS: (0.8 + 0.2 * Math.min(noOp * 1.4, 1)).toFixed(3),
+        ovTr: s.drag ? 'none' : 'opacity .25s ' + EASE + ', transform .25s ' + EASE,
+        cls: k === 0 && !s.touched && est === 'normal' ? 'a-nudge' : '',
+        conflict: k === 0 && s.conflict, hidden: k === 0 ? 'false' : 'true',
+        pe: k === 0 ? 'auto' : 'none', cursor: k === 0 ? (s.drag ? 'grabbing' : 'grab') : 'default',
+        down: k === 0 ? function (e) {
+          var st = self.S(); if (self.locked(st)) return;
+          self.sx = e.clientX; self.sy = e.clientY; self.lx = e.clientX; self.lt = e.timeStamp || Date.now(); self.vx = 0;
+          if (e.currentTarget.setPointerCapture) e.currentTarget.setPointerCapture(e.pointerId);
+          self.setState({ drag: true, dx: 0, dy: 0, touched: true });
+        } : undefined,
+        move: k === 0 ? function (e) {
+          if (!self.S().drag) return;
+          var now = e.timeStamp || Date.now(), dt = Math.max(now - self.lt, 1);
+          self.vx = 0.7 * self.vx + 0.3 * ((e.clientX - self.lx) / dt); self.lx = e.clientX; self.lt = now;
+          self.setState({ dx: e.clientX - self.sx, dy: e.clientY - self.sy });
+        } : undefined,
+        up: k === 0 ? function () {
+          var st = self.S(); if (!st.drag) return;
+          // arraste longo ou um "peteleco" rápido contam como swipe
+          var flick = Math.abs(self.vx) > 0.55 && Math.abs(st.dx) > 32 && (self.vx > 0) === (st.dx > 0);
+          if (st.dx > 110 || (flick && st.dx > 0)) self.commit('r');
+          else if (st.dx < -110 || (flick && st.dx < 0)) self.commit('l');
+          else self.setState({ drag: false, dx: 0, dy: 0 });
+        } : undefined
+      };
+    });
+
+    return { L: __L(), __nav: __N(this.props),
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      mine: s.mine, segs: segs, limit: limit, limitCls: s.shake ? 'a-shake' : '', offline: est === 'offline',
+      showStack: stackOn, stackH: banner ? 444 : 500, stack: stack,
+      isLoading: est === 'carregando', isErr: est === 'erro', retry: function () { self.setState({ est: 'carregando' }); clearTimeout(self.t1); self.t1 = setTimeout(function () { self.setState({ est: 'normal' }); }, 1200); },
+      isEmpty: s.cards.length === 0 && s.passed.length === 0 && est !== 'carregando' && est !== 'erro',
+      isPassed: s.cards.length === 0 && s.passed.length > 0,
+      passedN: s.passed.length, passedThumbs: thumbs,
+      showActions: stackOn,
+      passOff: est === 'offline' ? 'off' : '', takeOff: (limit || est === 'offline') ? 'off' : '',
+      takeIcon: limit ? 'i-cadeado' : 'i-check', takeLabel: limit ? 'Limite 5/5' : 'Assumir',
+      snack: !!s.snack, noSnack: !s.snack, statsCls: 'a-l', snackTxt: s.snack ? s.snack.txt : '', snackSub: s.snack ? s.snack.sub : '', snackUndo: s.snack ? s.snack.undo : false, snackIcon: s.snack ? s.snack.icon : 'i-check',
+      passar: function () { self.commit('l'); },
+      assumir: function () { self.commit('r'); },
+      undo: function () { self.undo(); },
+      rever: function () { var st = self.S(); self.setState({ cards: st.passed, passed: [], est: 'normal', touched: true }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

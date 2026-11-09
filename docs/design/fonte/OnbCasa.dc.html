@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>sua casa</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header style="display:flex;align-items:center;gap:12px;padding:12px 16px 0 8px;flex:none">
+<a class="iconbtn" href="{{L.OnbNome}}" data-to="OnbNome" aria-label="Voltar"><span class="ic i-chev-l"></span></a>
+<div style="display:flex;gap:4px;flex:1" aria-label="Passo 2 de 5"><span style="flex:1;height:4px;border-radius:4px;background:var(--text)"></span><span style="flex:1;height:4px;border-radius:4px;background:var(--primary)"></span><span style="flex:1;height:4px;border-radius:4px;background:var(--border)"></span><span style="flex:1;height:4px;border-radius:4px;background:var(--border)"></span><span style="flex:1;height:4px;border-radius:4px;background:var(--border)"></span></div>
+<span class="small muted tnum">2/5</span>
+</header>
+
+<div style="padding:20px 16px 0;flex:1;display:flex;flex-direction:column">
+<span class="label muted">oi, iane</span>
+<h1 class="h1" style="font-size:57px">e a sua casa?</h1>
+
+<a href="{{L.CriarCasa}}" data-to="CriarCasa" class="a-r d1" style="margin-top:28px;display:block;background:var(--ultramarino);color:#ffffff;border-radius:12px;padding:20px;text-decoration:none;position:relative;overflow:hidden;min-height:176px">
+<span class="label" style="color:var(--lima)">você vira admin</span>
+<p style="margin:8px 0 0;font-size:36px;font-weight:800;line-height:1.05;letter-spacing:-.03em;font-variation-settings:'opsz' 96,'wdth' 90">criar uma casa</p>
+<p class="small" style="margin-top:12px;color:#ffffff;max-width:190px">Dá um nome, escolhe o tipo e chama o pessoal com um código.</p>
+<span style="position:absolute;right:16px;bottom:16px;width:48px;height:48px;border-radius:4px;background:var(--lima);color:var(--tinta);display:flex;align-items:center;justify-content:center"><span class="ic i-seta-r"></span></span>
+</a>
+
+<a href="{{L.Codigo}}" data-to="Codigo" class="card a-r d2" style="margin-top:12px;display:flex;align-items:center;gap:16px;padding:20px 16px;text-decoration:none;color:var(--text)">
+<span class="tnum" style="font-size:20px;font-weight:600;letter-spacing:.12em;background:var(--surface-alt);border-radius:4px;padding:8px 12px;flex:none">K7·P</span>
+<span style="flex:1"><span class="ttl" style="display:block">tenho um código</span><span class="small muted">Alguém da casa te mandou 6 letras.</span></span>
+<span class="ic i-chev-r muted"></span>
+</a>
+
+<a href="{{L.Buscar}}" data-to="Buscar" class="a-r d3" style="margin-top:4px;display:flex;align-items:center;gap:12px;padding:16px 4px;text-decoration:none;color:var(--text);border-bottom:1px solid var(--border)">
+<span class="ic i-local"></span>
+<span style="flex:1;font-weight:600">Procurar uma vaga</span>
+<span class="st st-p">v1.1</span>
+</a>
+
+<a class="btn btn-t" href="{{L.BoasVindas}}" data-to="BoasVindas" style="margin:auto 0 20px;align-self:flex-start;padding-left:0;color:var(--text-muted)"><span class="ic ic-s i-sair"></span>Sair da conta</a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":360,"height":800}}'>
+var __GO = false;
+var __T = ['BoasVindas', 'Buscar', 'Codigo', 'CriarCasa', 'OnbNome'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go; return { L: __L(), __nav: __N(this.props),  temaCls: this.props.tema === 'escuro' ? 'escuro' : '' }; }
+}
+</script>
+</body>
+</html>

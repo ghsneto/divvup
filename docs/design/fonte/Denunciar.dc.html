@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>denunciar casa</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar" style="padding-left:8px"><a class="iconbtn" href="{{L.CasaPublica}}" data-to="CasaPublica" aria-label="Voltar"><span class="ic i-chev-l"></span></a><span class="label muted">rep. cajueiro</span></header>
+<sc-if value="{{form}}" hint-placeholder-val="{{true}}">
+<div style="padding:0 16px;flex:1;display:flex;flex-direction:column">
+<h1 class="h1" style="font-size:57px">o que tá errado?</h1>
+<p class="small muted" style="margin-top:8px">A denúncia é anônima para a casa.</p>
+<div role="radiogroup" aria-label="Motivo" style="margin-top:20px;border-top:1px solid var(--border)">
+<sc-for list="{{opts}}" as="o" hint-placeholder-count="4">
+<button type="button" role="radio" aria-checked="{{o.checked}}" onClick="{{o.pick}}" style="width:100%;display:flex;align-items:center;gap:12px;min-height:60px;border:0;border-bottom:1px solid var(--border);background:transparent;cursor:pointer;text-align:left;color:var(--text);padding:0">
+<span style="width:22px;height:22px;border-radius:999px;border:1px solid {{o.bc}};display:flex;align-items:center;justify-content:center;flex:none"><span style="width:10px;height:10px;border-radius:999px;background:{{o.dot}}"></span></span>
+<span style="flex:1"><span style="display:block;font-weight:600">{{o.name}}</span><span class="small muted">{{o.desc}}</span></span>
+</button>
+</sc-for>
+</div>
+<sc-if value="{{other}}" hint-placeholder-val="{{false}}"><textarea class="in a-up" rows="3" aria-label="Conte o que aconteceu" placeholder="Conte o que aconteceu" style="height:auto;padding:12px;margin-top:12px;resize:none"></textarea></sc-if>
+<button type="button" class="btn btn-dd btn-w {{off}}" style="margin:auto 0 24px" onClick="{{send}}"><span class="ic i-bandeira"></span>Enviar denúncia</button>
+</div>
+</sc-if>
+<sc-if value="{{done}}" hint-placeholder-val="{{false}}">
+<div class="a-up" style="padding:24px 16px 0;flex:1;display:flex;flex-direction:column"><span class="label muted">recebido</span><p class="h1" style="font-size:57px;margin-top:8px">valeu por avisar</p><p class="txt muted" style="margin-top:12px">A gente revisa em até 48 h. Se for golpe, a casa sai da busca.</p><a class="btn btn-p" href="{{L.Buscar}}" data-to="Buscar" style="margin:auto 0 24px">Voltar para a busca</a></div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":360,"height":800}}'>
+var O = [['Informação falsa', 'Fotos, preço ou vagas não batem'], ['Conteúdo impróprio', 'Texto ou imagem ofensiva'], ['Golpe', 'Pediram dinheiro antes da visita'], ['Outro', 'Conte com suas palavras']];
+var __GO = false;
+var __T = ['Buscar', 'CasaPublica'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.state || {}, sel = s.sel == null ? 2 : s.sel;
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '', form: !s.done, done: !!s.done, other: sel === 3, off: sel < 0 ? 'off' : '',
+      opts: O.map(function (o, i) { var on = i === sel; return { name: o[0], desc: o[1], checked: on ? 'true' : 'false', bc: on ? 'var(--danger)' : 'var(--border)', dot: on ? 'var(--danger)' : 'transparent', pick: function () { self.setState({ sel: i }); } }; }),
+      send: function () { self.setState({ done: true }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

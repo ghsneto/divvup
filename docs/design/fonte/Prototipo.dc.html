@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>divvup · protótipo navegável</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="dv {{temaCls}}" style="width:760px;height:864px;box-sizing:border-box;padding:32px;display:flex;gap:32px;background:var(--surface-alt)">
+
+<div style="width:360px;height:800px;box-sizing:content-box;flex:none;position:relative;overflow:hidden;border-radius:24px;border:1px solid var(--border);background:var(--background)" aria-label="Tela do app">
+<sc-if value="{{is.Splash}}" hint-placeholder-val="{{true}}"><div style="position:absolute;inset:0"><dc-import name="Splash" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.BoasVindas}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="BoasVindas" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Entrar}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Entrar" estado="normal" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.CriarConta}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="CriarConta" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.RecuperarSenha}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="RecuperarSenha" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.OnbNome}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="OnbNome" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.OnbCasa}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="OnbCasa" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.CriarCasa}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="CriarCasa" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Codigo}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Codigo" resultado="valido" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.BemVindo}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="BemVindo" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Tutorial}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Tutorial" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Permissao}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Permissao" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Convide}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Convide" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{seen.Main}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0;display:{{disp.Main}}"><dc-import name="Main" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.NovaTarefa}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="NovaTarefa" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.DetalheTarefa}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="DetalheTarefa" situacao="sua" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.DetalheAberta}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="DetalheTarefa" situacao="aberta" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.DetalheAtrasada}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="DetalheTarefa" situacao="atrasada" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Concluida}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Concluida" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{seen.MinhasTarefas}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0;display:{{disp.MinhasTarefas}}"><dc-import name="MinhasTarefas" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{seen.Ranking}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0;display:{{disp.Ranking}}"><dc-import name="Ranking" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.RankingGeral}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Ranking" aba="geral" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Historico}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Ranking" aba="historico" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Temporadas}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Temporadas" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Membro}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Membro" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{seen.Perfil}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0;display:{{disp.Perfil}}"><dc-import name="Perfil" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.EditarPerfil}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="EditarPerfil" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Avatar}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Avatar" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.PrefsNotif}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="PrefsNotif" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Aparencia}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Aparencia" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Sobre}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Sobre" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.ExcluirConta}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="ExcluirConta" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Notificacoes}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Notificacoes" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.MinhaCasa}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="MinhaCasa" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Convites}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Convites" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.MembroAdmin}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Membro" visao="admin" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.EditarCasa}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="EditarCasa" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Buscar}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Buscar" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.BuscarMapa}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Buscar" modo="mapa" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.CasaPublica}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="CasaPublica" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Anuncio}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Anuncio" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Solicitacoes}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Solicitacoes" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.MinhasSolicitacoes}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="MinhasSolicitacoes" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.Denunciar}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Denunciar" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.DeckCarregando}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Main" estado="carregando" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.DeckVazio}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Main" estado="vazio" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.DeckPassadas}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Main" estado="passadas" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.DeckLimite}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Main" estado="limite" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.DeckOffline}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Main" estado="offline" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+<sc-if value="{{is.DeckErro}}" hint-placeholder-val="{{false}}"><div style="position:absolute;inset:0"><dc-import name="Main" estado="erro" tema="{{tema}}" go="{{go}}" set-tema="{{setTema}}" hint-size="360px,800px"></dc-import></div></sc-if>
+</div>
+
+<aside style="flex:1;min-width:0;height:800px;display:flex;flex-direction:column" aria-label="Controles do protótipo">
+<div style="display:flex;align-items:center;justify-content:space-between"><svg width="96" height="24" viewBox="-149.11 -12.5 534.413 133.864" role="img" aria-label="divvup" style="display:block"><path style="fill:var(--primary)" d="M-69.564 41.761L-69.564 95.455C-69.564 104.868 -77.196 112.5 -86.61 112.5L-132.064 112.5C-141.478 112.5 -149.11 104.868 -149.11 95.455L-149.11 69.602ZM-122.121 -12.5L-76.666 -12.5C-67.253 -12.5 -59.621 -4.868 -59.621 4.545L-59.621 30.398L-139.166 58.239L-139.166 4.545C-139.166 -4.868 -131.534 -12.5 -122.121 -12.5Z"/><path style="fill:var(--text)" d="M122.727 100L101.818 20L127.273 20L137.879 79.848L138.485 79.848L149.848 20L197.121 20L207.727 79.848L208.333 79.848L219.697 20L267.727 20L267.727 64.545Q267.727 73.03 269.621 76.667Q271.515 80.303 275.303 80.303Q278.03 80.303 280.152 78.636Q282.273 76.97 283.712 73.712Q285.152 70.455 285.909 65.53Q286.667 60.606 286.667 53.788L286.667 20L310.758 20L310.758 100L290.152 100L290.152 69.545L289.091 69.545Q288.485 81.364 285.606 88.485Q282.727 95.606 277.803 98.788Q272.879 101.97 265.909 101.97Q254.545 101.97 249.091 93.409Q243.636 84.848 243.636 66.667L243.636 21.159L223.03 100L192.576 100L172.879 24.638L153.182 100ZM29.697 101.97Q21.667 101.97 15.606 97.197Q9.545 92.424 6.212 82.879Q2.879 73.333 2.879 59.545Q2.879 45.455 6.136 36.288Q9.394 27.121 15.152 22.652Q20.909 18.182 28.485 18.182Q34.697 18.182 39.167 21.136Q43.636 24.091 46.591 30.227Q49.545 36.364 50.758 45.758L52.121 45.758Q51.364 40.606 50.606 35.682Q49.848 30.758 49.47 26.212Q49.091 21.667 49.091 17.727L49.091 -4.848L73.182 -4.848L73.182 100L52.273 100L52.273 76.061L51.212 76.061Q49.848 85 47.045 90.833Q44.242 96.667 39.924 99.318Q35.606 101.97 29.697 101.97ZM315 121.364L315 20L336.212 20L336.212 45L337.273 45Q338.636 35.455 341.439 29.47Q344.242 23.485 348.636 20.758Q353.03 18.03 359.242 18.03Q367.121 18.03 373.03 22.576Q378.939 27.121 382.121 36.288Q385.303 45.455 385.303 59.697Q385.303 74.394 381.894 83.712Q378.485 93.03 372.652 97.5Q366.818 101.97 359.545 101.97Q353.636 101.97 349.242 99.015Q344.848 96.061 341.97 90.227Q339.091 84.394 337.727 75.606L336.212 75.606Q337.121 80 337.727 84.697Q338.333 89.394 338.712 93.939Q339.091 98.485 339.091 102.424L339.091 121.364ZM77.424 100L77.424 20L101.515 20L101.515 100ZM37.727 83.182Q40.152 83.182 42.197 81.742Q44.242 80.303 45.833 77.576Q47.424 74.848 48.333 70.985Q49.242 67.121 49.242 62.273L49.242 60.455Q49.242 56.061 48.561 52.576Q47.879 49.091 46.818 46.439Q45.758 43.788 44.242 41.97Q42.727 40.152 41.061 39.318Q39.394 38.485 37.576 38.485Q34.242 38.485 31.894 41.288Q29.545 44.091 28.409 49.167Q27.273 54.242 27.273 61.061Q27.273 67.424 28.485 72.5Q29.697 77.576 31.97 80.379Q34.242 83.182 37.727 83.182ZM350.758 81.818Q354.242 81.818 356.515 79.015Q358.788 76.212 359.848 71.288Q360.909 66.364 360.909 59.848Q360.909 52.727 359.773 47.803Q358.636 42.879 356.364 40.227Q354.091 37.576 350.758 37.576Q348.485 37.576 346.288 39.167Q344.091 40.758 342.5 43.561Q340.909 46.364 339.924 50.227Q338.939 54.091 338.939 58.636L338.939 60.606Q338.939 64.848 339.621 68.182Q340.303 71.515 341.439 74.091Q342.576 76.667 344.091 78.409Q345.606 80.152 347.348 80.985Q349.091 81.818 350.758 81.818ZM89.394 14.394Q82.727 14.394 79.015 11.515Q75.303 8.636 75.303 3.182Q75.303 -2.273 79.015 -5.152Q82.727 -8.03 89.394 -8.03Q96.364 -8.03 100 -5.152Q103.636 -2.273 103.636 3.182Q103.636 8.485 100 11.439Q96.364 14.394 89.394 14.394Z"/></svg><span class="label muted">protótipo</span></div>
+
+<div style="margin-top:32px">
+<span class="label muted">{{cur.group}}</span>
+<div style="display:flex;align-items:baseline;gap:12px;margin-top:4px"><span class="tnum" style="font-size:57px;line-height:1.05;font-weight:800;letter-spacing:-.03em;font-variation-settings:'opsz' 96,'wdth' 90">{{cur.code}}</span><span class="ttl">{{cur.title}}</span></div>
+<p class="small muted" style="margin-top:8px;min-height:40px">{{cur.tip}}</p>
+</div>
+
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-top:16px">
+<button type="button" class="btn btn-o {{backOff}}" onClick="{{back}}"><span class="ic ic-s i-chev-l"></span>Voltar</button>
+<button type="button" class="btn btn-o" onClick="{{restart}}"><span class="ic ic-s i-refresh"></span>Recomeçar</button>
+</div>
+<div style="display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+<span class="ic ic-s i-lua"></span><span class="small" style="flex:1;font-weight:600">Tema escuro</span>
+<button type="button" class="tg {{darkOn}}" role="switch" aria-checked="{{darkChecked}}" aria-label="Tema escuro" onClick="{{toggleTema}}"></button>
+</div>
+<p class="small muted" style="margin-top:8px">Caminho: <b class="tnum" style="color:var(--text)">{{depth}}</b> {{depthTxt}} · {{pathTxt}}</p>
+
+<nav class="scroll" style="margin-top:16px;padding-right:4px" aria-label="Ir para tela">
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="8">
+<h2 class="label muted" style="margin:16px 0 8px">{{g.name}}</h2>
+<div style="display:flex;flex-wrap:wrap;gap:4px">
+<sc-for list="{{g.items}}" as="it" hint-placeholder-count="5"><button type="button" class="chip {{it.on}}" aria-current="{{it.cur}}" onClick="{{it.jump}}" style="min-height:32px;padding:0 12px;font-size:12px"><span class="tnum" style="opacity:.6">{{it.code}}</span>{{it.title}}</button></sc-for>
+</div>
+</sc-for>
+</nav>
+</aside>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":864}}'>
+var META = {"Splash": {"code": "A1", "group": "acesso", "title": "splash", "tip": "Abre sozinha em 1,5 s."}, "BoasVindas": {"code": "A2", "group": "acesso", "title": "boas-vindas", "tip": "Crie conta, entre ou siga com o Google."}, "Entrar": {"code": "A3", "group": "acesso", "title": "entrar", "tip": "Entrar leva direto para a casa: é quem já tem conta."}, "CriarConta": {"code": "A4", "group": "acesso", "title": "criar conta", "tip": "Senha de 8+ caracteres, confirmação igual e os termos marcados liberam o botão."}, "RecuperarSenha": {"code": "A5", "group": "acesso", "title": "recuperar senha", "tip": "Envie o link para ver a confirmação."}, "OnbNome": {"code": "B1", "group": "onboarding", "title": "como te chamam", "tip": "Troque o avatar na escolha rápida ou abra a galeria."}, "OnbCasa": {"code": "B2", "group": "onboarding", "title": "sua casa", "tip": "Criar casa te faz admin; o código te põe numa casa existente."}, "CriarCasa": {"code": "B3", "group": "onboarding", "title": "criar casa", "tip": "República liga o anúncio de vagas. Apague o nome para ver o erro."}, "Codigo": {"code": "B4", "group": "onboarding", "title": "entrar com código", "tip": "O código já vem colado. Entre na casa."}, "BemVindo": {"code": "B5", "group": "onboarding", "title": "bem-vindo à casa", "tip": "Bora para o tutorial."}, "Tutorial": {"code": "B6", "group": "onboarding", "title": "tutorial do swipe", "tip": "Direita, esquerda e desfazer. Ou pule."}, "Permissao": {"code": "B7", "group": "onboarding", "title": "notificações", "tip": "Quem criou a casa vai para o convite; quem entrou por código, direto para o deck."}, "Convide": {"code": "B8", "group": "onboarding", "title": "convide moradores", "tip": "Copie, compartilhe ou gere outro código."}, "Main": {"code": "C1", "group": "tarefas", "title": "deck", "tip": "Arraste os cartões. O 4º simula a disputa. Desfaça em 3 s."}, "NovaTarefa": {"code": "C2", "group": "tarefas", "title": "nova tarefa", "tip": "A prévia muda com categoria e peso. Escreva um título para criar."}, "DetalheTarefa": {"code": "C3", "group": "tarefas", "title": "detalhe · sua", "tip": "Conclua para ver a celebração ou devolva ao deck."}, "DetalheAberta": {"code": "C3", "group": "tarefas", "title": "detalhe · aberta", "tip": "Assuma a tarefa direto daqui."}, "DetalheAtrasada": {"code": "C3", "group": "tarefas", "title": "detalhe · atrasada", "tip": "Concluir agora vale metade dos pontos."}, "Concluida": {"code": "C4", "group": "tarefas", "title": "concluída", "tip": "Pegue outra tarefa ou continue."}, "MinhasTarefas": {"code": "C5", "group": "tarefas", "title": "minhas tarefas", "tip": "Conclua pelo check e desfaça no aviso."}, "Ranking": {"code": "D1", "group": "ranking", "title": "ranking", "tip": "Troque as abas e toque no ? do equilíbrio."}, "RankingGeral": {"code": "D1", "group": "ranking", "title": "ranking · geral", "tip": "Ex-moradores aparecem apagados."}, "Historico": {"code": "D1", "group": "ranking", "title": "histórico", "tip": "Filtre o feed por morador."}, "Temporadas": {"code": "D2", "group": "ranking", "title": "temporadas", "tip": "Abra um mês para ver o ranking final."}, "Membro": {"code": "D3", "group": "ranking", "title": "morador", "tip": "Perfil de morador, só leitura."}, "Perfil": {"code": "E1", "group": "perfil", "title": "perfil", "tip": "Toque nas medalhas bloqueadas para ver o critério."}, "EditarPerfil": {"code": "E2", "group": "perfil", "title": "editar perfil", "tip": "Troque o avatar e salve."}, "Avatar": {"code": "E3", "group": "perfil", "title": "galeria de avatar", "tip": "Escolha um dos 24 e salve."}, "PrefsNotif": {"code": "E4", "group": "perfil", "title": "notificações", "tip": "Ligue e desligue cada aviso e o horário silencioso."}, "Aparencia": {"code": "E5", "group": "perfil", "title": "aparência", "tip": "Muda o tema do protótipo inteiro."}, "Sobre": {"code": "E6", "group": "perfil", "title": "sobre", "tip": "Versão e licenças."}, "ExcluirConta": {"code": "E7", "group": "perfil", "title": "excluir conta", "tip": "Digite EXCLUIR para liberar o botão."}, "Notificacoes": {"code": "F1", "group": "casa", "title": "central de avisos", "tip": "Toque num aviso para abrir; ou marque todas como lidas."}, "MinhaCasa": {"code": "G1", "group": "casa", "title": "minha casa", "tip": "Como admin: convites, anúncio e pedidos. Toque num morador."}, "Convites": {"code": "G2", "group": "casa", "title": "convites", "tip": "Gere e revogue códigos."}, "MembroAdmin": {"code": "G3", "group": "casa", "title": "morador · admin", "tip": "Promova a admin ou remova da casa."}, "EditarCasa": {"code": "G4", "group": "casa", "title": "editar casa", "tip": "Casal/Família avisa que o anúncio será desligado."}, "Buscar": {"code": "H1", "group": "busca (v1.1)", "title": "procurar vaga", "tip": "Alterne lista e mapa; abra os filtros."}, "BuscarMapa": {"code": "H1", "group": "busca (v1.1)", "title": "procurar · mapa", "tip": "Toque nos pinos para trocar a casa."}, "CasaPublica": {"code": "H2", "group": "busca (v1.1)", "title": "casa pública", "tip": "Solicite a vaga com uma mensagem."}, "Anuncio": {"code": "H3", "group": "busca (v1.1)", "title": "anúncio de vagas", "tip": "Aceite o termo para a casa aparecer na busca."}, "Solicitacoes": {"code": "H4", "group": "busca (v1.1)", "title": "pedidos recebidos", "tip": "Aprove ou recuse."}, "MinhasSolicitacoes": {"code": "H5", "group": "busca (v1.1)", "title": "meus pedidos", "tip": "Aprovado mostra o endereço e leva para a casa."}, "Denunciar": {"code": "H6", "group": "busca (v1.1)", "title": "denunciar", "tip": "Escolha um motivo e envie."}, "DeckCarregando": {"code": "C1", "group": "estados do deck", "title": "carregando", "tip": "Estado de carregamento."}, "DeckVazio": {"code": "C1", "group": "estados do deck", "title": "nada pendente", "tip": "Deck limpo."}, "DeckPassadas": {"code": "C1", "group": "estados do deck", "title": "tudo passado", "tip": "Toque em Rever."}, "DeckLimite": {"code": "C1", "group": "estados do deck", "title": "limite 5/5", "tip": "Tente arrastar para a direita."}, "DeckOffline": {"code": "C1", "group": "estados do deck", "title": "sem conexão", "tip": "Swipe desligado."}, "DeckErro": {"code": "C1", "group": "estados do deck", "title": "erro", "tip": "Falha ao carregar."}};
+var GROUPS = [["acesso", ["Splash", "BoasVindas", "Entrar", "CriarConta", "RecuperarSenha"]], ["onboarding", ["OnbNome", "OnbCasa", "CriarCasa", "Codigo", "BemVindo", "Tutorial", "Permissao", "Convide"]], ["tarefas", ["Main", "NovaTarefa", "DetalheTarefa", "DetalheAberta", "DetalheAtrasada", "Concluida", "MinhasTarefas"]], ["ranking", ["Ranking", "RankingGeral", "Historico", "Temporadas", "Membro"]], ["perfil", ["Perfil", "EditarPerfil", "Avatar", "PrefsNotif", "Aparencia", "Sobre", "ExcluirConta"]], ["casa", ["Notificacoes", "MinhaCasa", "Convites", "MembroAdmin", "EditarCasa"]], ["busca (v1.1)", ["Buscar", "BuscarMapa", "CasaPublica", "Anuncio", "Solicitacoes", "MinhasSolicitacoes", "Denunciar"]], ["estados do deck", ["DeckCarregando", "DeckVazio", "DeckPassadas", "DeckLimite", "DeckOffline", "DeckErro"]]];
+var IDS = ["Splash", "BoasVindas", "Entrar", "CriarConta", "RecuperarSenha", "OnbNome", "OnbCasa", "CriarCasa", "Codigo", "BemVindo", "Tutorial", "Permissao", "Convide", "Main", "NovaTarefa", "DetalheTarefa", "DetalheAberta", "DetalheAtrasada", "Concluida", "MinhasTarefas", "Ranking", "RankingGeral", "Historico", "Temporadas", "Membro", "Perfil", "EditarPerfil", "Avatar", "PrefsNotif", "Aparencia", "Sobre", "ExcluirConta", "Notificacoes", "MinhaCasa", "Convites", "MembroAdmin", "EditarCasa", "Buscar", "BuscarMapa", "CasaPublica", "Anuncio", "Solicitacoes", "MinhasSolicitacoes", "Denunciar", "DeckCarregando", "DeckVazio", "DeckPassadas", "DeckLimite", "DeckOffline", "DeckErro"];
+var TABS = ["Main", "MinhasTarefas", "Ranking", "Perfil"];
+var ROOTS = TABS.concat(['BoasVindas', 'Splash']);
+var ONB = ['Splash', 'BoasVindas', 'Entrar', 'CriarConta', 'RecuperarSenha', 'OnbNome', 'OnbCasa', 'CriarCasa', 'Codigo', 'BemVindo', 'Tutorial', 'Permissao', 'Convide', 'Buscar', 'BuscarMapa', 'CasaPublica', 'MinhasSolicitacoes', 'Denunciar'];
+class Component extends DCLogic {
+  S() { return Object.assign({ hist: ['Splash'], tema: 'claro', criou: false, seen: {} }, this.state || {}); }
+  componentDidMount() { this.splash(); }
+  componentDidUpdate() { this.splash(); }
+  componentWillUnmount() { clearTimeout(this.ts); }
+  splash() {
+    var self = this, h = this.S().hist;
+    if (h[h.length - 1] === 'Splash') { if (!this.ts) this.ts = setTimeout(function () { self.ts = null; self.nav('BoasVindas'); }, 1500); }
+    else if (this.ts) { clearTimeout(this.ts); this.ts = null; }
+  }
+  nav(t) {
+    var s = this.S(), h = s.hist.slice(), cur = h[h.length - 1], prev = h[h.length - 2], criou = s.criou;
+    if (t === 'back') { if (h.length > 1) h.pop(); this.setState({ hist: h }); return; }
+    if (!META[t]) return;
+    if (cur === 'Avatar' && prev === 'OnbNome' && (t === 'EditarPerfil' || t === 'Perfil')) t = 'OnbNome';
+    if (cur === 'CriarCasa' && t === 'Tutorial') criou = true;
+    if (t === 'Codigo' || t === 'BemVindo') criou = false;
+    if (t === 'Convide' && !criou && cur === 'Permissao') t = 'Main';
+    if (cur === 'Splash') h = [t];
+    else if (ROOTS.indexOf(t) >= 0) h = [t];
+    else if (prev === t) h.pop();
+    else if (t !== cur) h.push(t);
+    var seen = Object.assign({}, s.seen); if (TABS.indexOf(t) >= 0) seen[t] = true;
+    this.setState({ hist: h, criou: criou, seen: seen });
+  }
+  renderVals() {
+    var self = this, s = this.S(), h = s.hist, cur = h[h.length - 1];
+    var is = {}, disp = {};
+    IDS.forEach(function (id) { is[id] = id === cur; });
+    TABS.forEach(function (id) { disp[id] = id === cur ? 'block' : 'none'; });
+    var seen = Object.assign({}, s.seen); if (TABS.indexOf(cur) >= 0) seen[cur] = true;
+    var m = META[cur];
+    return {
+      temaCls: s.tema === 'escuro' ? 'escuro' : '', tema: s.tema,
+      is: is, disp: disp, seen: seen, cur: m,
+      go: function (t) { self.nav(t); },
+      setTema: function (t) { self.setState({ tema: t }); },
+      toggleTema: function () { self.setState({ tema: s.tema === 'escuro' ? 'claro' : 'escuro' }); },
+      darkOn: s.tema === 'escuro' ? 'on' : '', darkChecked: s.tema === 'escuro' ? 'true' : 'false',
+      back: function () { self.nav('back'); }, backOff: h.length > 1 ? '' : 'off',
+      restart: function () { self.setState({ hist: ['Splash'], criou: false, seen: {} }); },
+      depth: h.length, depthTxt: h.length === 1 ? 'tela' : 'telas',
+      pathTxt: h.slice(-4).map(function (id) { return META[id].code; }).join(' › '),
+      groups: GROUPS.map(function (g) { return { name: g[0], items: g[1].map(function (id) { var on = id === cur; return { code: META[id].code, title: META[id].title, on: on ? 'on' : '', cur: on ? 'page' : 'false', jump: function () { self.nav(id); } }; }) }; })
+    };
+  }
+}
+</script>
+</body>
+</html>

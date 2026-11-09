@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>solicitações recebidas</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar" style="padding-left:8px"><a class="iconbtn" href="{{L.MinhaCasa}}" data-to="MinhaCasa" aria-label="Voltar"><span class="ic i-chev-l"></span></a><span class="label muted">minha casa</span></header>
+<div class="scroll" style="padding:0 16px 24px">
+<div style="display:flex;align-items:flex-end;gap:12px"><h1 class="h1" style="font-size:57px;flex:1">querem entrar</h1><span class="tnum" style="font-size:57px;font-weight:800;line-height:1.05;color:var(--primary);font-variation-settings:'opsz' 96,'wdth' 90">{{n}}</span></div>
+<p class="small muted" style="margin-top:8px">Rep. Cajueiro tem <b class="tnum" style="color:var(--text)">{{vagas}}</b> no anúncio.</p>
+
+<sc-if value="{{empty}}" hint-placeholder-val="{{false}}"><p class="txt muted" style="padding:40px 0">Nenhum pedido pendente. Quando alguém pedir vaga pela busca, aparece aqui.</p></sc-if>
+
+<sc-for list="{{reqs}}" as="r" hint-placeholder-count="2">
+<article class="card a-up" style="margin-top:16px;padding:16px">
+<div style="display:flex;gap:12px;align-items:center"><span class="av" style="width:40px;height:40px"><img src="{{r.av}}" alt=""></span><div style="flex:1"><p class="ttl" style="font-size:16px">{{r.name}}</p><p class="small muted">{{r.when}}</p></div></div>
+<p class="txt" style="margin-top:12px;padding-left:12px;border-left:1px solid var(--border)">{{r.msg}}</p>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:8px;margin-top:16px"><button type="button" class="btn btn-o" onClick="{{r.reject}}">Recusar</button><button type="button" class="btn btn-p" onClick="{{r.approve}}"><span class="ic i-check"></span>Aprovar</button></div>
+</article>
+</sc-for>
+</div>
+
+<sc-if value="{{dlg}}" hint-placeholder-val="{{false}}">
+<div class="scrim" style="justify-content:center"><div class="dialog" role="alertdialog" aria-labelledby="q-t">
+<p class="h3" id="q-t" style="font-size:28px">{{dlgTitle}}</p>
+<p class="small muted" style="margin-top:8px">{{dlgBody}}</p>
+<sc-if value="{{noVagas}}" hint-placeholder-val="{{false}}"><p class="small" style="margin-top:12px;background:var(--warning-bg);color:var(--warning);padding:12px;border-radius:4px;font-weight:600;display:flex;gap:8px"><span class="ic ic-s i-alerta"></span>O anúncio está com 0 vagas. Aprovar mesmo assim?</p></sc-if>
+<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px"><button type="button" class="btn btn-t" onClick="{{closeDlg}}">Voltar</button><button type="button" class="btn {{dlgCls}}" onClick="{{confirm}}">{{dlgOk}}</button></div>
+</div></div>
+</sc-if>
+<sc-if value="{{snack}}" hint-placeholder-val="{{false}}"><div class="snack" role="status" style="bottom:16px"><span class="ic ic-s i-check" style="color:var(--lima)"></span><span style="flex:1;font-weight:600;font-size:14px">{{snack}}</span></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"semVagas":{"editor":"boolean","default":false},"$preview":{"width":360,"height":800}}'>
+var R = [
+  { id: 1, name: 'Lia Moura', av: '/_blob/fcf87c353c54bba17f885d3f7e589fba', when: 'há 2 h · pela busca', msg: 'Oi! Sou caloura de Engenharia, chego de Natal em fevereiro. Curto cozinhar e sou organizada com as coisas.' },
+  { id: 2, name: 'Rafa Lins', av: '/_blob/1862a84abf54b8be9631463d324e6c6e', when: 'ontem · pela busca', msg: 'Faço mestrado no CIn e procuro vaga até julho.' }
+];
+var __GO = false;
+var __T = ['MinhaCasa'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.state || {}, gone = s.gone || [];
+    var list = R.filter(function (r) { return gone.indexOf(r.id) < 0; });
+    var semV = !!this.props.semVagas, d = s.dlg;
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      n: list.length, vagas: semV ? '0 vagas' : '2 vagas', empty: list.length === 0,
+      reqs: list.map(function (r) { return { name: r.name, av: r.av, when: r.when, msg: r.msg, approve: function () { self.setState({ dlg: { r: r, ok: true } }); }, reject: function () { self.setState({ dlg: { r: r, ok: false } }); } }; }),
+      dlg: !!d, noVagas: !!d && d.ok && semV,
+      dlgTitle: d ? (d.ok ? 'Aprovar ' + d.r.name.split(' ')[0] + '?' : 'Recusar ' + d.r.name.split(' ')[0] + '?') : '',
+      dlgBody: d ? (d.ok ? 'Entra direto na casa e passa a ver o endereço completo.' : 'Avisamos que o pedido foi recusado, sem mostrar motivo.') : '',
+      dlgOk: d && d.ok ? 'Aprovar' : 'Recusar', dlgCls: d && d.ok ? 'btn-p' : 'btn-dd',
+      closeDlg: function () { self.setState({ dlg: null }); },
+      confirm: function () { var g = gone.concat([d.r.id]); clearTimeout(self.t); self.setState({ dlg: null, gone: g, snack: d.ok ? d.r.name.split(' ')[0] + ' entrou na casa' : 'Pedido recusado' }); self.t = setTimeout(function () { self.setState({ snack: null }); }, 2200); },
+      snack: s.snack || ''
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -181,7 +181,7 @@ reports/{id}                 houseId, reporterId, reason, createdAt   ← v1.1
 
 ## 5. Design
 
-- **Fonte da verdade visual:** design system **divvup** no Claude Design — https://claude.ai/artifact/UjULqNSrf5z5nr8z4KdEQq. As telas são montadas no Claude Design com esse sistema e implementadas em Compose a partir dele.
+- **Fonte da verdade visual:** as telas desenhadas no Claude Design (https://claude.ai/artifact/FCk2g4sxMAj8zyKA7soACw), feitas com o design system **divvup** (https://claude.ai/artifact/UjULqNSrf5z5nr8z4KdEQq). A cópia versionada, com PNGs, medidas, tokens, ícones e o mapa de telas, está em [docs/design/](docs/design/README.md); o app é implementado fielmente a partir dela.
 - **Isto substitui a proposta de cores original (menta/coral).** Marca: ultramarino `#2F2BD9` + lima ácida `#C9F24D` sobre papel frio `#F5F5F0`; escuro em `#0C0F18`.
   - Swipe **aceitar** = `accent` (lima) com `on-accent`; swipe **passar** = `danger`.
   - Lima nunca como texto/ícone sobre fundo claro.
@@ -189,7 +189,7 @@ reports/{id}                 houseId, reporterId, reason, createdAt   ← v1.1
 - Cantos: `radius-sm` 4px (controles), `radius-md` 12px (cartões), `radius-pill` (chips, selos, avatares). Bordas de 1px no lugar de sombras. Sem gradientes. Espaçamento em passos de 4px.
 - Títulos em minúsculas; rótulos em caixa-alta espaçada; voz "você", imperativo do dia a dia; **sem emoji na interface**; números no formato brasileiro ("1.240 pts").
 - Único movimento de marca: deslizar lateral do cartão. Respeitar "remover animações" do sistema.
-- `:core:designsystem` traduz os tokens em `DivvupTheme` (cores claro/escuro, tipografia, formas, espaçamentos) e componentes base: `TaskCard`, `PointsBadge`, `Chip`, `Button`, `Ranking`, `Logo`. Nenhuma tela usa cor ou medida literal.
+- `:core:designsystem` traduz os tokens em `DivvupTheme` (cores claro/escuro, tipografia, formas, espaçamentos) e os componentes base que as telas usam (inventário em [docs/design/README.md](docs/design/README.md#componentes-que-as-telas-usam)). Nenhuma tela usa cor ou medida literal.
 - Contraste mínimo 4,5:1 para texto nos dois temas.
 
 ---

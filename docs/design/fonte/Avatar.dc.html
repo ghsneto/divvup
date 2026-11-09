@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>galeria de avatar</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar" style="padding-left:8px"><a class="iconbtn" href="{{L.EditarPerfil}}" data-to="EditarPerfil" aria-label="Voltar"><span class="ic i-chev-l"></span></a><span class="label muted">avatar</span></header>
+<div class="scroll" style="padding:0 16px 16px">
+<div style="display:flex;align-items:flex-end;gap:16px">
+<h1 class="h2" style="flex:1">escolhe sua cara</h1>
+<span class="av {{popCls}}" style="width:96px;height:96px;border:1px solid var(--lima)"><img src="{{sel}}" alt="Avatar escolhido"></span>
+</div>
+<p class="small muted" style="margin-top:8px">{{count}} avatares, todos liberados. O editor completo vem depois.</p>
+
+<div role="radiogroup" aria-label="Avatares" style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:20px">
+<sc-for list="{{avs}}" as="a" hint-placeholder-count="24"><button type="button" role="radio" aria-checked="{{a.checked}}" aria-label="Avatar {{a.n}}" onClick="{{a.pick}}" style="aspect-ratio:1;padding:0;border-radius:999px;overflow:hidden;cursor:pointer;border:1px solid {{a.ring}};background:transparent;transform:scale({{a.sc}});transition:transform .15s"><img src="{{a.src}}" alt="" style="width:100%;height:100%;display:block"></button></sc-for>
+</div>
+
+<div style="display:flex;gap:8px;margin-top:20px">
+<button type="button" onClick="{{foto}}" class="btn btn-o" style="flex:1"><span class="ic i-camera"></span>Usar uma foto</button>
+<button type="button" onClick="{{semFoto}}" class="btn btn-t" style="color:var(--danger)">Remover foto</button>
+</div>
+</div>
+<div style="flex:none;padding:12px 16px 20px;border-top:1px solid var(--border)"><a class="btn btn-p btn-w" href="{{L.Perfil}}" data-to="Perfil">Salvar</a></div>
+<sc-if value="{{toast}}" hint-placeholder-val="{{false}}"><div class="snack" role="status" style="bottom:{{toastBottom}}px"><span class="ic ic-s i-info" style="color:#c9f24d"></span><span style="flex:1;font-weight:600;font-size:14px">{{toast}}</span></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":360,"height":800}}'>
+var IDS = ['e00900d46e0a7e6fc26a8968881f87ba','e17b5e45674dae4c695a8db8214f810e','fcf87c353c54bba17f885d3f7e589fba','1862a84abf54b8be9631463d324e6c6e','37a679a81d9bb119a79eecc63e4a10b9','394e7cecdc16acb58863ca5eafa147e8','f990b1328564f59bb8c0c4b6947416ec','8b7d1fe2f3912dc58ba9b4909ecce4dd','935aca369757ddbc49705d7ba5bae61f','0bae4390a120e3616daa9b45a79998c7','d1bb0331d1c33d863e64b88913038ea7','4461b6cf4585792fec7801d239127058','3a1551ca2c922d5b05abdf73a8d61772','a0c23f356575967a96d23e4b8f66a310','8553e57c2721fb78178dd9759202cf96','d81c75edae1487710007648d0655a992','1930df66e54fae5d4428962c06552b4e','6e5d025cba51ea1feda64595368df6bc','394adb94c097580dbcc2a712203f2c7b','bcb569cb244f8a03859a0dc0240cbce8','de39ee35ae5d20cb0df31eddb926a367','5b5f44fbfd2dbbdf9244d1ac29648101','428487a6ee9982a4c118b7052b0fdf8a','c399a9925760ca29f472958bee62968a'];
+var __GO = false;
+var __T = ['EditarPerfil', 'Perfil'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = Object.assign({ sel: 0, n: 0 }, this.state || {});
+    return { L: __L(), __nav: __N(this.props), toast: (this.state && this.state.toast) || '', toastBottom: 96, semFoto: function () { self.setState({ toast: 'Foto removida. O avatar volta a aparecer' }); clearTimeout(self.__tt); self.__tt = setTimeout(function () { self.setState({ toast: null }); }, 2400); }, foto: function () { self.setState({ toast: 'Abre a câmera ou a galeria do Android, com recorte circular' }); clearTimeout(self.__tt); self.__tt = setTimeout(function () { self.setState({ toast: null }); }, 2400); }, 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      sel: '/_blob/' + IDS[s.sel], count: IDS.length, popCls: s.n % 2 ? 'a-pop' : 'a-r',
+      avs: IDS.map(function (id, i) { var on = i === s.sel; return { src: '/_blob/' + id, n: i + 1, checked: on ? 'true' : 'false', ring: on ? 'var(--primary)' : 'transparent', sc: on ? 1.08 : 1, pick: function () { self.setState({ sel: i, n: s.n + 1 }); } }; })
+    };
+  }
+}
+</script>
+</body>
+</html>

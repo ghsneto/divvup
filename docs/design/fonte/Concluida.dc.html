@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>tarefa concluída</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}" style="background:var(--ultramarino);color:#ffffff">
+
+<div aria-hidden="true" style="position:absolute;left:150px;top:200px;width:0;height:0;z-index:1">
+<sc-for list="{{bits}}" as="b" hint-placeholder-count="10"><span style="position:absolute;left:0;top:0;width:{{b.w}}px;height:{{b.h}}px;border-radius:4px;background:{{b.c}};--fx:{{b.fx}}px;--fy:{{b.fy}}px;--fr:{{b.fr}}deg;animation:dv-fly 1.1s cubic-bezier(.2,.8,.2,1) {{b.d}}s both"></span></sc-for>
+</div>
+
+<header class="topbar" style="position:relative;z-index:2">
+<a class="iconbtn" href="{{L.Main}}" data-to="Main" aria-label="Fechar" style="color:#ffffff"><span class="ic i-x"></span></a>
+<span class="label" style="color:var(--lima);margin-left:auto;margin-right:8px">tarefa concluída</span>
+</header>
+
+<section style="padding:8px 24px 0;position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:center">
+<p class="small a-up" style="color:#ffffff;display:flex;align-items:center;gap:8px"><span class="ic ic-s i-cozinha"></span>Lavar a louça do jantar · no prazo</p>
+<div style="position:relative;margin-top:4px">
+<span class="a-grow d3" aria-hidden="true" style="position:absolute;left:-24px;bottom:-12px;width:148px;height:8px;background:var(--lima)"></span>
+<p class="a-pop" style="position:relative;margin:0;font-size:57px;line-height:1.05;font-weight:800;letter-spacing:-.03em;font-variation-settings:'opsz' 96,'wdth' 90;font-variant-numeric:tabular-nums">+{{n}}</p>
+</div>
+<p class="h2 a-r d4" style="font-size:36px;margin-top:24px">pontos na conta</p>
+</section>
+
+<section class="sheet" style="margin-top:auto;position:relative;z-index:3;background:var(--surface);color:var(--text);padding:20px 20px 20px;display:flex;flex-direction:column;gap:16px;animation-delay:.35s">
+
+<div style="display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden">
+<div style="padding:16px 16px;border-right:1px solid var(--border)">
+<span class="label muted">ranking do mês</span>
+<div style="display:flex;align-items:baseline;gap:8px;margin-top:4px">
+<span class="small muted tnum" style="text-decoration:line-through">3º</span>
+<span class="ic ic-xs i-seta-r muted"></span>
+<span class="h2 tnum" style="font-size:36px">2º</span>
+</div>
+<p class="small muted">você passou o Bruno</p>
+</div>
+<div style="padding:16px 16px">
+<span class="label muted">sequência</span>
+<div style="display:flex;align-items:baseline;gap:4px;margin-top:4px"><span class="h2 tnum" style="font-size:36px">{{streak}}</span><span class="small muted">dias</span></div>
+<div style="display:flex;gap:4px;margin-top:8px" aria-label="4 dias seguidos nesta semana">
+<sc-for list="{{days}}" as="d" hint-placeholder-count="7"><span style="width:12px;height:12px;border-radius:4px;background:{{d.bg}};border:1px solid {{d.bd}}"></span></sc-for>
+</div>
+</div>
+</div>
+
+<sc-if value="{{medalha}}" hint-placeholder-val="{{true}}">
+<div class="a-r d6" style="display:flex;align-items:center;gap:16px;background:var(--tinta);color:#f2f3f5;border-radius:12px;padding:16px 16px">
+<span style="width:56px;height:56px;border-radius:999px;background:var(--lima);color:var(--tinta);display:flex;align-items:center;justify-content:center;flex:none;position:relative"><span class="ic ic-l i-relogio"></span></span>
+<div style="flex:1;min-width:0">
+<span class="label" style="color:var(--lima)">medalha nova</span>
+<p class="ttl" style="font-size:20px">salva-vidas</p>
+<p class="small" style="color:#9ea1aa">Assumiu uma tarefa a menos de 48 h do prazo.</p>
+</div>
+</div>
+</sc-if>
+
+<div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px">
+<a class="btn btn-p" href="{{L.Main}}" data-to="Main"><span class="ic i-deck"></span>Pegar outra tarefa</a>
+<a class="btn btn-o" href="{{L.MinhasTarefas}}" data-to="MinhasTarefas">Continuar</a>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"pontos":{"editor":"enum","options":["25","50","100"],"default":"50"},"medalha":{"editor":"boolean","default":true},"$preview":{"width":360,"height":800}}'>
+var __GO = false;
+var __T = ['Main', 'MinhasTarefas'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  componentDidMount() { this.run(); }
+  componentDidUpdate(p) { if (p.pontos !== this.props.pontos) this.run(); }
+  componentWillUnmount() { clearInterval(this.iv); }
+  run() {
+    var self = this, target = parseInt(this.props.pontos || '50', 10), t0 = Date.now();
+    clearInterval(this.iv);
+    this.setState({ n: 0, streak: 3 });
+    this.iv = setInterval(function () {
+      var k = Math.min((Date.now() - t0) / 900, 1);
+      var e = 1 - Math.pow(1 - k, 3);
+      self.setState({ n: Math.round(target * e), streak: k > 0.7 ? 4 : 3 });
+      if (k >= 1) clearInterval(self.iv);
+    }, 30);
+  }
+  renderVals() { __GO = !!this.props.go;
+    var s = this.state || {};
+    var target = parseInt(this.props.pontos || '50', 10);
+    var cols = ['var(--lima)', '#ffffff', 'var(--lima)', '#ffffff', 'var(--lima)', '#ffffff', 'var(--lima)', '#ffffff', '#ffffff', 'var(--lima)'];
+    var bits = [];
+    for (var i = 0; i < 10; i++) {
+      var ang = (i / 10) * Math.PI * 2;
+      bits.push({ w: i % 3 === 0 ? 22 : 14, h: i % 2 ? 10 : 16, c: cols[i], fx: (Math.cos(ang) >= 0 ? 1 : -1) * (140 + (i % 3) * 40), fy: Math.round(Math.sin(ang) * 16), fr: (i % 2 ? 1 : -1) * (6 + i), d: (0.15 + i * 0.03).toFixed(2) });
+    }
+    var days = [];
+    var st = s.streak || 3;
+    for (var j = 0; j < 7; j++) days.push({ bg: j < st ? 'var(--accent)' : 'transparent', bd: j < st ? 'var(--accent)' : 'var(--border)' });
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      n: s.n == null ? target : s.n, streak: st, days: days, bits: bits,
+      medalha: this.props.medalha !== false
+    };
+  }
+}
+</script>
+</body>
+</html>

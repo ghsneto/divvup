@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>nova tarefa</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar">
+<button class="iconbtn" type="button" aria-label="Fechar" onClick="{{close}}"><span class="ic i-x"></span></button>
+<span class="label muted" style="margin-left:auto;margin-right:8px">{{modoLabel}}</span>
+</header>
+
+<div class="scroll" style="padding:0 16px 24px">
+<h1 class="h2" style="font-size:36px;margin:4px 0 20px">{{heading}}</h1>
+
+<span class="label muted">prévia do cartão</span>
+<div class="card" style="margin:8px 0 28px;display:flex;overflow:hidden;height:116px">
+<div style="width:112px;flex:none;border-right:1px solid var(--border)"><img src="{{img}}" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+<div style="flex:1;min-width:0;padding:12px 16px;display:flex;flex-direction:column">
+<span class="label muted" style="display:flex;align-items:center;gap:4px;font-size:12px"><span class="ic ic-xs {{catIcon}}"></span>{{catName}}</span>
+<p class="ttl" style="font-size:16px;margin-top:4px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:{{titleColor}}">{{titleShown}}</p>
+<div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px"><span class="small muted">{{dueShort}}</span><span class="pb" style="font-size:16px">{{pts}}<small>pts</small></span></div>
+</div>
+</div>
+
+<div class="field">
+<div style="display:flex;justify-content:space-between"><label class="label" for="t-title">título</label><span class="small muted tnum">{{titleLen}}/60</span></div>
+<input id="t-title" class="in" maxlength="60" placeholder="Ex.: Lavar a louça do jantar" value="{{title}}" onChange="{{setTitle}}">
+</div>
+<div class="field" style="margin-top:16px">
+<div style="display:flex;justify-content:space-between"><label class="label" for="t-desc">descrição <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:400">· opcional</span></label><span class="small muted tnum">{{descLen}}/280</span></div>
+<textarea id="t-desc" class="in" maxlength="280" rows="3" placeholder="Algum detalhe que ajude quem pegar" style="height:auto;padding:12px 16px;resize:none" onChange="{{setDesc}}">{{desc}}</textarea>
+</div>
+
+<fieldset style="border:0;padding:0;margin:28px 0 0">
+<legend class="label" style="margin-bottom:12px">categoria</legend>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{cats}}" as="c" hint-placeholder-count="10"><button type="button" class="chip {{c.on}}" aria-pressed="{{c.pressed}}" onClick="{{c.pick}}"><span class="ic ic-s {{c.icon}}"></span>{{c.name}}</button></sc-for>
+</div>
+</fieldset>
+
+<fieldset style="border:0;padding:0;margin:28px 0 0">
+<legend class="label" style="margin-bottom:12px">peso</legend>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.3fr);border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface)">
+<sc-for list="{{pesos}}" as="p" hint-placeholder-count="3"><button type="button" aria-pressed="{{p.pressed}}" onClick="{{p.pick}}" style="border:0;border-left:1px solid {{p.bl}};background:{{p.bg}};color:{{p.fg}};padding:12px 12px 12px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:4px;min-height:76px"><span class="label" style="font-size:12px">{{p.name}}</span><span class="tnum" style="font-size:{{p.fs}}px;font-weight:800;line-height:1.05;font-variation-settings:'opsz' 96,'wdth' 90">{{p.pts}}</span></button></sc-for>
+</div>
+</fieldset>
+
+<fieldset style="border:0;padding:0;margin:28px 0 0">
+<legend class="label" style="margin-bottom:12px">prazo</legend>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+<sc-for list="{{quick}}" as="q" hint-placeholder-count="3"><button type="button" class="chip {{q.on}}" aria-pressed="{{q.pressed}}" onClick="{{q.pick}}">{{q.name}}</button></sc-for>
+</div>
+<div style="display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:8px">
+<div class="field"><label class="small muted" for="t-data">Data</label><div class="in" id="t-data" style="display:flex;align-items:center;gap:8px"><span class="ic ic-s i-calendario muted"></span>{{dataTxt}}</div></div>
+<div class="field"><label class="small muted" for="t-hora">Hora</label><div class="in tnum" id="t-hora" style="display:flex;align-items:center;gap:8px"><span class="ic ic-s i-relogio muted"></span>{{horaTxt}}</div></div>
+</div>
+<sc-if value="{{soon}}" hint-placeholder-val="{{false}}">
+<p class="small a-up" style="margin-top:12px;background:var(--warning-bg);color:var(--warning);border-radius:4px;padding:12px 12px;display:flex;gap:8px;font-weight:600"><span class="ic ic-s i-alerta" style="margin-top:4px"></span>Com menos de 24 h, a tarefa pode ser atribuída automaticamente a quem tem menos pontos.</p>
+</sc-if>
+</fieldset>
+
+<sc-if value="{{editing}}" hint-placeholder-val="{{false}}">
+<button type="button" class="btn btn-t" style="color:var(--danger);margin-top:20px;padding-left:0" onClick="{{askDelete}}"><span class="ic i-lixo"></span>Excluir tarefa</button>
+</sc-if>
+</div>
+
+<div style="flex:none;padding:12px 16px 16px;border-top:1px solid var(--border);background:var(--background)">
+<button type="button" class="btn btn-p btn-w {{ctaOff}}" onClick="{{create}}">{{ctaLabel}}</button>
+</div>
+
+<sc-if value="{{dlg}}" hint-placeholder-val="{{false}}">
+<div class="scrim" style="justify-content:center">
+<div class="dialog" role="alertdialog" aria-labelledby="dlg-t">
+<p class="h3" id="dlg-t" style="font-size:28px">{{dlgTitle}}</p>
+<p class="small muted" style="margin-top:8px">{{dlgBody}}</p>
+<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
+<button type="button" class="btn btn-t" onClick="{{closeDlg}}">{{dlgCancel}}</button>
+<a class="btn btn-dd" href="{{L.Main}}" data-to="Main">{{dlgOk}}</a>
+</div>
+</div>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"modo":{"editor":"enum","options":["criar","editar"],"default":"criar"},"$preview":{"width":360,"height":800}}'>
+var CATS = [
+  ['Cozinha', 'i-cozinha', '/_blob/97dde59cea6e32f9b1a823e6d64bcd93'], ['Limpeza geral', 'i-limpeza', '/_blob/95053c824273e7686a9b157ad9538b3b'],
+  ['Banheiro', 'i-banheiro', '/_blob/e4af932dd4ca6b9c21d747d7e2502d09'], ['Lavanderia', 'i-lavanderia', '/_blob/fedd6f71ffcd53e0f5649a76694aaf49'],
+  ['Lixo', 'i-lixo', '/_blob/33f60ac1dc7ce7619f3dfa3b293f5398'], ['Compras', 'i-compras', '/_blob/bf447b271b996a4a7ac4a6baa25b0423'],
+  ['Pets', 'i-pets', '/_blob/0308c7d9b996da922b199e0e6807091e'], ['Plantas', 'i-plantas', '/_blob/0ce9043a42d924421ef5725dd81bb316'],
+  ['Manutenção', 'i-manutencao', '/_blob/e22b27595c0f31a27b2076cf823420f3'], ['Outros', 'i-outros', '/_blob/b83e59282e2b53e90b3d4137e4490e73']
+];
+var PESOS = [['leve', 25], ['média', 50], ['pesada', 100]];
+var QUICK = [['hoje, 22h', 'hoje, 6 nov', '22:00', true], ['amanhã, 20h', 'amanhã, 7 nov', '20:00', false], ['sábado, 12h', 'sáb., 8 nov', '12:00', false]];
+var __GO = false;
+var __T = ['Main'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  S() {
+    var ed = this.props.modo === 'editar';
+    var base = ed ? { title: 'Varrer a sala', desc: 'Inclui embaixo do sofá.', cat: 1, peso: 1, q: 1 } : { title: '', desc: '', cat: 0, peso: 1, q: 1 };
+    var st = this.state && this.state.modo === (this.props.modo || 'criar') ? this.state : {};
+    return Object.assign(base, { dlg: null, dirty: false }, st);
+  }
+  set(o) { var m = this.props.modo || 'criar'; var cur = this.state && this.state.modo === m ? {} : { title: undefined }; o.modo = m; if (cur.title === undefined && !(this.state && this.state.modo === m)) { var b = this.S(); o = Object.assign({ title: b.title, desc: b.desc, cat: b.cat, peso: b.peso, q: b.q, dlg: null, dirty: false }, o); } this.setState(o); }
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.S(), ed = this.props.modo === 'editar';
+    var c = CATS[s.cat], q = QUICK[s.q];
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      editing: ed, modoLabel: ed ? 'só sem dono' : 'vai pro deck de todo mundo', heading: ed ? 'editar tarefa' : 'nova tarefa',
+      img: c[2], catIcon: c[1], catName: c[0],
+      title: s.title, desc: s.desc, titleLen: s.title.length, descLen: s.desc.length,
+      titleShown: s.title || 'Dá um nome pra tarefa', titleColor: s.title ? 'var(--text)' : 'var(--text-muted)',
+      pts: PESOS[s.peso][1], dueShort: q[0], dataTxt: q[1], horaTxt: q[2], soon: q[3],
+      cats: CATS.map(function (k, i) { return { name: k[0], icon: k[1], on: i === s.cat ? 'on' : '', pressed: i === s.cat ? 'true' : 'false', pick: function () { self.set({ cat: i, dirty: true }); } }; }),
+      pesos: PESOS.map(function (k, i) { var on = i === s.peso; return { name: k[0], pts: k[1], fs: 36, pressed: on ? 'true' : 'false', bg: on ? 'var(--accent)' : 'transparent', fg: on ? 'var(--on-accent)' : 'var(--text)', bl: i === 0 ? 'transparent' : 'var(--border)', pick: function () { self.set({ peso: i, dirty: true }); } }; }),
+      quick: QUICK.map(function (k, i) { return { name: k[0], on: i === s.q ? 'on' : '', pressed: i === s.q ? 'true' : 'false', pick: function () { self.set({ q: i, dirty: true }); } }; }),
+      setTitle: function (e) { self.set({ title: e.target.value.slice(0, 60), dirty: true }); },
+      setDesc: function (e) { self.set({ desc: e.target.value.slice(0, 280), dirty: true }); },
+      ctaLabel: ed ? 'Salvar' : 'Criar tarefa', ctaOff: s.title.trim() ? '' : 'off',
+      create: function () { if (!s.title.trim()) return; if (self.props.go) { self.props.go('Main'); return; } self.set({ dlg: null }); },
+      close: function () { if (s.dirty) self.set({ dlg: 'discard' }); else if (self.props.go) self.props.go('back'); },
+      askDelete: function () { self.set({ dlg: 'delete' }); },
+      closeDlg: function () { self.set({ dlg: null }); },
+      dlg: !!s.dlg,
+      dlgTitle: s.dlg === 'delete' ? 'Excluir esta tarefa?' : 'Descartar alterações?',
+      dlgBody: s.dlg === 'delete' ? 'Ela some do deck de todo mundo. Não dá pra desfazer.' : 'O que você escreveu aqui vai se perder.',
+      dlgCancel: s.dlg === 'delete' ? 'Cancelar' : 'Continuar editando',
+      dlgOk: s.dlg === 'delete' ? 'Excluir tarefa' : 'Descartar'
+    };
+  }
+}
+</script>
+</body>
+</html>

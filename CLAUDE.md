@@ -20,18 +20,27 @@ App Android (Kotlin + Jetpack Compose + Firebase) de divisão gamificada de tare
 - Módulos: `:app`, `:core:{designsystem,model,domain,data,testing}`, `:feature:{auth,onboarding,house,deck,tasks,ranking,notifications,profile,discover}`.
 - `:core:domain` é Kotlin puro (sem Android/Firebase): toda regra de cálculo mora lá e é testada por unidade.
 - Cloud Functions em TypeScript em `functions/`, testadas no Emulator.
-- minSdk 26. Flavors `dev` / `prod`.
+- minSdk 26, compileSdk 37, targetSdk 37, JDK 21. Flavors `dev` / `prod` (dimensão `ambiente`).
+- Convenções de build em `build-logic/` (`divvup.android.application`, `.library`, `.compose`, `.feature`, `divvup.hilt`, `divvup.jvm.library`); versões em `gradle/libs.versions.toml`. Só adote versões publicadas há pelo menos duas semanas.
+- Verificação completa (a mesma da CI): `./gradlew check assembleDevDebug assembleProdDebug`. `check` roda lint estrito (aviso = erro), testes unitários dos dois flavors e a guarda `verificarDominioPuro`.
 
 ## Design
-- Design system **divvup** (Claude Design): https://claude.ai/artifact/UjULqNSrf5z5nr8z4KdEQq — leia `project/README.md` e `project/tokens.json` dele antes de mexer em UI.
-- As telas vêm do Claude Design; implemente fielmente em Compose. Comportamento, estados e navegação de cada tela estão em [TELAS.md](TELAS.md).
-- Toda cor, tipografia, forma e espaçamento vem de `DivvupTheme` em `:core:designsystem`. **Nada de valores literais nas telas.**
+- **O app tem que ficar igual ao desenho.** A referência está versionada em [`docs/design/`](docs/design/README.md): leia o README dela antes de mexer em qualquer UI. Ela traz o mapa código da TELAS.md → artboard, os PNGs claro/escuro de cada tela, o HTML-fonte com as medidas exatas, tokens, ícones, ilustrações e avatares.
+- Ordem de precedência: telas (`docs/design/fonte` + estilo das telas) → PNGs → [TELAS.md](TELAS.md) (comportamento, estados, navegação) → design system → SPEC. Regra de negócio `R-xx` sempre vence o desenho; se o desenho a contradiz, pare e pergunte.
+- Originais no Claude Design: telas https://claude.ai/artifact/FCk2g4sxMAj8zyKA7soACw · protótipo https://claude.ai/artifact/JS5bWp4d6nNk2KMTDh4XRk · design system https://claude.ai/artifact/UjULqNSrf5z5nr8z4KdEQq. Se o desenho mudar lá, atualize `docs/design/` no mesmo PR do código.
+- Valores do desenho em px = dp; tamanhos de fonte = sp. Textos do desenho são a cópia final (exceto dados de exemplo) e vão para `strings.xml` como estão.
+- Toda cor, tipografia, forma e espaçamento vem de `DivvupTheme` em `:core:designsystem`. **Nada de valores literais nas telas** (o lint barra `Color(0x…)`, `.dp` e `.sp` fora de `:core:designsystem`).
+- Ícones, ilustrações e avatares vêm de `docs/design/{icones,ilustracoes,avatares}` convertidos para vector drawable; nunca redesenhe nem troque por Material Icons.
 - Swipe aceitar = `accent` (lima); passar = `danger`. Lima nunca como texto sobre fundo claro.
 - Títulos em minúsculas, sem emoji na UI, números no formato pt-BR, todos os textos em `strings.xml`.
 - Toda tela tem estados carregando / vazio / erro / sem permissão. Testar claro e escuro.
 
 ## Fluxo de trabalho
 - Antes de declarar algo pronto: build + testes unitários + testes do Emulator relevantes passando.
+- **Pronto para tela/componente** só quando:
+  1. existe teste de screenshot (Roborazzi) de cada estado desenhado, em claro e escuro, a 360×800 dp;
+  2. você comparou lado a lado o screenshot gerado com `docs/design/png/<Artboard>.png` (e `__escuro`) e listou no PR qualquer diferença restante, com o motivo;
+  3. os screenshots aprovados estão commitados e a CI os verifica (`verifyRoborazzi*`).
 - Regras de domínio e Functions: escreva o teste junto (de preferência antes).
 - Commits pequenos, mensagem em português, referenciando `R-xx` quando aplicável.
 

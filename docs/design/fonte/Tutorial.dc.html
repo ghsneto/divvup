@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>tutorial do swipe</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header style="display:flex;align-items:center;gap:12px;padding:16px 8px 0 16px;flex:none">
+<div style="display:flex;gap:4px;flex:1" aria-label="Passo 4 de 5 do cadastro"><sc-for list="{{prog}}" as="g" hint-placeholder-count="5"><span style="flex:1;height:4px;border-radius:4px;background:{{g.bg}}"></span></sc-for></div>
+<a class="btn btn-t" href="{{L.Permissao}}" data-to="Permissao" style="min-height:44px">Pular</a>
+</header>
+
+<div style="padding:16px 16px 0;flex:none;min-height:150px">
+<span class="label muted">{{stepLabel}}</span>
+<h1 class="h2 a-l" style="font-size:36px;margin-top:8px">{{headline}}</h1>
+</div>
+
+<main style="flex:1;min-height:0;position:relative;padding:8px 16px 0">
+<sc-if value="{{showCard}}" hint-placeholder-val="{{true}}">
+<div style="position:relative;height:360px">
+<div class="card" style="position:absolute;inset:0;transform:translateY(14px) scale(.94);background:var(--surface-alt)"></div>
+<div style="position:absolute;inset:0;touch-action:none;cursor:grab;transform:translateX({{x}}px) rotate({{rot}}deg);transition:{{tr}}" onPointerDown="{{down}}" onPointerMove="{{move}}" onPointerUp="{{up}}" onPointerCancel="{{up}}">
+<article class="card {{cardCls}}" style="height:100%;overflow:hidden;position:relative;display:flex;flex-direction:column" aria-label="Cartão de exemplo: {{c.title}}">
+<div style="height:190px;position:relative;border-bottom:1px solid var(--border)"><img src="{{c.img}}" alt="" draggable="false" style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none">
+<span class="st st-n" style="position:absolute;right:12px;top:12px">de mentira</span></div>
+<div style="padding:16px 20px;display:flex;flex-direction:column;flex:1">
+<span class="label muted" style="display:flex;align-items:center;gap:4px"><span class="ic ic-xs {{c.icon}}"></span>{{c.cat}}</span>
+<p class="h3" style="font-size:28px;margin-top:4px">{{c.title}}</p>
+<div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center"><span class="small muted">vence amanhã às 20h</span><span class="pb" style="font-size:28px;padding:8px 16px">{{c.pts}}<small>pts</small></span></div>
+</div>
+<div style="position:absolute;inset:0;background:var(--accent);opacity:{{okOp}};pointer-events:none;padding:24px"><span style="display:inline-block;border:1px solid var(--on-accent);color:var(--on-accent);border-radius:4px;padding:4px 12px;transform:rotate(-8deg);font-size:36px;font-weight:800">É MINHA</span></div>
+<div style="position:absolute;inset:0;background:var(--danger);opacity:{{noOp}};pointer-events:none;padding:24px;display:flex;justify-content:flex-end;align-items:flex-start"><span style="border:1px solid var(--on-danger);color:var(--on-danger);border-radius:4px;padding:4px 12px;transform:rotate(8deg);font-size:36px;font-weight:800">PASSO</span></div>
+</article>
+</div>
+<div aria-hidden="true" style="position:absolute;top:150px;{{arrowSide}}:12px;width:36px;height:36px;border-radius:999px;background:{{arrowBg}};color:{{arrowFg}};display:flex;align-items:center;justify-content:center;z-index:3;opacity:{{arrowOp}};animation:dv-nudge 1.6s ease-in-out infinite"><span class="ic {{arrowIcon}}"></span></div>
+</div>
+</sc-if>
+
+<sc-if value="{{finished}}" hint-placeholder-val="{{false}}">
+<div class="a-up" style="padding-top:12px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;gap:8px">
+<span style="flex:1;height:64px;border-radius:12px;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600"><span class="ic i-check"></span>assumir</span>
+<span style="flex:1;height:64px;border-radius:12px;background:var(--danger);color:var(--on-danger);display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600"><span class="ic i-x"></span>passar</span>
+<span style="flex:1;height:64px;border-radius:12px;background:var(--text);color:var(--background);display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600"><span class="ic i-desfazer"></span>desfazer</span>
+</div>
+<p class="txt muted">Essas tarefas eram de mentira, nada foi salvo. As de verdade estão te esperando no deck.</p>
+</div>
+</sc-if>
+</main>
+
+<sc-if value="{{showButtons}}" hint-placeholder-val="{{true}}">
+<div style="flex:none;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:8px;padding:12px 16px 24px">
+<button type="button" class="btn btn-d {{passOff}}" onClick="{{passar}}"><span class="ic i-x"></span>Passar</button>
+<button type="button" class="btn btn-a {{takeOff}}" onClick="{{assumir}}"><span class="ic i-check"></span>Assumir</button>
+</div>
+</sc-if>
+<sc-if value="{{finished}}" hint-placeholder-val="{{false}}">
+<div style="flex:none;padding:12px 16px 24px"><a class="btn btn-p btn-w" href="{{L.Permissao}}" data-to="Permissao">Continuar<span class="ic i-seta-r"></span></a></div>
+</sc-if>
+
+<sc-if value="{{snack}}" hint-placeholder-val="{{false}}">
+<div class="snack" role="status" style="bottom:96px">
+<span style="flex:1;font-weight:600;font-size:14px">Você passou</span>
+<button class="act" type="button" onClick="{{undo}}" style="outline:2px solid var(--lima);outline-offset:-4px;border-radius:4px;animation:dv-nudge 1.6s ease-in-out infinite"><span class="ic ic-s i-desfazer"></span>Desfazer</button>
+<span class="bar" style="animation-duration:6s"></span>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":360,"height":800}}'>
+var CARDS = [
+  { title: 'Lavar a louça', cat: 'Cozinha', icon: 'i-cozinha', pts: 50, img: '/_blob/97dde59cea6e32f9b1a823e6d64bcd93' },
+  { title: 'Tirar o lixo', cat: 'Lixo', icon: 'i-lixo', pts: 25, img: '/_blob/33f60ac1dc7ce7619f3dfa3b293f5398' }
+];
+var __GO = false;
+var __T = ['Permissao'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  S() { return Object.assign({ step: 0, dx: 0, drag: false, leave: null }, this.state || {}); }
+  componentWillUnmount() { clearTimeout(this.t); }
+  go(dir) {
+    var self = this, s = this.S();
+    var want = s.step === 0 ? 'r' : s.step === 1 ? 'l' : null;
+    if (dir !== want) { this.setState({ dx: 0, drag: false }); return; }
+    this.setState({ leave: dir, drag: false });
+    clearTimeout(this.t);
+    this.t = setTimeout(function () { self.setState({ step: s.step + 1, leave: null, dx: 0, back: false }); }, 280);
+  }
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.S();
+    var step = s.step;
+    var c = CARDS[step === 0 ? 0 : 1];
+    var x = s.leave === 'r' ? 560 : s.leave === 'l' ? -560 : (step === 2 ? -560 : s.dx);
+    var p = Math.min(Math.abs(s.dx) / 110, 1);
+    var heads = ['arrasta pra direita: a tarefa é sua', 'arrasta pra esquerda: passa a vez', 'errou? desfaz em até 3 segundos', 'pronto, você já sabe jogar'];
+    var labels = ['tutorial · 1 de 3', 'tutorial · 2 de 3', 'tutorial · 3 de 3', 'tutorial completo'];
+    var prog = [];
+    for (var i = 0; i < 5; i++) prog.push({ bg: i < 3 ? 'var(--text)' : (i === 3 ? 'var(--primary)' : 'var(--border)') });
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '', prog: prog,
+      stepLabel: labels[step], headline: heads[step], c: c,
+      showCard: step < 3, finished: step === 3, showButtons: step < 2,
+      x: x, rot: (x / 22).toFixed(2), tr: s.drag ? 'none' : 'transform .28s cubic-bezier(.2,.8,.2,1)',
+      okOp: s.dx > 0 ? p.toFixed(2) : 0, noOp: s.dx < 0 ? p.toFixed(2) : 0,
+      cardCls: s.back ? 'a-l' : '',
+      arrowSide: step === 0 ? 'right' : 'left', arrowIcon: step === 0 ? 'i-seta-r' : 'i-chev-l',
+      arrowBg: step === 0 ? 'var(--accent)' : (step === 1 ? 'var(--danger)' : 'transparent'), arrowFg: step === 0 ? 'var(--on-accent)' : 'var(--on-danger)',
+      arrowOp: step < 2 ? 1 : 0, passOff: step === 0 ? 'off' : '', takeOff: step === 1 ? 'off' : '',
+      snack: step === 2,
+      down: function (e) { if (self.S().step > 1) return; self.sx = e.clientX; if (e.currentTarget.setPointerCapture) e.currentTarget.setPointerCapture(e.pointerId); self.setState({ drag: true, dx: 0 }); },
+      move: function (e) { if (!self.S().drag) return; self.setState({ dx: e.clientX - self.sx }); },
+      up: function () { var st = self.S(); if (!st.drag) return; if (st.dx > 100) self.go('r'); else if (st.dx < -100) self.go('l'); else self.setState({ drag: false, dx: 0 }); },
+      passar: function () { self.go('l'); }, assumir: function () { self.go('r'); },
+      undo: function () { self.setState({ step: 3 }); }
+    };
+  }
+}
+</script>
+</body>
+</html>
