@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>editar casa</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar" style="padding-left:8px"><a class="iconbtn" href="{{L.MinhaCasa}}" data-to="MinhaCasa" aria-label="Voltar"><span class="ic i-chev-l"></span></a><span class="label muted">minha casa</span></header>
+<div class="scroll" style="padding:0 16px 16px">
+<h1 class="h1" style="font-size:57px">editar casa</h1>
+<div class="field" style="margin-top:24px"><label class="label" for="g-nome">nome</label><input id="g-nome" class="in" value="Rep. Cajueiro" style="font-size:16px;font-weight:600"></div>
+<fieldset style="border:0;padding:0;margin:20px 0 0"><legend class="label" style="margin-bottom:8px">tipo</legend>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><sc-for list="{{tipos}}" as="t" hint-placeholder-count="3"><button type="button" class="chip {{t.on}}" aria-pressed="{{t.pressed}}" onClick="{{t.pick}}"><span class="ic ic-s {{t.icon}}"></span>{{t.name}}</button></sc-for></div>
+<sc-if value="{{warn}}" hint-placeholder-val="{{false}}"><p class="small a-up" style="margin-top:12px;background:var(--warning-bg);color:var(--warning);padding:12px 12px;border-radius:4px;display:flex;gap:8px;font-weight:600"><span class="ic ic-s i-alerta"></span>Casal/Família não aparece na busca. Ao salvar, o anúncio de vagas será desligado.</p></sc-if>
+</fieldset>
+<h2 class="label" style="margin:24px 0 8px">onde fica</h2>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px">
+<div class="field"><label class="small muted" for="g-cid">Cidade</label><input id="g-cid" class="in" value="Recife"></div>
+<div class="field"><label class="small muted" for="g-bai">Bairro</label><input id="g-bai" class="in" value="Várzea"></div>
+<div class="field" style="grid-column:span 2"><label class="small muted" for="g-rua">Rua</label><input id="g-rua" class="in" value="Rua Amaro Albino Pimentel"></div>
+</div>
+<p class="small muted" style="margin-top:8px;display:flex;gap:8px"><span class="ic ic-s i-cadeado"></span>Só os moradores veem isso. O número fica no anúncio, e só para quem você aprovar.</p>
+</div>
+<div style="flex:none;padding:12px 16px 20px;border-top:1px solid var(--border)"><a class="btn btn-p btn-w" href="{{L.MinhaCasa}}" data-to="MinhaCasa">Salvar</a></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":360,"height":800}}'>
+var T = [['República', 'i-usuarios'], ['Moradia compartilhada', 'i-casa'], ['Casal/Família', 'i-perfil']];
+var __GO = false;
+var __T = ['MinhaCasa'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.state || {}, sel = s.sel == null ? 0 : s.sel;
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '', warn: sel === 2,
+      tipos: T.map(function (t, i) { return { name: t[0], icon: t[1], on: i === sel ? 'on' : '', pressed: i === sel ? 'true' : 'false', pick: function () { self.setState({ sel: i }); } }; })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>como te chamam</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header style="display:flex;align-items:center;gap:12px;padding:20px 16px 0;flex:none">
+<div style="display:flex;gap:4px;flex:1" aria-label="Passo 1 de 5"><span style="flex:1;height:4px;border-radius:4px;background:var(--primary)"></span><span style="flex:1;height:4px;border-radius:4px;background:var(--border)"></span><span style="flex:1;height:4px;border-radius:4px;background:var(--border)"></span><span style="flex:1;height:4px;border-radius:4px;background:var(--border)"></span><span style="flex:1;height:4px;border-radius:4px;background:var(--border)"></span></div>
+<span class="small muted tnum">1/5</span>
+</header>
+
+<div style="padding:28px 16px 0;flex:1;display:flex;flex-direction:column">
+<h1 class="h1" style="font-size:57px;max-width:250px">como te chamam?</h1>
+
+<div style="display:flex;align-items:flex-end;gap:16px;margin-top:24px">
+<div style="position:relative;flex:none">
+<span class="av a-pop" style="width:96px;height:96px;border:1px solid var(--accent)"><img src="{{avatar}}" alt="Seu avatar"></span>
+<a href="{{L.Avatar}}" data-to="Avatar" class="iconbtn" aria-label="Escolher avatar" style="position:absolute;right:-4px;bottom:-4px;background:var(--primary);color:var(--on-primary);border-radius:999px"><span class="ic i-editar"></span></a>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;padding-bottom:4px">
+<span class="label muted">escolha rápida</span>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+<sc-for list="{{quick}}" as="q" hint-placeholder-count="6"><button type="button" onClick="{{q.pick}}" aria-label="Avatar {{q.n}}" aria-pressed="{{q.pressed}}" style="width:44px;height:44px;padding:0;border-radius:999px;border:1px solid {{q.ring}};overflow:hidden;cursor:pointer;background:transparent"><img src="{{q.src}}" alt="" style="width:100%;height:100%;display:block"></button></sc-for>
+</div>
+</div>
+</div>
+<div style="display:flex;gap:16px;margin-top:12px"><a href="{{L.Avatar}}" data-to="Avatar" class="small" style="font-weight:600">Ver todos os avatares</a><a href="{{L.Avatar}}" data-to="Avatar" class="small" style="font-weight:600;display:flex;gap:4px;align-items:center"><span class="ic ic-xs i-camera"></span>Usar foto</a></div>
+
+<div class="field" style="margin-top:28px"><label class="label" for="n-nome">nome de exibição</label><input id="n-nome" class="in" value="{{nome}}" onChange="{{setNome}}" maxlength="24"><span class="small muted">É assim que a casa vai te ver no ranking.</span></div>
+
+<a class="btn btn-p btn-w {{off}}" href="{{L.OnbCasa}}" data-to="OnbCasa" style="margin:auto 0 24px">Continuar<span class="ic i-seta-r"></span></a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":360,"height":800}}'>
+var AVS = ['/_blob/e00900d46e0a7e6fc26a8968881f87ba', '/_blob/e17b5e45674dae4c695a8db8214f810e', '/_blob/fcf87c353c54bba17f885d3f7e589fba', '/_blob/1862a84abf54b8be9631463d324e6c6e', '/_blob/37a679a81d9bb119a79eecc63e4a10b9', '/_blob/f990b1328564f59bb8c0c4b6947416ec'];
+var __GO = false;
+var __T = ['Avatar', 'OnbCasa'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = Object.assign({ av: 0, nome: 'Iane' }, this.state || {});
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      avatar: AVS[s.av], nome: s.nome, off: s.nome.trim() ? '' : 'off',
+      setNome: function (e) { self.setState({ nome: e.target.value }); },
+      quick: AVS.map(function (src, i) { return { src: src, n: i + 1, ring: i === s.av ? 'var(--primary)' : 'transparent', pressed: i === s.av ? 'true' : 'false', pick: function () { self.setState({ av: i }); } }; })
+    };
+  }
+}
+</script>
+</body>
+</html>

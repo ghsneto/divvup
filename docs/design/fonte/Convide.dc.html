@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>convide seus moradores</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar"><span class="label muted" style="flex:1">casa criada</span><a class="btn btn-t" href="{{L.Main}}" data-to="Main" style="min-height:44px">Fazer isso depois</a></header>
+
+<div style="padding:8px 16px 0;flex:1;display:flex;flex-direction:column">
+<h1 class="h1" style="font-size:57px">chama a galera</h1>
+<p class="txt muted" style="margin-top:12px;max-width:270px">Quem usar o código entra direto na Rep. Cajueiro, sem precisar de aprovação.</p>
+
+<div style="margin-top:28px;background:var(--tinta);color:#f2f3f5;border-radius:12px;overflow:hidden;position:relative">
+<div style="padding:20px 20px 16px;display:flex;justify-content:space-between;align-items:center">
+<span class="label" style="color:var(--lima)">código de convite</span>
+<span class="small tnum" style="color:#9ea1aa;display:flex;align-items:center;gap:4px"><span class="ic ic-xs i-relogio"></span>{{left}}</span>
+</div>
+<div class="{{anim}}" style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;padding:0 16px" aria-label="Código {{codeSpaced}}">
+<sc-for list="{{chars}}" as="c" hint-placeholder-count="6"><span style="height:68px;border-radius:4px;background:#272b36;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:800;font-variant-numeric:tabular-nums;font-variation-settings:'opsz' 96,'wdth' 90;color:{{c.color}}">{{c.ch}}</span></sc-for>
+</div>
+<div style="display:flex;align-items:center;gap:8px;padding:16px 20px 16px;border-top:1px dashed #3d414d;margin-top:16px">
+<span class="small" style="color:#9ea1aa;flex:1">vale por 24 h · uso único</span>
+<div style="width:90px;height:4px;background:#272b36;border-radius:4px;overflow:hidden"><div style="height:100%;width:{{pct}}%;background:var(--lima)"></div></div>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:8px;margin-top:12px">
+<button type="button" class="btn btn-p" onClick="{{share}}"><span class="ic i-compartilhar"></span>Compartilhar</button>
+<button type="button" class="btn btn-o" onClick="{{copy}}"><span class="ic i-copiar"></span>Copiar</button>
+</div>
+<button type="button" class="btn btn-t" onClick="{{regen}}" style="align-self:flex-start;padding-left:0;margin-top:4px"><span class="ic ic-s i-refresh"></span>Gerar outro código</button>
+
+<p class="small muted" style="margin:auto 0 24px;display:flex;gap:8px"><span class="ic ic-s i-info"></span>Você pode gerar e revogar códigos depois em Minha casa › Convites.</p>
+</div>
+
+<sc-if value="{{snack}}" hint-placeholder-val="{{false}}">
+<div class="snack" role="status" style="bottom:24px"><span class="ic ic-s i-check" style="color:var(--lima)"></span><span style="flex:1;font-weight:600;font-size:14px">{{snack}}</span></div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":360,"height":800}}'>
+var ALPHA = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+var __GO = false;
+var __T = ['Main'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  componentDidMount() { var self = this; this.t0 = Date.now(); this.iv = setInterval(function () { self.forceUpdate(); }, 1000); }
+  componentWillUnmount() { clearInterval(this.iv); clearTimeout(this.ts); }
+  toast(msg) { var self = this; clearTimeout(this.ts); this.setState({ snack: msg }); this.ts = setTimeout(function () { self.setState({ snack: null }); }, 2200); }
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = Object.assign({ code: 'K7PQ2X', n: 0 }, this.state || {});
+    var total = 24 * 3600, el = Math.floor((Date.now() - (this.t0 || Date.now())) / 1000) + 19;
+    var rem = Math.max(total - el, 0);
+    var h = Math.floor(rem / 3600), m = Math.floor((rem % 3600) / 60), sec = rem % 60;
+    function p(n) { return (n < 10 ? '0' : '') + n; }
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      chars: s.code.split('').map(function (c, i) { return { ch: c, color: i % 2 ? 'var(--lima)' : '#f2f3f5' }; }),
+      codeSpaced: s.code.split('').join(' '), anim: s.n ? 'a-r' : '',
+      left: p(h) + ':' + p(m) + ':' + p(sec), pct: Math.round(rem / total * 100),
+      snack: s.snack || '',
+      share: function () { self.toast('Abrindo o compartilhar do Android'); },
+      copy: function () { self.toast('Código copiado'); },
+      regen: function () { var c = ''; for (var i = 0; i < 6; i++) c += ALPHA[Math.floor(Math.random() * ALPHA.length)]; self.t0 = Date.now(); self.setState({ code: c, n: s.n + 1 }); self.toast('Código novo gerado. O anterior continua ativo.'); }
+    };
+  }
+}
+</script>
+</body>
+</html>

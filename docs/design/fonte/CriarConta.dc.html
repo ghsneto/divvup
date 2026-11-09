@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>criar conta</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar" style="padding-left:8px"><a class="iconbtn" href="{{L.BoasVindas}}" data-to="BoasVindas" aria-label="Voltar"><span class="ic i-chev-l"></span></a></header>
+<div class="scroll" style="padding:0 16px 16px">
+<span class="label muted">leva 1 minuto</span>
+<h1 class="h1" style="font-size:57px;margin-bottom:24px">criar conta</h1>
+
+<div class="field"><label class="label" for="c-nome">nome</label><input id="c-nome" class="in" value="{{nome}}" onChange="{{setNome}}" placeholder="Como te chamam em casa" autocomplete="given-name"></div>
+
+<div class="field" style="margin-top:16px"><label class="label" for="c-mail">e-mail</label><input id="c-mail" class="in {{mailErr}}" type="email" value="{{mail}}" onChange="{{setMail}}" aria-invalid="{{mailInv}}" autocomplete="email">
+<sc-if value="{{dup}}" hint-placeholder-val="{{false}}"><p class="errmsg"><span class="ic i-alerta"></span>Esse e-mail já tem conta. <a href="{{L.Entrar}}" data-to="Entrar" style="color:var(--danger)">Entrar</a></p></sc-if></div>
+
+<div class="field" style="margin-top:16px"><label class="label" for="c-pass">senha</label><input id="c-pass" class="in" type="password" value="{{pass}}" onChange="{{setPass}}" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+<div style="display:flex;align-items:center;gap:8px;margin-top:4px"><div style="display:flex;gap:4px;flex:1" aria-hidden="true"><sc-for list="{{meter}}" as="m" hint-placeholder-count="4"><span style="flex:1;height:4px;border-radius:4px;background:{{m.bg}};transition:background .2s"></span></sc-for></div><span class="small" style="font-weight:600;color:{{forceColor}};min-width:58px;text-align:right">{{forceTxt}}</span></div></div>
+
+<div class="field" style="margin-top:16px"><label class="label" for="c-conf">confirmar senha</label><input id="c-conf" class="in {{confErr}}" type="password" value="{{conf}}" onChange="{{setConf}}" autocomplete="new-password">
+<sc-if value="{{mismatch}}" hint-placeholder-val="{{false}}"><p class="errmsg"><span class="ic i-alerta"></span>As senhas não batem.</p></sc-if></div>
+
+<label style="display:flex;gap:12px;align-items:flex-start;margin-top:20px;cursor:pointer">
+<input type="checkbox" checked="{{terms}}" onChange="{{setTerms}}" style="width:22px;height:22px;margin:4px 0 0;accent-color:var(--primary);flex:none">
+<span class="small">Li e aceito os <a href="{{L.Sobre}}" data-to="Sobre">Termos de uso</a> e a <a href="{{L.Sobre}}" data-to="Sobre">Política de Privacidade</a>.</span>
+</label>
+
+<a class="btn btn-p btn-w {{ctaOff}}" href="{{ctaHref.h}}" data-to="{{ctaHref.t}}" style="margin-top:20px">Criar conta</a>
+<div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:8px;margin-top:8px">
+<a class="btn btn-o" href="{{L.OnbNome}}" data-to="OnbNome"><span style="font-weight:600;font-size:16px;color:var(--primary)">G</span>Google</a>
+<a class="btn btn-t" href="{{L.Entrar}}" data-to="Entrar">Já tenho conta</a>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"emailDuplicado":{"editor":"boolean","default":false},"$preview":{"width":360,"height":800}}'>
+var __GO = false;
+var __T = ['BoasVindas', 'Entrar', 'OnbNome', 'Sobre'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var self = this;
+    var s = Object.assign({ nome: 'Iane', mail: 'iane@email.com', pass: 'caju', conf: 'caju2', terms: false }, this.state || {});
+    var p = s.pass, sc = 0;
+    if (p.length >= 8) sc++;
+    if (/[A-Z]/.test(p) && /[a-z]/.test(p)) sc++;
+    if (/\d/.test(p)) sc++;
+    if (/[^A-Za-z0-9]/.test(p) || p.length >= 12) sc++;
+    if (p.length < 8) sc = Math.min(sc, 1);
+    var labels = ['fraca', 'fraca', 'razoável', 'boa', 'forte'];
+    var colors = ['var(--danger)', 'var(--danger)', 'var(--warning)', 'var(--success)', 'var(--success)'];
+    var meter = [];
+    for (var i = 0; i < 4; i++) meter.push({ bg: i < Math.max(sc, p ? 1 : 0) ? colors[sc] : 'var(--surface-alt)' });
+    var mismatch = s.conf.length > 0 && s.conf !== s.pass;
+    var dup = !!this.props.emailDuplicado;
+    var ok = s.terms && sc >= 2 && !mismatch && s.nome && !dup;
+    function set(k) { return function (e) { var o = {}; o[k] = e.target.type === 'checkbox' ? e.target.checked : e.target.value; self.setState(o); }; }
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      nome: s.nome, mail: s.mail, pass: s.pass, conf: s.conf, terms: s.terms,
+      setNome: set('nome'), setMail: set('mail'), setPass: set('pass'), setConf: set('conf'), setTerms: set('terms'),
+      meter: meter, forceTxt: p ? labels[sc] : '', forceColor: colors[sc],
+      mismatch: mismatch, confErr: mismatch ? 'err' : '', dup: dup, mailErr: dup ? 'err' : '', mailInv: dup ? 'true' : 'false',
+      ctaOff: ok ? '' : 'off', ctaHref: ok ? __u('OnbNome') : __u('')
+    };
+  }
+}
+</script>
+</body>
+</html>

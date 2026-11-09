@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>procurar vaga</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<div style="padding:12px 16px 0;flex:none">
+<div style="display:flex;align-items:center;gap:4px">
+<a class="iconbtn" href="{{L.OnbCasa}}" data-to="OnbCasa" aria-label="Voltar" style="margin-left:-12px"><span class="ic i-chev-l"></span></a>
+<label for="q" style="flex:1;display:flex;align-items:center;gap:8px;height:48px;border:1px solid var(--text);border-radius:4px;padding:0 12px;background:var(--surface)"><span class="ic ic-s i-local"></span><input id="q" value="{{q}}" onChange="{{setQ}}" placeholder="Cidade, bairro ou faculdade" style="flex:1;border:0;outline:0;background:transparent;font-size:16px;min-width:0"></label>
+</div>
+<div style="display:flex;align-items:center;gap:8px;margin-top:12px">
+<div role="tablist" aria-label="Visualização" style="display:flex;border:1px solid var(--border);border-radius:4px;overflow:hidden">
+<button role="tab" type="button" aria-selected="{{listaSel}}" onClick="{{toLista}}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border:0;background:{{listaBg}};color:{{listaFg}};font-weight:600;font-size:14px;cursor:pointer"><span class="ic ic-s i-lista"></span>Lista</button>
+<button role="tab" type="button" aria-selected="{{mapaSel}}" onClick="{{toMapa}}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border:0;background:{{mapaBg}};color:{{mapaFg}};font-weight:600;font-size:14px;cursor:pointer"><span class="ic ic-s i-mapa"></span>Mapa</button>
+</div>
+<button type="button" class="chip" onClick="{{openF}}" style="margin-left:auto"><span class="ic ic-s i-filtro"></span>Filtros<span class="tnum" style="background:var(--text);color:var(--background);border-radius:999px;padding:0 8px;font-size:12px">2</span></button>
+</div>
+</div>
+
+<sc-if value="{{isAntes}}" hint-placeholder-val="{{false}}">
+<div style="padding:48px 16px 0"><span class="label muted">procurar vaga</span><p class="h1" style="font-size:57px;margin-top:8px">onde você vai estudar?</p><p class="txt muted" style="margin-top:12px">Digite a cidade, o bairro ou a faculdade. Mostramos as casas com vaga mais perto.</p>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:20px"><button type="button" class="chip" onClick="{{sugg}}">UFPE, Recife</button><button type="button" class="chip" onClick="{{sugg}}">UFPB, João Pessoa</button><button type="button" class="chip" onClick="{{sugg}}">Boa Viagem</button></div></div>
+</sc-if>
+
+<sc-if value="{{isVazio}}" hint-placeholder-val="{{false}}">
+<div style="padding:48px 16px 0"><span class="ic ic-l i-casa muted"></span><p class="h2" style="font-size:36px;margin-top:12px">nenhuma casa com vagas por aqui</p><p class="txt muted" style="margin-top:8px">Tenta um bairro vizinho ou tira o filtro de valor.</p><button type="button" class="btn btn-o" style="margin-top:16px" onClick="{{sugg}}">Limpar filtros</button></div>
+</sc-if>
+
+<sc-if value="{{isOff}}" hint-placeholder-val="{{false}}">
+<div style="padding:48px 16px 0"><span class="ic ic-l i-offline muted"></span><p class="h2" style="font-size:36px;margin-top:12px">sem conexão</p><p class="txt muted" style="margin-top:8px">A busca precisa de internet.</p><button type="button" class="btn btn-p" style="margin-top:16px" onClick="{{sugg}}"><span class="ic i-refresh"></span>Tentar de novo</button></div>
+</sc-if>
+
+<sc-if value="{{showLista}}" hint-placeholder-val="{{true}}">
+<div class="scroll" style="padding:12px 16px 24px">
+<p class="small muted" style="margin-bottom:12px"><b style="color:var(--text)" class="tnum">4 casas</b> com vaga perto de UFPE · por distância</p>
+<a href="{{L.CasaPublica}}" data-to="CasaPublica" class="card a-up" style="display:block;overflow:hidden;text-decoration:none;color:var(--text)">
+<div style="height:150px;position:relative;border-bottom:1px solid var(--border)"><img src="/_blob/d9c92a38909b721c330d5ebc54fd0207" alt="" style="width:100%;height:100%;object-fit:cover;display:block"><span class="pb" style="position:absolute;left:12px;top:12px;font-size:14px">2 vagas</span><span class="st st-n" style="position:absolute;right:12px;top:14px;background:var(--surface)">mais perto</span></div>
+<div style="padding:16px">
+<div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start"><div><p class="ttl">Rep. Cajueiro</p><p class="small muted">República · Rua Amaro Albino Pimentel · Várzea</p></div></div>
+<div style="display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) minmax(0,1fr);margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
+<div><span class="label muted" style="font-size:12px">mês</span><p class="tnum" style="margin:0;font-size:20px;font-weight:600">R$ 750</p></div>
+<div><span class="label muted" style="font-size:12px">equilíbrio</span><p class="tnum" style="margin:0;font-size:20px;font-weight:600">82</p></div>
+<div><span class="label muted" style="font-size:12px">distância</span><p class="tnum" style="margin:0;font-size:20px;font-weight:600">1,2<small style="font-size:12px"> km</small></p></div>
+</div>
+<p class="small" style="margin-top:8px;display:flex;align-items:center;gap:8px;color:var(--success);font-weight:600"><span class="ic ic-xs i-raio"></span>40 tarefas no último mês</p>
+</div>
+</a>
+<ul style="list-style:none;margin:12px 0 0;padding:0">
+<sc-for list="{{others}}" as="h" hint-placeholder-count="3">
+<li class="a-up {{h.d}}" style="border-bottom:1px solid var(--border)"><a href="{{L.CasaPublica}}" data-to="CasaPublica" style="display:flex;gap:12px;padding:12px 0;text-decoration:none;color:var(--text)">
+<span style="width:88px;height:88px;border-radius:12px;overflow:hidden;flex:none;border:1px solid var(--border)"><img src="{{h.img}}" alt="" style="width:100%;height:100%;object-fit:cover"></span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px"><span style="font-weight:600;font-size:16px">{{h.name}}</span><span class="small muted" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{h.addr}}</span><span class="small" style="display:flex;gap:12px;margin-top:auto"><b class="tnum">{{h.price}}</b><span class="muted tnum">{{h.dist}}</span><span class="muted tnum">eq. {{h.bal}}</span></span></span>
+<span class="pb" style="font-size:12px;padding:4px 8px;align-self:flex-start">{{h.vagas}}</span>
+</a></li>
+</sc-for>
+</ul>
+</div>
+</sc-if>
+
+<sc-if value="{{showMapa}}" hint-placeholder-val="{{false}}">
+<div style="flex:1;position:relative;overflow:hidden;margin-top:12px;background:#181b26" aria-label="Mapa com casas próximas">
+<svg width="360" height="600" viewBox="0 0 360 600" aria-hidden="true" style="position:absolute;inset:0">
+<rect width="360" height="600" fill="#181b26"/>
+<g fill="#272b36"><rect x="10" y="20" width="90" height="70"/><rect x="120" y="20" width="110" height="70"/><rect x="250" y="20" width="100" height="70"/><rect x="10" y="110" width="90" height="120"/><rect x="250" y="110" width="100" height="60"/><rect x="10" y="250" width="150" height="80"/><rect x="180" y="250" width="170" height="80"/><rect x="10" y="350" width="70" height="110"/><rect x="100" y="350" width="120" height="110"/><rect x="240" y="350" width="110" height="110"/><rect x="10" y="480" width="200" height="110"/><rect x="230" y="480" width="120" height="110"/></g>
+<rect x="120" y="110" width="110" height="120" fill="#182259"/><rect x="250" y="180" width="100" height="50" fill="#182259"/>
+<path d="M0 240 C120 230 240 250 360 236" stroke="#515561" stroke-width="10" fill="none"/>
+<path d="M110 0 V600 M240 0 V600 M0 100 H360 M0 340 H360 M0 470 H360" stroke="#3d414d" stroke-width="6"/>
+<path d="M0 560 C80 520 160 600 360 520" stroke="#2621ba" stroke-width="16" fill="none" opacity=".8"/>
+<text x="130" y="175" fill="#9ea1aa" font-family="Bricolage Grotesque, sans-serif" font-size="12" font-weight="700">UFPE</text>
+</svg>
+<span style="position:absolute;left:150px;top:150px;width:16px;height:16px;border-radius:999px;background:#ffffff;border:4px solid var(--ultramarino);box-sizing:content-box" aria-label="Ponto buscado"></span>
+<sc-for list="{{pins}}" as="p" hint-placeholder-count="4">
+<button type="button" onClick="{{p.pick}}" aria-label="{{p.name}}, {{p.price}}" style="position:absolute;left:{{p.x}}px;top:{{p.y}}px;transform:translate(-50%,-50%);border:0;background:transparent;padding:8px;min-width:44px;min-height:44px;white-space:nowrap;cursor:pointer">
+<span style="position:absolute;left:50%;top:50%;width:72px;height:72px;border-radius:999px;background:rgba(201,242,77,.18);border:1px dashed rgba(201,242,77,.6);transform:translate(-50%,-50%)"></span>
+<span style="position:relative;display:inline-flex;padding:4px 12px;border-radius:999px;background:{{p.bg}};color:{{p.fg}};font-weight:600;font-size:14px;font-variant-numeric:tabular-nums;border:1px solid var(--tinta);transform:scale({{p.sc}});transition:transform .15s">{{p.price}}</span>
+</button>
+</sc-for>
+<span class="small" style="position:absolute;right:10px;top:10px;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:12px">Híbrido · locais aproximados</span>
+<a href="{{L.CasaPublica}}" data-to="CasaPublica" class="card a-up" style="position:absolute;left:12px;right:12px;bottom:12px;display:flex;gap:12px;padding:12px;text-decoration:none;color:var(--text)">
+<span style="width:76px;height:76px;border-radius:12px;overflow:hidden;flex:none"><img src="{{selImg}}" alt="" style="width:100%;height:100%;object-fit:cover"></span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="font-weight:600">{{selName}}</span><span class="small muted">{{selAddr}}</span><span class="small" style="margin-top:auto;display:flex;gap:12px"><b class="tnum">{{selPrice}}</b><span class="muted">{{selVagas}}</span></span></span>
+<span class="ic i-chev-r" style="align-self:center"></span>
+</a>
+</div>
+</sc-if>
+
+<sc-if value="{{filters}}" hint-placeholder-val="{{false}}">
+<div class="scrim"><div class="sheet" role="dialog" aria-labelledby="f-t">
+<div class="grab"></div>
+<p class="h2" id="f-t" style="font-size:28px">filtros</p>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--border);margin-top:8px"><span style="font-weight:600">Só casas com vagas</span><button type="button" class="tg {{vagOn}}" role="switch" aria-checked="{{vagChecked}}" aria-label="Só casas com vagas" onClick="{{flipVag}}"></button></div>
+<p class="label" style="margin:16px 0 8px">valor por mês</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><sc-for list="{{precos}}" as="p" hint-placeholder-count="4"><button type="button" class="chip {{p.on}}" aria-pressed="{{p.pressed}}" onClick="{{p.pick}}">{{p.name}}</button></sc-for></div>
+<p class="label" style="margin:16px 0 8px">tipo</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><sc-for list="{{tipos}}" as="t" hint-placeholder-count="2"><button type="button" class="chip {{t.on}}" aria-pressed="{{t.pressed}}" onClick="{{t.pick}}">{{t.name}}</button></sc-for></div>
+<div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;margin-top:20px"><button type="button" class="btn btn-t" onClick="{{closeF}}">Limpar</button><button type="button" class="btn btn-p" onClick="{{closeF}}">Ver 4 casas</button></div>
+</div></div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"modo":{"editor":"enum","options":["lista","mapa"],"default":"lista"},"estado":{"editor":"enum","options":["resultados","antes-de-buscar","vazio","sem-conexao"],"default":"resultados"},"$preview":{"width":360,"height":800}}'>
+var H = [
+  { name: 'Rep. Cajueiro', addr: 'Rua Amaro Albino Pimentel · Várzea', price: 'R$ 750', dist: '1,2 km', bal: 82, vagas: '2 vagas', img: '/_blob/d9c92a38909b721c330d5ebc54fd0207', x: 196, y: 120 },
+  { name: 'Casa Mandacaru', addr: 'Rua Benfica · Madalena', price: 'R$ 680', dist: '2,0 km', bal: 74, vagas: '1 vaga', img: '/_blob/783c5f4c2fad06b49a0cc7104e2ebd6f', x: 70, y: 210 },
+  { name: 'Rep. Maré Alta', addr: 'Av. Caxangá · Cordeiro', price: 'R$ 820', dist: '2,6 km', bal: 91, vagas: '3 vagas', img: '/_blob/6a67b9a235ff83b88d687ff8bb802711', x: 290, y: 300 },
+  { name: 'Apê do Capibaribe', addr: 'Rua Real da Torre · Torre', price: 'R$ 900', dist: '3,4 km', bal: 58, vagas: '1 vaga', img: '/_blob/783c5f4c2fad06b49a0cc7104e2ebd6f', x: 160, y: 400 }
+];
+var __GO = false;
+var __T = ['CasaPublica', 'OnbCasa'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.state || {};
+    var modo = s.modo && s.base === this.props.modo ? s.modo : (this.props.modo || 'lista');
+    var base = this.props.modo;
+    var est = s.est || this.props.estado || 'resultados';
+    var res = est === 'resultados', sel = s.sel == null ? 0 : s.sel, h = H[sel];
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      q: s.q != null ? s.q : (est === 'antes-de-buscar' ? '' : 'UFPE, Recife'),
+      setQ: function (e) { self.setState({ q: e.target.value }); },
+      listaSel: modo === 'lista' ? 'true' : 'false', mapaSel: modo === 'mapa' ? 'true' : 'false',
+      listaBg: modo === 'lista' ? 'var(--text)' : 'var(--surface)', listaFg: modo === 'lista' ? 'var(--background)' : 'var(--text)',
+      mapaBg: modo === 'mapa' ? 'var(--text)' : 'var(--surface)', mapaFg: modo === 'mapa' ? 'var(--background)' : 'var(--text)',
+      toLista: function () { self.setState({ modo: 'lista', base: base }); }, toMapa: function () { self.setState({ modo: 'mapa', base: base }); },
+      isAntes: est === 'antes-de-buscar', isVazio: est === 'vazio', isOff: est === 'sem-conexao',
+      sugg: function () { self.setState({ est: 'resultados', q: 'UFPE, Recife' }); },
+      showLista: res && modo === 'lista', showMapa: res && modo === 'mapa',
+      others: H.slice(1).map(function (x, i) { return Object.assign({ d: 'd' + (i + 2) }, x); }),
+      pins: H.map(function (x, i) { var on = i === sel; return { name: x.name, price: x.price, x: x.x, y: x.y, bg: on ? 'var(--lima)' : '#ffffff', fg: 'var(--tinta)', sc: on ? 1.15 : 1, pick: function () { self.setState({ sel: i }); } }; }),
+      selImg: h.img, selName: h.name, selAddr: h.addr, selPrice: h.price + '/mês', selVagas: h.vagas,
+      vagOn: s.vag === false ? '' : 'on', vagChecked: s.vag === false ? 'false' : 'true', flipVag: function () { self.setState({ vag: s.vag === false }); },
+      precos: ['até R$ 500', 'até R$ 800', 'até R$ 1.200', 'qualquer'].map(function (n, i) { var on = (s.preco == null ? 1 : s.preco) === i; return { name: n, on: on ? 'on' : '', pressed: on ? 'true' : 'false', pick: function () { self.setState({ preco: i }); } }; }),
+      tipos: ['República', 'Moradia compartilhada'].map(function (n, i) { var sel = s.tipos || [true, false]; return { name: n, on: sel[i] ? 'on' : '', pressed: sel[i] ? 'true' : 'false', pick: function () { var t = sel.slice(); t[i] = !t[i]; self.setState({ tipos: t }); } }; }),
+      filters: !!s.f, openF: function () { self.setState({ f: true }); }, closeF: function () { self.setState({ f: false }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

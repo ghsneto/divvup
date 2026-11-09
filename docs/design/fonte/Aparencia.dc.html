@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>aparência</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}" style="transition:background .3s,color .3s">
+<header class="topbar" style="padding-left:8px"><a class="iconbtn" href="{{L.Perfil}}" data-to="Perfil" aria-label="Voltar"><span class="ic i-chev-l"></span></a><span class="label muted">perfil</span></header>
+<div style="padding:0 16px">
+<h1 class="h1" style="font-size:57px">aparência</h1>
+<p class="small muted" style="margin-top:8px">Toca pra ver a tela mudar na hora.</p>
+<div role="radiogroup" aria-label="Tema" style="display:flex;flex-direction:column;gap:8px;margin-top:24px">
+<sc-for list="{{opts}}" as="o" hint-placeholder-count="3">
+<button type="button" role="radio" aria-checked="{{o.checked}}" onClick="{{o.pick}}" style="display:flex;align-items:center;gap:16px;padding:12px;border-radius:12px;border:{{o.bw}} solid {{o.bc}};background:var(--surface);cursor:pointer;text-align:left;color:var(--text)">
+<span style="width:64px;height:84px;border-radius:12px;overflow:hidden;border:1px solid var(--border);display:flex;flex:none" aria-hidden="true">
+<span style="flex:1;background:{{o.a}};display:flex;flex-direction:column;gap:4px;padding:8px 8px"><span style="height:6px;width:70%;background:{{o.ta}};border-radius:4px"></span><span style="height:24px;background:#2f2bd9;border-radius:4px"></span><span style="height:6px;width:40%;background:var(--lima);border-radius:4px"></span></span>
+<span style="flex:{{o.split}};background:{{o.b}};display:flex;flex-direction:column;gap:4px;padding:8px 0"><span style="height:6px;width:70%;background:{{o.tb}};border-radius:4px"></span><span style="height:24px;background:#7590fd;border-radius:4px 0 0 4px"></span></span>
+</span>
+<span style="flex:1"><span style="display:block;font-size:16px;font-weight:600">{{o.name}}</span><span class="small muted">{{o.desc}}</span></span>
+<span style="width:24px;height:24px;border-radius:999px;border:1px solid {{o.bc}};display:flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:999px;background:{{o.dot}}"></span></span>
+</button>
+</sc-for>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":360,"height":800}}'>
+var __GO = false;
+var __T = ['Perfil'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.state || {};
+    var sel = s.sel || 'sistema';
+    var dark = sel === 'escuro' || (sel === 'sistema' && this.props.tema === 'escuro');
+    var O = [['sistema', 'Seguir o sistema', 'Acompanha o Android', '#f5f5f0', 'var(--tinta)', 1], ['claro', 'Claro', 'Papel frio, sempre', '#f5f5f0', '#f5f5f0', 0], ['escuro', 'Escuro', 'Tinta, sempre', 'var(--tinta)', 'var(--tinta)', 0]];
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: dark ? 'escuro' : '',
+      opts: O.map(function (o) { var on = o[0] === sel; return { name: o[1], desc: o[2], a: o[3], b: o[4], split: o[5], ta: o[3] === 'var(--tinta)' ? '#f2f3f5' : '#181b26', tb: o[4] === 'var(--tinta)' ? '#f2f3f5' : '#181b26', checked: on ? 'true' : 'false', bw: on ? '1px' : '1px', bc: on ? 'var(--primary)' : 'var(--border)', dot: on ? 'var(--primary)' : 'transparent', pick: function () { self.setState({ sel: o[0] }); if (self.props.setTema) self.props.setTema(o[0] === 'escuro' ? 'escuro' : 'claro'); } }; })
+    };
+  }
+}
+</script>
+</body>
+</html>

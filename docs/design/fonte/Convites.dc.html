@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>convites</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar" style="padding-left:8px"><a class="iconbtn" href="{{L.MinhaCasa}}" data-to="MinhaCasa" aria-label="Voltar"><span class="ic i-chev-l"></span></a><span class="label muted">minha casa</span></header>
+<div class="scroll" style="padding:0 16px 24px">
+<h1 class="h1" style="font-size:57px">convites</h1>
+<p class="small muted" style="margin-top:8px">Cada código vale 24 h e entra uma pessoa só.</p>
+<button type="button" class="btn btn-p btn-w" style="margin-top:20px" onClick="{{gen}}"><span class="ic i-mais"></span>Gerar código</button>
+
+<ul style="list-style:none;margin:20px 0 0;padding:0;border-top:1px solid var(--border)">
+<sc-for list="{{codes}}" as="c" hint-placeholder-count="4">
+<li class="{{c.anim}}" style="display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid var(--border);opacity:{{c.op}}">
+<span class="tnum" style="font-size:20px;font-weight:600;letter-spacing:.12em;font-variation-settings:'opsz' 96,'wdth' 90;text-decoration:{{c.strike}};width:104px">{{c.code}}</span>
+<span style="flex:1;min-width:0"><span class="st {{c.cls}}" style="height:20px;font-size:12px">{{c.status}}</span><span class="small muted" style="display:block;margin-top:4px">{{c.meta}}</span></span>
+<sc-if value="{{c.active}}" hint-placeholder-val="{{true}}">
+<button type="button" class="iconbtn" aria-label="Compartilhar {{c.code}}" onClick="{{c.share}}"><span class="ic ic-s i-compartilhar"></span></button>
+<button type="button" class="btn btn-t" style="color:var(--danger);padding:8px 4px;min-height:44px" onClick="{{c.revoke}}">Revogar</button>
+</sc-if>
+</li>
+</sc-for>
+</ul>
+</div>
+<sc-if value="{{snack}}" hint-placeholder-val="{{false}}"><div class="snack" role="status" style="bottom:16px"><span class="ic ic-s i-check" style="color:var(--lima)"></span><span style="flex:1;font-weight:600;font-size:14px">{{snack}}</span></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":360,"height":800}}'>
+var BASE = [
+  { code: 'K7PQ2X', st: 'ativo', meta: 'por você · expira em 23 h 41 min' },
+  { code: 'H3MW9R', st: 'ativo', meta: 'por Ana · expira em 6 h 12 min' },
+  { code: 'T8ZN4B', st: 'usado', meta: 'usado por Davi · ontem às 18h' },
+  { code: 'F2CJ7D', st: 'expirado', meta: 'por você · expirou seg.' },
+  { code: 'R5YB8K', st: 'revogado', meta: 'por Ana · revogado dom.' }
+];
+var A = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+var __GO = false;
+var __T = ['MinhaCasa'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  componentWillUnmount() { clearTimeout(this.t); }
+  toast(m) { var self = this; clearTimeout(this.t); this.t = setTimeout(function () { self.setState({ snack: null }); }, 2200); return m; }
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.state || {};
+    var list = s.list || BASE;
+    var CLS = { ativo: 'st-ok', usado: 'st-p', expirado: 'st-n', revogado: 'st-bad' };
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '', snack: s.snack || '',
+      codes: list.map(function (c, i) {
+        var label = c.st === 'usado' ? 'usado' : c.st;
+        return { code: c.code, status: label, meta: c.meta, cls: CLS[c.st], active: c.st === 'ativo', op: 1, strike: c.st === 'revogado' || c.st === 'expirado' ? 'line-through' : 'none', anim: c.fresh ? 'a-r' : '',
+          share: function () { self.setState({ snack: self.toast('Abrindo o compartilhar do Android') }); }, revoke: function () { var l = list.map(function (x, j) { return j === i ? { code: x.code, st: 'revogado', meta: 'por você · revogado agora' } : x; }); self.setState({ list: l, snack: self.toast('Código ' + c.code + ' revogado') }); } };
+      }),
+      gen: function () { var c = ''; for (var k = 0; k < 6; k++) c += A[Math.floor(Math.random() * A.length)]; self.setState({ list: [{ code: c, st: 'ativo', meta: 'por você · expira em 24 h', fresh: true }].concat(list.map(function (x) { return { code: x.code, st: x.st, meta: x.meta }; })), snack: self.toast('Código ' + c + ' gerado') }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

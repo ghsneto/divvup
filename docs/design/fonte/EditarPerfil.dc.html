@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>editar perfil</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar" style="padding-left:8px"><a class="iconbtn" href="{{L.Perfil}}" data-to="Perfil" aria-label="Voltar"><span class="ic i-chev-l"></span></a><span class="label muted">perfil</span></header>
+<div class="scroll" style="padding:0 16px 16px">
+<h1 class="h1" style="font-size:57px">editar perfil</h1>
+
+<div style="display:flex;gap:16px;align-items:center;margin-top:24px;padding-bottom:20px;border-bottom:1px solid var(--border)">
+<span class="av" style="width:96px;height:96px"><img src="/_blob/e00900d46e0a7e6fc26a8968881f87ba" alt="Seu avatar"></span>
+<div style="display:flex;flex-direction:column;gap:4px">
+<a href="{{L.Avatar}}" data-to="Avatar" class="btn btn-t" style="justify-content:flex-start;padding:8px 0;min-height:40px"><span class="ic ic-s i-perfil"></span>Trocar avatar</a>
+<a href="{{L.Avatar}}" data-to="Avatar" class="btn btn-t" style="justify-content:flex-start;padding:8px 0;min-height:40px"><span class="ic ic-s i-camera"></span>Adicionar foto</a>
+</div>
+</div>
+
+<div class="field" style="margin-top:20px"><label class="label" for="p-nome">nome de exibição</label><input id="p-nome" class="in" value="Iane" maxlength="24"></div>
+<div class="field" style="margin-top:16px"><span class="label">e-mail</span><div class="in" style="display:flex;align-items:center;justify-content:space-between;background:var(--surface-alt);color:var(--text-muted)">iane@email.com<span class="ic ic-s i-cadeado"></span></div><span class="small muted">O e-mail da conta não muda por aqui.</span></div>
+
+<a href="{{L.RecuperarSenha}}" data-to="RecuperarSenha" style="display:flex;align-items:center;gap:12px;min-height:56px;margin-top:20px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-decoration:none;color:var(--text)"><span class="ic i-cadeado"></span><span style="flex:1;font-weight:600">Alterar senha</span><span class="ic ic-s i-chev-r muted"></span></a>
+</div>
+<div style="flex:none;padding:12px 16px 20px;border-top:1px solid var(--border)"><a class="btn btn-p btn-w" href="{{L.Perfil}}" data-to="Perfil">Salvar</a></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":360,"height":800}}'>
+var __GO = false;
+var __T = ['Avatar', 'Perfil', 'RecuperarSenha'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go; return { L: __L(), __nav: __N(this.props),  temaCls: this.props.tema === 'escuro' ? 'escuro' : '' }; }
+}
+</script>
+</body>
+</html>

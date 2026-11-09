@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>bem-vindo à casa</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<section style="background:var(--ultramarino);color:#ffffff;padding:56px 20px 28px;flex:none;position:relative">
+<span class="label a-up" style="color:var(--lima)">você entrou na</span>
+<h1 class="h1 a-r d1" style="font-size:57px;margin-top:8px">rep. cajueiro</h1>
+<p class="small a-up d2" style="color:#ffffff;margin-top:8px;display:flex;align-items:center;gap:8px"><span class="ic ic-s i-usuarios"></span>República · Várzea, Recife</p>
+<div style="display:flex;margin-top:24px;align-items:center">
+<sc-for list="{{members}}" as="m" hint-placeholder-count="5"><span class="av a-r {{m.d}}" style="width:40px;height:40px;border:1px solid var(--ultramarino);margin-left:{{m.ml}}px"><img src="{{m.src}}" alt="{{m.name}}"></span></sc-for>
+<span class="small a-r d6" style="margin-left:12px;color:#ffffff">Ana, Bruno, Caio, Davi<br>e agora você</span>
+</div>
+</section>
+
+<div style="padding:24px 16px 0;flex:1;display:flex;flex-direction:column">
+<div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center;padding-bottom:20px;border-bottom:1px solid var(--border)">
+<span class="tnum" style="font-size:57px;font-weight:800;line-height:1.05;letter-spacing:-.03em;font-variation-settings:'opsz' 96,'wdth' 90">7</span>
+<div><p class="ttl">tarefas abertas</p><p class="small muted">esperando alguém no deck agora</p></div>
+</div>
+<div style="display:flex;gap:8px;margin-top:16px" aria-hidden="true">
+<sc-for list="{{thumbs}}" as="t" hint-placeholder-count="5"><span class="a-up {{t.d}}" style="flex:1;height:72px;border-radius:12px;overflow:hidden;border:1px solid var(--border)"><img src="{{t.src}}" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></span></sc-for>
+</div>
+<p class="small muted" style="margin-top:12px">O mês vale 1 temporada. Quem fizer mais pontos até dia 30 leva a medalha.</p>
+<a class="btn btn-p btn-w" href="{{L.Tutorial}}" data-to="Tutorial" style="margin:auto 0 24px;min-height:56px;font-size:16px">Bora<span class="ic i-seta-r"></span></a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":360,"height":800}}'>
+var __GO = false;
+var __T = ['Tutorial'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var m = [['Ana', '/_blob/f990b1328564f59bb8c0c4b6947416ec'], ['Bruno', '/_blob/e17b5e45674dae4c695a8db8214f810e'], ['Caio', '/_blob/394e7cecdc16acb58863ca5eafa147e8'], ['Davi', '/_blob/8b7d1fe2f3912dc58ba9b4909ecce4dd'], ['Você', '/_blob/e00900d46e0a7e6fc26a8968881f87ba']];
+    var t = ['/_blob/97dde59cea6e32f9b1a823e6d64bcd93', '/_blob/33f60ac1dc7ce7619f3dfa3b293f5398', '/_blob/0308c7d9b996da922b199e0e6807091e', '/_blob/0ce9043a42d924421ef5725dd81bb316', '/_blob/95053c824273e7686a9b157ad9538b3b'];
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      members: m.map(function (x, i) { return { name: x[0], src: x[1], ml: i ? -14 : 0, d: 'd' + (i + 2) }; }),
+      thumbs: t.map(function (x, i) { return { src: x, d: 'd' + (i + 3) }; })
+    };
+  }
+}
+</script>
+</body>
+</html>

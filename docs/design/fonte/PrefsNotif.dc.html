@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>preferências de notificação</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar" style="padding-left:8px"><a class="iconbtn" href="{{L.Perfil}}" data-to="Perfil" aria-label="Voltar"><span class="ic i-chev-l"></span></a><span class="label muted">perfil</span></header>
+<div class="scroll" style="padding:0 16px 24px">
+<h1 class="h2" style="">notificações</h1>
+
+<sc-if value="{{denied}}" hint-placeholder-val="{{false}}">
+<div style="margin-top:16px;background:var(--warning-bg);border-radius:12px;padding:16px;display:flex;gap:12px">
+<span class="ic i-alerta" style="color:var(--warning)"></span>
+<div style="flex:1"><p class="small" style="font-weight:600">As notificações estão desligadas no Android.</p><p class="small muted">A central dentro do app continua funcionando.</p><button type="button" onClick="{{abrirConfig}}" class="btn btn-o" style="margin-top:12px;min-height:40px;padding:8px 16px">Abrir configurações</button></div>
+</div>
+</sc-if>
+
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="3">
+<section style="margin-top:28px">
+<h2 class="label" style="margin-bottom:4px">{{g.name}}</h2>
+<sc-for list="{{g.items}}" as="it" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:12px;min-height:60px;border-bottom:1px solid var(--border);padding:8px 0">
+<div style="flex:1;min-width:0"><span style="font-size:14px;font-weight:600;display:flex;gap:8px;align-items:center">{{it.name}}<sc-if value="{{it.v11}}" hint-placeholder-val="{{false}}"><span class="st st-p" style="height:18px;font-size:12px">v1.1</span></sc-if></span><span class="small muted" style="font-size:12px">{{it.who}}</span></div>
+<button type="button" class="tg {{it.on}}" role="switch" aria-checked="{{it.checked}}" aria-label="{{it.name}}" onClick="{{it.flip}}"></button>
+</div>
+</sc-for>
+</section>
+</sc-for>
+
+<section style="margin-top:28px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px">
+<div style="display:flex;align-items:center;gap:12px"><span class="ic i-lua"></span><span style="flex:1;font-size:16px;font-weight:600">Horário silencioso</span><button type="button" class="tg {{quietOn}}" role="switch" aria-checked="{{quietChecked}}" aria-label="Horário silencioso" onClick="{{flipQuiet}}"></button></div>
+<sc-if value="{{quiet}}" hint-placeholder-val="{{true}}">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:center;margin-top:16px">
+<div class="in tnum" style="display:flex;flex-direction:column;justify-content:center;height:64px"><span class="label muted" style="font-size:12px">de</span><span style="font-size:20px;font-weight:600">22:00</span></div>
+<span class="ic ic-s i-seta-r muted"></span>
+<div class="in tnum" style="display:flex;flex-direction:column;justify-content:center;height:64px"><span class="label muted" style="font-size:12px">até</span><span style="font-size:20px;font-weight:600">08:00</span></div>
+</div>
+<p class="small muted" style="margin-top:12px">Pushes ficam guardados e chegam às 8h. Lembretes de 2 h ainda chegam.</p>
+</sc-if>
+</section>
+</div>
+<sc-if value="{{toast}}" hint-placeholder-val="{{false}}"><div class="snack" role="status" style="bottom:{{toastBottom}}px"><span class="ic ic-s i-info" style="color:#c9f24d"></span><span style="flex:1;font-weight:600;font-size:14px">{{toast}}</span></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"permissaoNegada":{"editor":"boolean","default":false},"$preview":{"width":360,"height":800}}'>
+var G = [
+  ['suas tarefas', [['auto', 'Tarefa atribuída a você', 'quando o sorteio te escolhe', 1], ['prazo', 'Vence em 24 h e em 2 h', 'lembretes das suas tarefas', 1], ['atraso', 'Sua tarefa atrasou', 'passou do prazo sem concluir', 1]]],
+  ['sua casa', [['nova', 'Nova tarefa criada', 'quando alguém coloca no deck', 1], ['conclui', 'Um morador concluiu', 'cada tarefa feita na casa', 0], ['removido', 'Você foi removido', 'aviso de saída da casa', 1], ['pedido', 'Pedido de entrada', 'só para admins', 1, 1], ['resposta', 'Resposta ao seu pedido', 'aprovado ou recusado', 1, 1]]],
+  ['temporada', [['fim', 'Fim de temporada e campeão', 'todo dia 1º', 1]]]
+];
+var __GO = false;
+var __T = ['Perfil'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.state || {};
+    var v = function (k, d) { return s[k] == null ? !!d : s[k]; };
+    var quiet = v('quiet', 1);
+    return { L: __L(), __nav: __N(this.props), toast: (this.state && this.state.toast) || '', toastBottom: 96, abrirConfig: function () { self.setState({ toast: 'Abre as notificações do Divvup nas configurações do Android' }); clearTimeout(self.__tt); self.__tt = setTimeout(function () { self.setState({ toast: null }); }, 2400); }, 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '', denied: !!this.props.permissaoNegada,
+      groups: G.map(function (g) { return { name: g[0], items: g[1].map(function (it) { var on = v(it[0], it[3]); return { name: it[1], who: it[2], v11: !!it[4], on: on ? 'on' : '', checked: on ? 'true' : 'false', flip: function () { var o = {}; o[it[0]] = !on; self.setState(o); } }; }) }; }),
+      quiet: quiet, quietOn: quiet ? 'on' : '', quietChecked: quiet ? 'true' : 'false', flipQuiet: function () { self.setState({ quiet: !quiet }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

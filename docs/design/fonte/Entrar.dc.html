@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>entrar</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar" style="padding-left:8px"><a class="iconbtn" href="{{L.BoasVindas}}" data-to="BoasVindas" aria-label="Voltar"><span class="ic i-chev-l"></span></a></header>
+
+<sc-if value="{{offline}}" hint-placeholder-val="{{false}}">
+<p class="small" style="margin:0 16px;background:var(--info-bg);color:var(--info);border-radius:4px;padding:12px 12px;display:flex;gap:8px;font-weight:600"><span class="ic ic-s i-offline"></span>Sem conexão. Conecte-se para entrar.</p>
+</sc-if>
+
+<div style="padding:12px 16px 0;flex:1;display:flex;flex-direction:column">
+<span class="label muted">de volta</span>
+<h1 class="h1" style="font-size:57px;margin-bottom:28px">entrar</h1>
+
+<div class="field">
+<label class="label" for="e-mail">e-mail</label>
+<input id="e-mail" class="in" type="email" value="iane@email.com" autocomplete="email" readonly>
+</div>
+<div class="field {{shake}}" style="margin-top:16px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><label class="label" for="e-pass">senha</label><a href="{{L.RecuperarSenha}}" data-to="RecuperarSenha" class="small" style="font-weight:600">Esqueci a senha</a></div>
+<div style="position:relative">
+<input id="e-pass" class="in {{passErr}}" type="{{passType}}" value="cajueiro2025" autocomplete="current-password" aria-invalid="{{invalid}}" aria-describedby="e-err" readonly style="padding-right:52px">
+<button type="button" class="iconbtn" onClick="{{toggle}}" aria-label="{{eyeLabel}}" style="position:absolute;right:2px;top:2px"><span class="ic ic-s i-olho" style="opacity:{{eyeOp}}"></span></button>
+</div>
+<sc-if value="{{err}}" hint-placeholder-val="{{true}}"><p class="errmsg" id="e-err"><span class="ic i-alerta"></span>{{errTxt}}</p></sc-if>
+</div>
+
+<button type="button" class="btn btn-p btn-w {{btnOff}}" style="margin-top:24px" onClick="{{submit}}">
+<sc-if value="{{loading}}" hint-placeholder-val="{{false}}"><span class="shuttle" style="width:48px;background:rgba(255,255,255,.3)"></span></sc-if>
+<sc-if value="{{notLoading}}" hint-placeholder-val="{{true}}"><span>Entrar</span></sc-if>
+</button>
+
+<div style="display:flex;align-items:center;gap:12px;margin:20px 0"><span class="rule" style="flex:1"></span><span class="small muted">ou</span><span class="rule" style="flex:1"></span></div>
+<a class="btn btn-o btn-w" href="{{L.OnbNome}}" data-to="OnbNome"><span style="font-weight:600;font-size:16px;color:var(--primary)">G</span>Continuar com Google</a>
+
+<p class="small" style="margin:auto 0 24px">Ainda não tem conta? <a href="{{L.CriarConta}}" data-to="CriarConta" style="font-weight:600">Criar conta</a></p>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"estado":{"editor":"enum","options":["normal","senha-incorreta","conta-nao-encontrada","muitas-tentativas","carregando","offline"],"default":"senha-incorreta"},"$preview":{"width":360,"height":800}}'>
+var ERR = { 'senha-incorreta': 'Senha incorreta. Confere e tenta de novo.', 'conta-nao-encontrada': 'Não achamos uma conta com esse e-mail.', 'muitas-tentativas': 'Muitas tentativas. Espera uns minutos ou recupera a senha.' };
+var __GO = false;
+var __T = ['BoasVindas', 'CriarConta', 'OnbNome', 'RecuperarSenha'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.state || {};
+    var est = s.est && s.base === this.props.estado ? s.est : (this.props.estado || 'senha-incorreta');
+    var base = this.props.estado;
+    var err = !!ERR[est];
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      offline: est === 'offline', err: err, errTxt: ERR[est] || '', passErr: err ? 'err' : '', invalid: err ? 'true' : 'false',
+      shake: s.shake ? 'a-shake' : '',
+      passType: s.show ? 'text' : 'password', eyeLabel: s.show ? 'Ocultar senha' : 'Mostrar senha', eyeOp: s.show ? 1 : 0.6,
+      toggle: function () { self.setState({ show: !s.show }); },
+      loading: est === 'carregando', notLoading: est !== 'carregando', btnOff: est === 'offline' || est === 'muitas-tentativas' ? 'off' : '',
+      submit: function () {
+        if (est === 'offline' || est === 'muitas-tentativas') return;
+        self.setState({ est: 'carregando', base: base, shake: false });
+        clearTimeout(self.t);
+        self.t = setTimeout(function () { if (self.props.go) { self.props.go('Main'); return; } self.setState({ est: 'senha-incorreta', base: base, shake: true }); }, 1200);
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

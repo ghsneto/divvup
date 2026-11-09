@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>anúncio de vagas</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar" style="padding-left:8px"><a class="iconbtn" href="{{L.MinhaCasa}}" data-to="MinhaCasa" aria-label="Voltar"><span class="ic i-chev-l"></span></a><span class="label muted">minha casa</span></header>
+<div class="scroll" style="padding:0 16px 16px">
+<h1 class="h1" style="font-size:57px">anúncio de vagas</h1>
+
+<div style="margin-top:16px;display:flex;align-items:center;gap:12px;padding:16px;border-radius:12px;background:{{statusBg}}">
+<div style="flex:1"><p style="margin:0;font-weight:600">Anunciar vagas</p><p class="small" style="color:{{statusFg}};font-weight:600;display:flex;gap:4px;align-items:center"><span class="ic ic-xs {{statusIcon}}"></span>{{statusTxt}}</p></div>
+<button type="button" class="tg {{onCls}}" role="switch" aria-checked="{{onChecked}}" aria-label="Anunciar vagas" onClick="{{flip}}"></button>
+</div>
+
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:8px;margin-top:20px">
+<div class="field"><span class="label">vagas</span>
+<div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:4px;background:var(--surface);height:52px">
+<button type="button" class="iconbtn" aria-label="Menos uma vaga" onClick="{{minus}}" style="height:50px;width:44px">–</button>
+<span class="tnum" style="flex:1;text-align:center;font-size:20px;font-weight:600" aria-live="polite">{{vagas}}</span>
+<button type="button" class="iconbtn" aria-label="Mais uma vaga" onClick="{{plus}}" style="height:50px;width:44px"><span class="ic ic-s i-mais"></span></button>
+</div></div>
+<div class="field"><label class="label" for="a-val">valor/mês <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:400">· opcional</span></label><input id="a-val" class="in tnum" value="R$ 750"></div>
+</div>
+<div class="field" style="margin-top:16px"><label class="label" for="a-desc">descrição</label><textarea id="a-desc" class="in" rows="3" style="height:auto;padding:12px;resize:none">Casa grande a 15 min a pé da UFPE. Quartos individuais e varanda.</textarea></div>
+
+<p class="label" style="margin:20px 0 8px;display:flex;justify-content:space-between">fotos<span class="muted tnum">3 de 6</span></p>
+<div style="display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr);grid-template-rows:56px 56px;gap:8px">
+<span style="grid-row:span 2;border-radius:12px;overflow:hidden;position:relative"><img src="/_blob/d9c92a38909b721c330d5ebc54fd0207" alt="Foto de capa" style="width:100%;height:100%;object-fit:cover"><span class="st st-n" style="position:absolute;left:6px;bottom:6px;height:18px;font-size:12px;background:var(--surface)">capa</span></span>
+<span style="border-radius:12px;overflow:hidden"><img src="/_blob/783c5f4c2fad06b49a0cc7104e2ebd6f" alt="" style="width:100%;height:100%;object-fit:cover"></span>
+<span style="border-radius:12px;overflow:hidden"><img src="/_blob/6a67b9a235ff83b88d687ff8bb802711" alt="" style="width:100%;height:100%;object-fit:cover"></span>
+<button type="button" onClick="{{addFoto}}" style="grid-column:span 2;border:1px dashed var(--border);border-radius:12px;background:transparent;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;cursor:pointer;color:var(--text)"><span class="ic ic-s i-camera"></span>Adicionar foto</button>
+</div>
+
+<p class="label" style="margin:24px 0 8px">endereço completo</p>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:8px">
+<div class="field"><label class="small muted" for="a-cep">CEP</label><input id="a-cep" class="in tnum" value="50740-000"></div>
+<div class="field"><label class="small muted" for="a-rua">Rua</label><input id="a-rua" class="in" value="R. Amaro Albino Pimentel"></div>
+<div class="field"><label class="small muted" for="a-num">Número</label><input id="a-num" class="in tnum" value="214" style="border-color:var(--primary);border-width:2px"></div>
+<div class="field"><label class="small muted" for="a-comp">Complemento</label><input id="a-comp" class="in" value="casa B"></div>
+</div>
+<p class="small" style="margin-top:8px;display:flex;gap:8px;color:var(--primary);font-weight:600"><span class="ic ic-s i-cadeado"></span>O número só aparece para quem você aprovar.</p>
+
+<label style="display:flex;gap:12px;align-items:flex-start;margin-top:20px;padding:16px;border:1px solid var(--border);border-radius:12px;cursor:pointer;background:var(--surface)">
+<input type="checkbox" checked="{{terms}}" onChange="{{setTerms}}" style="width:22px;height:22px;margin:4px 0 0;accent-color:var(--primary);flex:none">
+<span class="small"><b>Termo de exposição.</b> Entendo que nome, rua, bairro, fotos e o índice de equilíbrio da casa ficam públicos na busca.</span>
+</label>
+
+<p class="label" style="margin:24px 0 8px">como sua casa aparece na busca</p>
+<div class="card" style="display:flex;gap:12px;padding:12px;opacity:{{prevOp}}">
+<span style="width:76px;height:76px;border-radius:12px;overflow:hidden;flex:none"><img src="/_blob/d9c92a38909b721c330d5ebc54fd0207" alt="" style="width:100%;height:100%;object-fit:cover"></span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="font-weight:600">Rep. Cajueiro</span><span class="small muted">Rua Amaro Albino Pimentel · Várzea</span><span class="small" style="margin-top:auto;display:flex;gap:12px"><b class="tnum">R$ 750</b><span class="muted tnum">eq. 82</span></span></span>
+<span class="pb tnum" style="font-size:12px;padding:4px 8px;align-self:flex-start">{{vagasTxt}}</span>
+</div>
+</div>
+<div style="flex:none;padding:12px 16px 20px;border-top:1px solid var(--border)"><a class="btn btn-p btn-w" href="{{L.MinhaCasa}}" data-to="MinhaCasa">Salvar anúncio</a></div>
+<sc-if value="{{toast}}" hint-placeholder-val="{{false}}"><div class="snack" role="status" style="bottom:{{toastBottom}}px"><span class="ic ic-s i-info" style="color:#c9f24d"></span><span style="flex:1;font-weight:600;font-size:14px">{{toast}}</span></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":360,"height":800}}'>
+var __GO = false;
+var __T = ['MinhaCasa'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = Object.assign({ on: true, terms: false, vagas: 2 }, this.state || {});
+    var live = s.on && s.terms && s.vagas > 0;
+    var st = !s.on ? ['var(--surface-alt)', 'var(--text-muted)', 'i-olho', 'Desligado: a casa não aparece na busca'] : live ? ['var(--success-bg)', 'var(--success)', 'i-check', 'Visível na busca agora'] : ['var(--warning-bg)', 'var(--warning)', 'i-alerta', s.vagas ? 'Ainda não visível: aceite o termo abaixo' : 'Ainda não visível: informe as vagas'];
+    return { L: __L(), __nav: __N(this.props), toast: (this.state && this.state.toast) || '', toastBottom: 96, addFoto: function () { self.setState({ toast: 'Abre a galeria. Até 6 fotos por anúncio' }); clearTimeout(self.__tt); self.__tt = setTimeout(function () { self.setState({ toast: null }); }, 2400); }, 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      statusBg: st[0], statusFg: st[1], statusIcon: st[2], statusTxt: st[3],
+      onCls: s.on ? 'on' : '', onChecked: s.on ? 'true' : 'false', flip: function () { self.setState({ on: !s.on }); },
+      vagas: s.vagas, vagasTxt: s.vagas === 1 ? '1 vaga' : s.vagas + ' vagas',
+      minus: function () { self.setState({ vagas: Math.max(0, s.vagas - 1) }); }, plus: function () { self.setState({ vagas: Math.min(9, s.vagas + 1) }); },
+      terms: s.terms, setTerms: function (e) { self.setState({ terms: e.target.checked }); },
+      prevOp: live ? 1 : 0.5
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>minhas tarefas</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar">
+<span class="av" style="width:40px;height:40px"><img src="/_blob/d9c92a38909b721c330d5ebc54fd0207" alt=""></span>
+<span class="ttl" style="font-size:16px;flex:1">rep. cajueiro</span>
+<a class="iconbtn" href="{{L.Notificacoes}}" data-to="Notificacoes" aria-label="Notificações, 3 não lidas"><span class="ic i-sino"></span><span class="count">3</span></a>
+</header>
+
+<div class="scroll" style="padding:0 16px 160px">
+<div style="display:flex;align-items:flex-end;gap:12px;padding:8px 0 20px;border-bottom:1px solid var(--border)">
+<h1 class="h2" style="font-size:36px;flex:1">minhas tarefas</h1>
+<div style="text-align:right;flex:none">
+<span class="tnum" style="font-size:57px;font-weight:800;line-height:1.05;font-variation-settings:'opsz' 96,'wdth' 90">{{open}}</span><span class="small muted tnum" style="font-weight:600"> de 5</span>
+<div style="display:flex;gap:4px;justify-content:flex-end;margin-top:8px"><sc-for list="{{segs}}" as="sg" hint-placeholder-count="5"><span style="width:12px;height:6px;border-radius:4px;background:{{sg.bg}}"></span></sc-for></div>
+</div>
+</div>
+
+<sc-if value="{{empty}}" hint-placeholder-val="{{false}}">
+<div class="a-up" style="padding:56px 0 0;display:flex;flex-direction:column;gap:16px">
+<span class="label muted">mãos livres</span>
+<p class="h2" style="font-size:36px">você não tem tarefas</p>
+<p class="txt muted" style="max-width:250px">Passa no deck e pega uma. Quem pega cedo escolhe a melhor.</p>
+<div><a class="btn btn-p" href="{{L.Main}}" data-to="Main"><span class="ic i-deck"></span>Ir para o deck</a></div>
+</div>
+</sc-if>
+
+<sc-for list="{{sections}}" as="sec" hint-placeholder-count="3">
+<section style="margin-top:24px">
+<h2 class="label" style="color:{{sec.color}};display:flex;align-items:center;gap:8px;margin-bottom:8px">{{sec.name}}<span class="muted tnum" style="font-weight:600">· {{sec.count}}</span></h2>
+<ul style="list-style:none;margin:0;padding:0">
+<sc-for list="{{sec.items}}" as="it" hint-placeholder-count="1">
+<li class="{{it.anim}}" style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)">
+<a href="{{L.DetalheTarefa}}" data-to="DetalheTarefa" style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;text-decoration:none;color:var(--text)">
+<span style="width:56px;height:56px;border-radius:12px;overflow:hidden;flex:none;border:1px solid var(--border)"><img src="{{it.img}}" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+<span style="font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{it.title}}</span>
+<span class="small" style="color:{{it.dueColor}};font-weight:{{it.dueW}};display:flex;align-items:center;gap:4px"><span class="ic ic-xs {{it.icon}}"></span>{{it.due}}</span>
+<sc-if value="{{it.auto}}" hint-placeholder-val="{{false}}"><span class="st st-info" style="align-self:flex-start;height:20px;font-size:12px">atribuída a você</span></sc-if>
+</span>
+</a>
+<span class="pts" style="font-size:16px;color:{{it.ptsColor}}">{{it.pts}}</span>
+<sc-if value="{{it.open}}" hint-placeholder-val="{{true}}"><button type="button" class="btn btn-o" aria-label="Concluir {{it.title}}" onClick="{{it.done}}" style="width:44px;min-height:44px;padding:0"><span class="ic i-check"></span></button></sc-if>
+</li>
+</sc-for>
+</ul>
+</section>
+</sc-for>
+
+<sc-if value="{{showDone}}" hint-placeholder-val="{{true}}">
+<section style="margin-top:28px">
+<button type="button" onClick="{{toggle}}" aria-expanded="{{expanded}}" style="width:100%;min-height:48px;display:flex;align-items:center;gap:8px;background:transparent;border:0;padding:8px 0;cursor:pointer">
+<span class="label" style="color:var(--success)">concluídas · 7 dias</span><span class="label muted tnum">· {{doneCount}}</span>
+<span class="small muted tnum" style="margin-left:auto;font-weight:600">+{{doneSum}} pts</span><span class="ic ic-s {{chev}}"></span>
+</button>
+<sc-if value="{{expandedB}}" hint-placeholder-val="{{true}}">
+<ul style="list-style:none;margin:0;padding:0">
+<sc-for list="{{done}}" as="d" hint-placeholder-count="3">
+<li class="{{d.anim}}" style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)">
+<span style="width:24px;height:24px;border-radius:999px;background:var(--success-bg);color:var(--success);display:flex;align-items:center;justify-content:center;flex:none"><span class="ic ic-xs i-check"></span></span>
+<span style="flex:1;min-width:0;font-size:14px;text-decoration:line-through;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{d.title}}</span>
+<span class="small muted">{{d.when}}</span>
+<span class="pb" style="font-size:14px;padding:4px 8px">+{{d.pts}}</span>
+</li>
+</sc-for>
+</ul>
+</sc-if>
+</section>
+</sc-if>
+</div>
+
+<a class="fab" href="{{L.NovaTarefa}}" data-to="NovaTarefa" aria-label="Nova tarefa"><span class="ic i-mais"></span></a>
+
+<sc-if value="{{snack}}" hint-placeholder-val="{{false}}">
+<div class="snack" role="status"><span class="pb" style="font-size:14px;padding:4px 8px">+{{snackPts}}</span><span style="flex:1;font-weight:600;font-size:14px">Concluída. Boa!</span><button class="act" type="button" onClick="{{undo}}">Desfazer</button><span class="bar"></span></div>
+</sc-if>
+
+<nav class="tabbar" aria-label="Navegação principal">
+<a class="tab" href="{{L.Main}}" data-to="Main"><span class="ic i-deck"></span>Deck</a>
+<a class="tab on" href="{{L.MinhasTarefas}}" data-to="MinhasTarefas" aria-current="page"><span class="ic i-tarefas"></span>Minhas tarefas</a>
+<a class="tab" href="{{L.Ranking}}" data-to="Ranking"><span class="ic i-ranking"></span>Ranking</a>
+<a class="tab" href="{{L.Perfil}}" data-to="Perfil"><span class="ic i-perfil"></span>Perfil</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"estado":{"editor":"enum","options":["normal","vazio"],"default":"normal"},"$preview":{"width":360,"height":800}}'>
+var OPEN = [
+  { id: 'a', sec: 0, title: 'Trocar a lâmpada da cozinha', img: '/_blob/e22b27595c0f31a27b2076cf823420f3', due: 'venceu ontem · vale metade', pts: 25, icon: 'i-alerta' },
+  { id: 'b', sec: 1, title: 'Tirar o lixo reciclável', img: '/_blob/33f60ac1dc7ce7619f3dfa3b293f5398', due: 'hoje às 23h', pts: 25, icon: 'i-relogio', auto: true },
+  { id: 'c', sec: 2, title: 'Limpar o banheiro de cima', img: '/_blob/e4af932dd4ca6b9c21d747d7e2502d09', due: 'sáb. às 18h', pts: 100, icon: 'i-relogio' }
+];
+var DONE = [
+  { id: 'x', title: 'Lavar a louça do jantar', when: 'hoje', pts: 50 },
+  { id: 'y', title: 'Regar as plantas da varanda', when: 'ontem', pts: 25 },
+  { id: 'z', title: 'Passear com o Thor', when: 'ter.', pts: 50 }
+];
+var SECS = [['atrasadas', 'var(--danger)'], ['para hoje', 'var(--warning)'], ['próximas', 'var(--text)']];
+var __GO = false;
+var __T = ['DetalheTarefa', 'Main', 'MinhasTarefas', 'Notificacoes', 'NovaTarefa', 'Perfil', 'Ranking'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.state || {};
+    var empty = this.props.estado === 'vazio';
+    var doneIds = s.doneIds || [];
+    var open = empty ? [] : OPEN.filter(function (t) { return doneIds.indexOf(t.id) < 0; });
+    var justDone = OPEN.filter(function (t) { return doneIds.indexOf(t.id) >= 0; }).map(function (t) { return { id: t.id, title: t.title, when: 'agora', pts: t.pts, anim: 'a-r' }; }).reverse();
+    var done = empty ? [] : justDone.concat(DONE.map(function (d) { return Object.assign({ anim: '' }, d); }));
+    var sections = [];
+    SECS.forEach(function (sc, i) {
+      var items = open.filter(function (t) { return t.sec === i; }).map(function (t) {
+        return { title: t.title, img: t.img, due: t.due, pts: t.pts, icon: t.icon, auto: !!t.auto, open: true, anim: '',
+          dueColor: i === 0 ? 'var(--danger)' : (i === 1 ? 'var(--warning)' : 'var(--text-muted)'), dueW: i < 2 ? 600 : 400,
+          ptsColor: i === 0 ? 'var(--danger)' : 'var(--text)',
+          done: function () { var ids = (self.state && self.state.doneIds) || []; clearTimeout(self.t); self.setState({ doneIds: ids.concat([t.id]), snack: t.pts, expanded: true }); self.t = setTimeout(function () { self.setState({ snack: null }); }, 3000); } };
+      });
+      if (items.length) sections.push({ name: sc[0], color: sc[1], count: items.length, items: items });
+    });
+    var segs = [];
+    for (var i = 0; i < 5; i++) segs.push({ bg: i < open.length ? 'var(--text)' : 'var(--border)' });
+    var expanded = s.expanded !== false;
+    var sum = done.reduce(function (a, d) { return a + d.pts; }, 0);
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      open: open.length, segs: segs, sections: sections, empty: open.length === 0 && empty,
+      showDone: done.length > 0, done: done, doneCount: done.length, doneSum: sum,
+      expanded: expanded ? 'true' : 'false', expandedB: expanded, chev: expanded ? 'i-chev-d' : 'i-chev-r',
+      toggle: function () { self.setState({ expanded: !expanded }); },
+      snack: !!s.snack, snackPts: s.snack || 0,
+      undo: function () { var ids = (self.state.doneIds || []).slice(0, -1); clearTimeout(self.t); self.setState({ doneIds: ids, snack: null }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

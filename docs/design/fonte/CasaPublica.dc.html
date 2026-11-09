@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>perfil público da casa</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<div class="scroll">
+<div style="position:relative;height:240px;border-bottom:1px solid var(--border)">
+<div style="display:flex;overflow-x:auto;scroll-snap-type:x mandatory;height:100%;scrollbar-width:none">
+<sc-for list="{{photos}}" as="p" hint-placeholder-count="3"><img src="{{p}}" alt="" style="flex:none;width:360px;height:240px;object-fit:cover;scroll-snap-align:start"></sc-for>
+</div>
+<a class="iconbtn" href="{{L.Buscar}}" data-to="Buscar" aria-label="Voltar" style="position:absolute;left:8px;top:8px;background:var(--surface);border:1px solid var(--border)"><span class="ic i-chev-l"></span></a>
+<span class="small tnum" style="position:absolute;right:12px;bottom:12px;background:var(--tinta);color:#f2f3f5;border-radius:999px;padding:4px 12px;font-weight:600">1 / 3</span>
+</div>
+
+<div style="padding:20px 16px 24px">
+<span class="st st-n">república · 5 moradores</span>
+<h1 class="h1" style="font-size:57px;margin-top:8px">rep. cajueiro</h1>
+<p class="small muted" style="display:flex;gap:8px;align-items:center;margin-top:8px"><span class="ic ic-xs i-local"></span>Rua Amaro Albino Pimentel · Várzea, Recife</p>
+
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);margin-top:20px;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface)">
+<div style="padding:16px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--accent);color:var(--on-accent)"><span class="label" style="font-size:12px">vagas</span><p class="tnum" style="margin:0;font-size:36px;font-weight:800;line-height:1.05;font-variation-settings:'opsz' 96,'wdth' 90">2</p></div>
+<div style="padding:16px;border-bottom:1px solid var(--border)"><span class="label muted" style="font-size:12px">por mês</span><p class="tnum" style="margin:8px 0 0;font-size:28px;font-weight:600">R$ 750</p></div>
+<div style="padding:16px;border-right:1px solid var(--border)"><span class="label muted" style="font-size:12px">equilíbrio</span><p class="tnum" style="margin:4px 0 0;font-size:28px;font-weight:600">82<span class="small muted" style="font-weight:400">/100</span></p><span class="small" style="color:var(--success);font-weight:600">bem dividido</span></div>
+<div style="padding:16px"><span class="label muted" style="font-size:12px">atividade</span><p class="tnum" style="margin:4px 0 0;font-size:28px;font-weight:600">40</p><span class="small muted">tarefas no mês</span></div>
+</div>
+
+<p class="txt" style="margin-top:20px">Casa grande a 15 min a pé da UFPE. Quartos individuais, cozinha equipada, área de serviço e varanda. A gente divide tudo pelo Divvup e o deck tá sempre em dia.</p>
+
+<div style="margin-top:20px;height:120px;border-radius:12px;overflow:hidden;position:relative;background:#181b26" aria-label="Localização aproximada">
+<svg width="328" height="120" viewBox="0 0 328 120" aria-hidden="true" style="display:block"><g fill="#272b36"><rect x="8" y="8" width="90" height="44"/><rect x="112" y="8" width="100" height="44"/><rect x="226" y="8" width="94" height="44"/><rect x="8" y="66" width="140" height="46"/><rect x="162" y="66" width="158" height="46"/></g><path d="M105 0V120M219 0V120M0 59H328" stroke="#3d414d" stroke-width="6"/></svg>
+<span style="position:absolute;left:150px;top:28px;width:80px;height:64px;border-radius:999px;background:rgba(201,242,77,.22);border:1px dashed var(--lima)"></span>
+<span class="small" style="position:absolute;left:8px;bottom:8px;background:var(--surface);border-radius:4px;padding:4px 8px;font-size:12px;display:flex;gap:4px;align-items:center"><span class="ic ic-xs i-cadeado"></span>Número só depois da aprovação</span>
+</div>
+
+<a href="{{L.Denunciar}}" data-to="Denunciar" class="small" style="display:inline-flex;gap:8px;align-items:center;margin-top:20px;color:var(--text-muted);font-weight:600"><span class="ic ic-xs i-bandeira"></span>Denunciar esta casa</a>
+</div>
+</div>
+
+<div style="flex:none;padding:12px 16px 16px;border-top:1px solid var(--border);background:var(--background)">
+<sc-if value="{{pending}}" hint-placeholder-val="{{false}}"><div class="a-up" style="display:flex;align-items:center;gap:12px;min-height:48px"><span class="st st-warn"><span class="ic i-relogio"></span>aguardando</span><span class="small" style="flex:1;font-weight:600">Solicitação enviada. O admin vai responder.</span><a href="{{L.MinhasSolicitacoes}}" data-to="MinhasSolicitacoes" class="small" style="font-weight:600">Ver</a></div></sc-if>
+<sc-if value="{{notPending}}" hint-placeholder-val="{{true}}"><button type="button" class="btn btn-p btn-w" onClick="{{openSheet}}"><span class="ic i-chat"></span>Solicitar vaga</button></sc-if>
+</div>
+
+<sc-if value="{{sheet}}" hint-placeholder-val="{{false}}">
+<div class="scrim"><div class="sheet" role="dialog" aria-labelledby="s-t">
+<div class="grab"></div>
+<p class="h2" id="s-t" style="font-size:28px">se apresenta</p>
+<p class="small muted" style="margin-top:4px">Opcional, mas ajuda o admin a decidir.</p>
+<textarea class="in" rows="4" maxlength="280" aria-label="Mensagem para a casa" style="height:auto;padding:12px;margin-top:16px;resize:none">Oi! Sou a Iane, caloura de Design na UFPE. Chego em fevereiro e tô procurando vaga perto do campus.</textarea>
+<div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;margin-top:16px"><button type="button" class="btn btn-t" onClick="{{closeSheet}}">Cancelar</button><button type="button" class="btn btn-p" onClick="{{send}}">Enviar solicitação</button></div>
+</div></div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"jaSolicitou":{"editor":"boolean","default":false},"$preview":{"width":360,"height":800}}'>
+var __GO = false;
+var __T = ['Buscar', 'Denunciar', 'MinhasSolicitacoes'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.state || {};
+    var pending = s.sent || !!this.props.jaSolicitou;
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      photos: ['/_blob/d9c92a38909b721c330d5ebc54fd0207', '/_blob/783c5f4c2fad06b49a0cc7104e2ebd6f', '/_blob/6a67b9a235ff83b88d687ff8bb802711'],
+      pending: pending, notPending: !pending, sheet: !!s.sheet,
+      openSheet: function () { self.setState({ sheet: true }); }, closeSheet: function () { self.setState({ sheet: false }); },
+      send: function () { self.setState({ sheet: false, sent: true }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

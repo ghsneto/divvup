@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>minha casa</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar" style="padding-left:8px"><a class="iconbtn" href="{{L.Perfil}}" data-to="Perfil" aria-label="Voltar"><span class="ic i-chev-l"></span></a><span class="label muted">perfil</span></header>
+<div class="scroll" style="padding:0 16px 24px">
+<span class="st st-n">república</span>
+<h1 class="h1" style="font-size:57px;margin-top:8px">rep. cajueiro</h1>
+<div style="display:flex;gap:16px;margin-top:12px" class="small">
+<span><b class="tnum">5</b> <span class="muted">moradores</span></span><span><b>novembro</b> <span class="muted">temporada</span></span><span><b class="tnum">68</b> <span class="muted">equilíbrio</span></span>
+</div>
+
+<sc-if value="{{admin}}" hint-placeholder-val="{{true}}">
+<div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:8px;margin-top:20px">
+<a href="{{L.Convites}}" data-to="Convites" style="grid-row:span 2;background:var(--ultramarino);color:#ffffff;border-radius:12px;padding:16px;text-decoration:none;display:flex;flex-direction:column;justify-content:space-between;min-height:150px">
+<span class="ic ic-l i-usuarios" style="color:var(--lima)"></span>
+<span><span style="display:block;font-size:20px;font-weight:600;letter-spacing:-.03em;line-height:1.05">convidar moradores</span><span class="small" style="color:#ffffff">2 códigos ativos</span></span>
+</a>
+<a href="{{L.EditarCasa}}" data-to="EditarCasa" class="card" style="padding:12px;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:8px"><span class="ic ic-s i-editar"></span><span style="font-weight:600;font-size:14px">Editar casa</span></a>
+<a href="{{L.Anuncio}}" data-to="Anuncio" class="card" style="padding:12px;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:8px"><span class="ic ic-s i-local"></span><span style="font-weight:600;font-size:14px;flex:1">Anúncio</span></a>
+</div>
+<a href="{{L.Solicitacoes}}" data-to="Solicitacoes" style="display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid var(--border);text-decoration:none;color:var(--text);margin-top:4px"><span class="ic i-chat"></span><span style="flex:1;font-weight:600">Solicitações de entrada</span><span class="count" style="position:static;border:0">2</span><span class="ic ic-s i-chev-r muted"></span></a>
+</sc-if>
+
+<h2 class="label" style="margin:24px 0 4px">moradores</h2>
+<ul style="list-style:none;margin:0;padding:0">
+<sc-for list="{{members}}" as="m" hint-placeholder-count="5">
+<li style="border-bottom:1px solid var(--border)"><a href="{{m.href.h}}" data-to="{{m.href.t}}" style="display:flex;align-items:center;gap:12px;padding:12px 0;text-decoration:none;color:var(--text)">
+<span class="av" style="width:40px;height:40px"><img src="{{m.av}}" alt=""></span>
+<span style="flex:1;min-width:0"><span style="display:flex;align-items:center;gap:8px;font-weight:600;font-size:16px">{{m.name}}<sc-if value="{{m.adm}}" hint-placeholder-val="{{false}}"><span class="st st-p" style="height:18px;font-size:12px">admin</span></sc-if></span><span class="small muted">desde {{m.since}}</span></span>
+<span class="small tnum" style="font-weight:600">{{m.pts}} pts</span>
+</a></li>
+</sc-for>
+</ul>
+
+<button type="button" class="btn btn-d btn-w" style="margin-top:28px" onClick="{{askLeave}}"><span class="ic i-sair"></span>Sair da casa</button>
+</div>
+
+<sc-if value="{{dlg}}" hint-placeholder-val="{{false}}">
+<div class="scrim" style="justify-content:center"><div class="dialog" role="alertdialog" aria-labelledby="l-t">
+<p class="h3" id="l-t" style="font-size:28px">Sair da Rep. Cajueiro?</p>
+<p class="small muted" style="margin-top:8px">Suas 3 tarefas assumidas voltam para o deck. Seus pontos ficam no histórico da casa como ex-morador, e suas medalhas seguem com você.</p>
+<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px"><button type="button" class="btn btn-t" onClick="{{closeDlg}}">Ficar</button><a class="btn btn-dd" href="{{L.OnbCasa}}" data-to="OnbCasa">Sair da casa</a></div>
+</div></div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"admin":{"editor":"boolean","default":true},"$preview":{"width":360,"height":800}}'>
+var M = [['Você', '/_blob/e00900d46e0a7e6fc26a8968881f87ba', 'mar. 2025', 325, 1], ['Ana', '/_blob/f990b1328564f59bb8c0c4b6947416ec', 'mar. 2025', 480, 1], ['Bruno', '/_blob/e17b5e45674dae4c695a8db8214f810e', 'abr. 2025', 300, 0], ['Caio', '/_blob/394e7cecdc16acb58863ca5eafa147e8', 'fev. 2026', 175, 0], ['Davi', '/_blob/8b7d1fe2f3912dc58ba9b4909ecce4dd', 'ontem', 100, 0]];
+var __GO = false;
+var __T = ['Anuncio', 'Convites', 'EditarCasa', 'Membro', 'MembroAdmin', 'OnbCasa', 'Perfil', 'Solicitacoes'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.state || {}, admin = this.props.admin !== false;
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '', admin: admin,
+      members: M.map(function (m, i) { return { name: m[0], av: m[1], since: m[2], pts: m[3], adm: !!m[4], href: i === 0 ? __u('Perfil') : (admin ? __u('MembroAdmin') : __u('Membro')) }; }),
+      dlg: !!s.dlg, askLeave: function () { self.setState({ dlg: true }); }, closeDlg: function () { self.setState({ dlg: false }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

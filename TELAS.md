@@ -2,6 +2,7 @@
 
 > Complementa a seção 6 do [SPEC.md](SPEC.md). Regras citadas por ID (`R-xx`) estão no SPEC.
 > Feito para ser usado como briefing no Claude Design (design system **divvup**) e como referência de implementação em Compose.
+> **O desenho de cada tela** (PNG claro/escuro, HTML com medidas exatas) está em [docs/design/](docs/design/README.md); o mapa código → artboard fica lá. Este arquivo descreve comportamento, estados e navegação; o visual vem do desenho.
 
 ## Convenções gerais
 

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>temporadas anteriores</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar" style="padding-left:8px"><a class="iconbtn" href="{{L.Ranking}}" data-to="Ranking" aria-label="Voltar"><span class="ic i-chev-l"></span></a><span class="label muted">ranking</span></header>
+<div class="scroll" style="padding:0 16px 24px">
+<h1 class="h2" style="margin-bottom:8px">temporadas anteriores</h1>
+<p class="small muted" style="margin-bottom:16px">Cada mês o placar zera e o campeão leva uma medalha. Toque num mês para ver o ranking final.</p>
+<ul style="list-style:none;margin:0;padding:0;border-top:1px solid var(--border)">
+<sc-for list="{{months}}" as="m" hint-placeholder-count="5">
+<li style="border-bottom:1px solid var(--border)">
+<button type="button" onClick="{{m.toggle}}" aria-expanded="{{m.exp}}" style="width:100%;display:flex;align-items:center;gap:12px;padding:16px 0;background:transparent;border:0;cursor:pointer;text-align:left">
+<span style="width:112px;flex:none"><span style="display:block;font-size:24px;font-weight:800;letter-spacing:-.03em;font-variation-settings:'opsz' 96,'wdth' 90;color:var(--text)">{{m.name}}</span><span class="small muted">{{m.year}}</span></span>
+<span class="av" style="width:40px;height:40px;border:1px solid var(--lima)"><img src="{{m.av}}" alt=""></span>
+<span style="flex:1;min-width:0"><span style="display:flex;gap:4px;align-items:center;font-weight:600;font-size:14px;color:var(--text)"><span class="ic ic-xs i-trofeu"></span>{{m.champ}}</span><span class="small muted tnum">{{m.pts}} pts</span></span>
+<span class="ic ic-s {{m.chev}} muted"></span>
+</button>
+<sc-if value="{{m.open}}" hint-placeholder-val="{{false}}">
+<ol class="a-up" style="list-style:none;margin:0 0 16px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px">
+<sc-for list="{{m.rows}}" as="r" hint-placeholder-count="5"><li style="display:flex;align-items:center;gap:12px;padding:8px 0"><span class="tnum small muted" style="width:20px;font-weight:600">{{r.pos}}</span><span class="av" style="width:24px;height:24px"><img src="{{r.av}}" alt=""></span><span class="small" style="flex:1;font-weight:600">{{r.name}}</span><div style="width:70px;height:6px;background:var(--surface-alt);border-radius:4px;overflow:hidden"><div style="height:100%;width:{{r.w}}%;background:var(--text)"></div></div><span class="small tnum" style="font-weight:600;width:36px;text-align:right">{{r.pts}}</span></li></sc-for>
+</ol>
+</sc-if>
+</li>
+</sc-for>
+</ul>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":360,"height":800}}'>
+var P = { Ana: '/_blob/f990b1328564f59bb8c0c4b6947416ec', Você: '/_blob/e00900d46e0a7e6fc26a8968881f87ba', Bruno: '/_blob/e17b5e45674dae4c695a8db8214f810e', Caio: '/_blob/394e7cecdc16acb58863ca5eafa147e8', Lia: '/_blob/fcf87c353c54bba17f885d3f7e589fba' };
+var M = [
+  ['outubro', '2026', [['Ana', 520], ['Você', 410], ['Bruno', 385], ['Caio', 260], ['Lia', 90]]],
+  ['setembro', '2026', [['Bruno', 455], ['Ana', 430], ['Você', 300], ['Caio', 275], ['Lia', 210]]],
+  ['agosto', '2026', [['Ana', 610], ['Caio', 350], ['Bruno', 340], ['Lia', 300], ['Você', 150]]],
+  ['julho', '2026', [['Caio', 380], ['Ana', 360], ['Lia', 330], ['Bruno', 205]]],
+  ['junho', '2026', [['Ana', 440], ['Lia', 410], ['Bruno', 380], ['Caio', 300]]]
+];
+var __GO = false;
+var __T = ['Ranking'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.state || {}, open = s.open == null ? 0 : s.open;
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      months: M.map(function (m, i) {
+        var max = m[2][0][1], on = open === i;
+        return { name: m[0], year: m[1], champ: m[2][0][0], av: P[m[2][0][0]], pts: m[2][0][1], open: on, exp: on ? 'true' : 'false', chev: on ? 'i-chev-d' : 'i-chev-r',
+          toggle: function () { self.setState({ open: on ? -1 : i }); },
+          rows: m[2].map(function (r, j) { return { pos: (j + 1) + 'º', name: r[0], av: P[r[0]], pts: r[1], w: Math.round(r[1] / max * 100) }; }) };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

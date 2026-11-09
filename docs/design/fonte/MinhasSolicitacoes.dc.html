@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>minhas solicitações</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar" style="padding-left:8px"><a class="iconbtn" href="{{L.Buscar}}" data-to="Buscar" aria-label="Voltar"><span class="ic i-chev-l"></span></a><span class="label muted">procurar vaga</span></header>
+<div class="scroll" style="padding:0 16px 24px">
+<h1 class="h1" style="font-size:57px">meus pedidos</h1>
+
+<article class="a-up" style="margin-top:20px;background:var(--ultramarino);color:#ffffff;border-radius:12px;overflow:hidden">
+<div style="display:flex;gap:12px;padding:16px;align-items:center">
+<span style="width:64px;height:64px;border-radius:12px;overflow:hidden;flex:none;border:1px solid var(--lima)"><img src="/_blob/d9c92a38909b721c330d5ebc54fd0207" alt="" style="width:100%;height:100%;object-fit:cover"></span>
+<div style="flex:1"><span class="label" style="color:var(--lima)">aprovado</span><p style="margin:4px 0 0;font-size:28px;font-weight:600;letter-spacing:-.03em">Rep. Cajueiro</p></div>
+</div>
+<div style="background:#f5f5f0;color:var(--tinta);padding:16px 16px;display:flex;gap:12px;align-items:flex-start">
+<span class="ic i-local"></span>
+<div style="flex:1"><p style="margin:0;font-weight:600">Rua Amaro Albino Pimentel, 214, casa B</p><p class="small" style="color:#515561">Várzea, Recife · 50740-000</p></div>
+</div>
+<div style="padding:12px 16px 16px"><a class="btn btn-a" href="{{L.BemVindo}}" data-to="BemVindo">Entrar na casa<span class="ic i-seta-r"></span></a></div>
+</article>
+
+<ul style="list-style:none;margin:20px 0 0;padding:0;border-top:1px solid var(--border)">
+<li style="display:flex;gap:12px;align-items:center;padding:16px 0;border-bottom:1px solid var(--border)"><span style="width:52px;height:52px;border-radius:12px;overflow:hidden;flex:none"><img src="/_blob/6a67b9a235ff83b88d687ff8bb802711" alt="" style="width:100%;height:100%;object-fit:cover"></span><div style="flex:1"><p style="margin:0;font-weight:600">Rep. Maré Alta</p><p class="small muted">enviado ontem</p></div><span class="st st-warn"><span class="ic i-relogio"></span>aguardando</span></li>
+<li style="display:flex;gap:12px;align-items:center;padding:16px 0;border-bottom:1px solid var(--border);"><span style="width:52px;height:52px;border-radius:12px;overflow:hidden;flex:none"><img src="/_blob/783c5f4c2fad06b49a0cc7104e2ebd6f" alt="" style="width:100%;height:100%;object-fit:cover"></span><div style="flex:1"><p style="margin:0;font-weight:600">Casa Mandacaru</p><p class="small muted">respondido seg.</p></div><span class="st st-bad"><span class="ic i-x"></span>recusado</span></li>
+</ul>
+<p class="small muted" style="margin-top:12px">Ao entrar numa casa, os outros pedidos são cancelados.</p>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":360,"height":800}}'>
+var __GO = false;
+var __T = ['BemVindo', 'Buscar'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go; return { L: __L(), __nav: __N(this.props),  temaCls: this.props.tema === 'escuro' ? 'escuro' : '' }; }
+}
+</script>
+</body>
+</html>

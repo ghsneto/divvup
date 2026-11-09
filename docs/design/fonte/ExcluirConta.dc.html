@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>excluir conta</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar" style="padding-left:8px"><button type="button" class="iconbtn" onClick="{{back}}" aria-label="Voltar"><span class="ic i-chev-l"></span></button><span class="label muted" style="flex:1">passo {{stepN}} de 2</span></header>
+
+<sc-if value="{{s1}}" hint-placeholder-val="{{true}}">
+<div style="padding:0 16px;flex:1;display:flex;flex-direction:column">
+<h1 class="h1" style="font-size:57px;color:var(--danger)">excluir conta</h1>
+<p class="txt muted" style="margin-top:12px">Antes, veja o que acontece:</p>
+<ol style="list-style:none;margin:20px 0 0;padding:0;counter-reset:x">
+<li style="display:grid;grid-template-columns:36px minmax(0,1fr);gap:8px;padding:12px 0;border-top:1px solid var(--border)"><span class="tnum" style="font-size:28px;font-weight:600;color:var(--text-muted)">1</span><span><b>Seus dados pessoais somem.</b> Nome, e-mail, foto, medalhas e estatísticas.</span></li>
+<li style="display:grid;grid-template-columns:36px minmax(0,1fr);gap:8px;padding:12px 0;border-top:1px solid var(--border)"><span class="tnum" style="font-size:28px;font-weight:600;color:var(--text-muted)">2</span><span><b>O histórico da casa fica anônimo.</b> Suas tarefas aparecem como "ex-morador".</span></li>
+<li style="display:grid;grid-template-columns:36px minmax(0,1fr);gap:8px;padding:12px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)"><span class="tnum" style="font-size:28px;font-weight:600;color:var(--text-muted)">3</span><span><b>Não tem volta.</b> Nem a gente consegue recuperar.</span></li>
+</ol>
+<sc-if value="{{onlyAdmin}}" hint-placeholder-val="{{true}}">
+<p class="small" style="margin-top:16px;background:var(--warning-bg);color:var(--warning);padding:12px;border-radius:4px;display:flex;gap:8px;font-weight:600"><span class="ic ic-s i-alerta"></span>Você é a única admin da Rep. Cajueiro. A Ana, moradora mais antiga, vira admin.</p>
+</sc-if>
+<div style="margin:auto 0 24px;display:flex;flex-direction:column;gap:8px">
+<button type="button" class="btn btn-d btn-w" onClick="{{next}}">Entendi, continuar</button>
+<a class="btn btn-t" href="{{L.Perfil}}" data-to="Perfil">Manter minha conta</a>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{s2}}" hint-placeholder-val="{{false}}">
+<div class="a-r" style="padding:0 16px;flex:1;display:flex;flex-direction:column">
+<h1 class="h1" style="font-size:57px">confirma que é você</h1>
+<div class="field" style="margin-top:24px"><label class="label" for="x-pass">sua senha</label><input id="x-pass" class="in" type="password" value="••••••••••" readonly></div>
+<p class="small muted" style="margin-top:8px">Entrou com Google? A confirmação abre a sua conta Google.</p>
+<div class="field" style="margin-top:20px"><label class="label" for="x-word">digite EXCLUIR</label><input id="x-word" class="in tnum" value="{{word}}" onChange="{{setWord}}" autocapitalize="characters" style="font-weight:600;letter-spacing:.12em;border-color:{{wordBorder}}"></div>
+<button type="button" class="btn btn-dd btn-w {{off}}" style="margin:auto 0 24px" onClick="{{del}}"><span class="ic i-lixo"></span>Excluir minha conta</button>
+</div>
+</sc-if>
+
+<sc-if value="{{done}}" hint-placeholder-val="{{false}}">
+<div class="scrim a-up" style="background:var(--background);justify-content:center;padding:0 24px">
+<span class="label muted">conta excluída</span>
+<p class="h1" style="font-size:57px;margin-top:8px">valeu por dividir a casa com a gente</p>
+<a class="btn btn-p" style="margin-top:24px;align-self:flex-start" href="{{L.BoasVindas}}" data-to="BoasVindas">Voltar ao início</a>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"unicoAdmin":{"editor":"boolean","default":true},"$preview":{"width":360,"height":800}}'>
+var __GO = false;
+var __T = ['BoasVindas', 'Perfil'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = Object.assign({ step: 1, word: 'EXCL' }, this.state || {});
+    var ok = s.word.trim().toUpperCase() === 'EXCLUIR';
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      s1: s.step === 1, s2: s.step === 2, done: s.step === 3, stepN: Math.min(s.step, 2), onlyAdmin: this.props.unicoAdmin !== false,
+      next: function () { self.setState({ step: 2 }); }, back: function () { if (s.step === 1 && self.props.go) { self.props.go('back'); return; } self.setState({ step: 1 }); },
+      word: s.word, setWord: function (e) { self.setState({ word: e.target.value.toUpperCase() }); },
+      wordBorder: ok ? 'var(--danger)' : 'var(--border)', off: ok ? '' : 'off',
+      del: function () { if (ok) self.setState({ step: 3 }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

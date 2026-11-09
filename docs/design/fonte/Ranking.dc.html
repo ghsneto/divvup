@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>ranking</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar">
+<span class="av" style="width:40px;height:40px"><img src="/_blob/d9c92a38909b721c330d5ebc54fd0207" alt=""></span>
+<span class="ttl" style="font-size:16px;flex:1">rep. cajueiro</span>
+<a class="iconbtn" href="{{L.Notificacoes}}" data-to="Notificacoes" aria-label="Notificações, 3 não lidas"><span class="ic i-sino"></span><span class="count">3</span></a>
+</header>
+
+<div role="tablist" aria-label="Ranking" style="display:flex;gap:8px;padding:0 16px;border-bottom:1px solid var(--border);flex:none">
+<sc-for list="{{tabs}}" as="tb" hint-placeholder-count="3"><button role="tab" type="button" aria-selected="{{tb.sel}}" onClick="{{tb.pick}}" style="background:transparent;border:0;min-height:48px;padding:12px 8px;font-size:14px;font-weight:600;cursor:pointer;color:{{tb.color}};border-bottom:1px solid {{tb.line}};margin-bottom:-4px">{{tb.name}}</button></sc-for>
+</div>
+
+<div class="scroll" style="padding:0 16px 24px">
+
+<sc-if value="{{isMes}}" hint-placeholder-val="{{true}}">
+<div style="display:flex;align-items:flex-end;gap:12px;padding:20px 0 16px">
+<div style="flex:1"><span class="label muted">temporada</span><h1 class="h2" style="">novembro</h1></div>
+<div style="width:92px;flex:none;padding-bottom:8px"><span class="small" style="font-weight:600;display:block">faltam 24 dias</span><div style="height:4px;background:var(--surface-alt);border-radius:4px;margin-top:8px;overflow:hidden"><div class="a-grow" style="width:20%;height:100%;background:var(--text)"></div></div></div>
+</div>
+
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) minmax(0,1fr);align-items:end;gap:8px" aria-label="Pódio">
+<sc-for list="{{podium}}" as="p" hint-placeholder-count="3">
+<a href="{{L.Membro}}" data-to="Membro" style="display:flex;flex-direction:column;align-items:{{p.align}};gap:8px;text-decoration:none;color:var(--text)">
+<span class="av a-pop {{p.d}}" style="width:{{p.avs}}px;height:{{p.avs}}px;border:1px solid {{p.ring}}"><img src="{{p.av}}" alt=""></span>
+<div class="a-rise {{p.d}}" style="width:100%;height:{{p.h}}px;background:{{p.bg}};color:{{p.fg}};border:1px solid {{p.bd}};border-radius:12px 12px 0 0;padding:12px;display:flex;flex-direction:column;justify-content:space-between">
+<div style="display:flex;justify-content:space-between;align-items:flex-start"><span style="font-size:{{p.fs}}px;font-weight:800;line-height:1.05;font-variation-settings:'opsz' 96,'wdth' 90">{{p.pos}}</span><sc-if value="{{p.crown}}" hint-placeholder-val="{{false}}"><span class="ic ic-s i-trofeu" style="color:var(--lima)"></span></sc-if></div>
+<div><span style="font-size:14px;font-weight:600;display:block">{{p.name}}</span><span class="tnum" style="font-size:14px;font-weight:600;opacity:.85">{{p.pts}} pts</span></div>
+</div>
+</a>
+</sc-for>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;background:var(--surface);border:1px solid var(--border);border-top:0;border-radius:0 0 12px 12px;padding:16px 16px">
+<div style="flex:none"><span class="label muted" style="font-size:12px">equilíbrio</span><div style="display:flex;align-items:baseline;gap:4px"><span class="tnum" style="font-size:36px;font-weight:800;line-height:1.05;font-variation-settings:'opsz' 96,'wdth' 90">68</span><span class="small muted">/100</span></div></div>
+<div style="flex:1;min-width:0">
+<p class="small" style="font-weight:600">quase equilibrado</p>
+<div style="display:flex;gap:4px;margin-top:8px" aria-hidden="true"><sc-for list="{{bal}}" as="b" hint-placeholder-count="10"><span style="flex:1;height:8px;background:{{b.bg}}"></span></sc-for></div>
+<p class="small muted" style="font-size:12px;margin-top:4px">Ana fez 35% dos pontos.</p>
+</div>
+<button type="button" class="iconbtn" aria-label="O que é o índice de equilíbrio" onClick="{{openHelp}}" style="width:44px;height:44px"><span class="ic i-ajuda"></span></button>
+</div>
+</sc-if>
+
+<sc-if value="{{isGeral}}" hint-placeholder-val="{{false}}">
+<div style="padding:20px 0 12px"><span class="label muted">desde mar. 2025</span><h1 class="h1" style="font-size:57px">de todos os tempos</h1></div>
+</sc-if>
+
+<sc-if value="{{showList}}" hint-placeholder-val="{{true}}">
+<ol style="list-style:none;margin:20px 0 0;padding:0">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="5">
+<li class="a-up {{r.d}}" style="display:flex;align-items:center;gap:12px;padding:12px {{r.pad}}px;border-bottom:1px solid var(--border);background:{{r.bg}};border-radius:{{r.rad}}">
+<span class="tnum" style="width:22px;font-size:14px;font-weight:600;color:var(--text-muted)">{{r.pos}}</span>
+<span class="av" style="width:40px;height:40px;opacity:{{r.op}}"><img src="{{r.av}}" alt=""></span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="font-size:16px;font-weight:600">{{r.name}}</span><span class="small muted">{{r.sub}}</span></span>
+<span class="pts" style="font-size:16px">{{r.pts}}</span>
+</li>
+</sc-for>
+</ol>
+<sc-if value="{{isMes}}" hint-placeholder-val="{{true}}"><a href="{{L.Temporadas}}" data-to="Temporadas" class="btn btn-t" style="margin-top:12px;padding-left:0;color:var(--text)">Temporadas anteriores<span class="ic ic-s i-seta-r"></span></a></sc-if>
+</sc-if>
+
+<sc-if value="{{isHist}}" hint-placeholder-val="{{false}}">
+<div style="padding:16px 0 0">
+<div style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px">
+<sc-for list="{{filters}}" as="f" hint-placeholder-count="5"><button type="button" class="chip {{f.on}}" aria-pressed="{{f.pressed}}" onClick="{{f.pick}}" style="min-height:36px"><sc-if value="{{f.av}}" hint-placeholder-val="{{false}}"><span class="av" style="width:24px;height:24px;margin-left:-8px"><img src="{{f.av}}" alt=""></span></sc-if>{{f.name}}</button></sc-for>
+</div>
+<sc-for list="{{feed}}" as="g" hint-placeholder-count="2">
+<h2 class="label muted" style="margin:20px 0 4px">{{g.day}}</h2>
+<ul style="list-style:none;margin:0;padding:0">
+<sc-for list="{{g.items}}" as="e" hint-placeholder-count="3">
+<li style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);align-items:flex-start">
+<span class="av" style="width:24px;height:24px"><img src="{{e.av}}" alt=""></span>
+<div style="flex:1;min-width:0"><p class="small" style="font-size:14px"><b style="font-weight:600">{{e.who}}</b> {{e.verb}} <span style="font-weight:600">{{e.what}}</span></p><span class="small muted" style="font-size:12px;display:flex;align-items:center;gap:4px"><span class="ic ic-xs {{e.icon}}"></span>{{e.when}}</span></div>
+<sc-if value="{{e.pts}}" hint-placeholder-val="{{false}}"><span class="pb" style="font-size:14px;padding:4px 8px">+{{e.pts}}</span></sc-if>
+</li>
+</sc-for>
+</ul>
+</sc-for>
+<sc-if value="{{feedEmpty}}" hint-placeholder-val="{{false}}"><p class="txt muted" style="padding:32px 0">Nada de {{filterName}} nos últimos dias.</p></sc-if>
+</div>
+</sc-if>
+</div>
+
+<sc-if value="{{help}}" hint-placeholder-val="{{false}}">
+<div class="scrim">
+<div class="sheet" role="dialog" aria-labelledby="h-t">
+<div class="grab"></div>
+<span class="label muted">índice de equilíbrio</span>
+<p class="h2" id="h-t" style="font-size:36px;margin-top:4px">quão dividida está a casa</p>
+<p class="txt muted" style="margin-top:12px">Vai de 0 a 100. Se todo mundo fez a mesma quantidade de pontos no mês, dá 100. Se uma pessoa fez tudo, dá 0. É ele que aparece no anúncio da casa, nunca os pontos de ninguém.</p>
+<div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 12px;margin-top:16px" class="small">
+<span class="tnum" style="font-weight:600">75–100</span><span>bem dividido</span>
+<span class="tnum" style="font-weight:600">50–74</span><span>quase equilibrado</span>
+<span class="tnum" style="font-weight:600">0–49</span><span>desequilibrado</span>
+</div>
+<button type="button" class="btn btn-p btn-w" style="margin-top:20px" onClick="{{closeHelp}}">Entendi</button>
+</div>
+</div>
+</sc-if>
+
+<nav class="tabbar" aria-label="Navegação principal">
+<a class="tab" href="{{L.Main}}" data-to="Main"><span class="ic i-deck"></span>Deck</a>
+<a class="tab" href="{{L.MinhasTarefas}}" data-to="MinhasTarefas"><span class="ic i-tarefas"></span>Minhas tarefas</a>
+<a class="tab on" href="{{L.Ranking}}" data-to="Ranking" aria-current="page"><span class="ic i-ranking"></span>Ranking</a>
+<a class="tab" href="{{L.Perfil}}" data-to="Perfil"><span class="ic i-perfil"></span>Perfil</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"aba":{"editor":"enum","options":["mes","geral","historico"],"default":"mes"},"$preview":{"width":360,"height":800}}'>
+var A = { ana: '/_blob/f990b1328564f59bb8c0c4b6947416ec', iane: '/_blob/e00900d46e0a7e6fc26a8968881f87ba', bruno: '/_blob/e17b5e45674dae4c695a8db8214f810e', caio: '/_blob/394e7cecdc16acb58863ca5eafa147e8', davi: '/_blob/8b7d1fe2f3912dc58ba9b4909ecce4dd', lia: '/_blob/fcf87c353c54bba17f885d3f7e589fba' };
+var MES = [['Ana', A.ana, '480', '12 tarefas'], ['Você', A.iane, '325', '8 tarefas', true], ['Bruno', A.bruno, '300', '7 tarefas'], ['Caio', A.caio, '175', '5 tarefas'], ['Davi', A.davi, '100', '3 tarefas']];
+var GERAL = [['Ana', A.ana, '3.240', '81 tarefas'], ['Bruno', A.bruno, '2.980', '74 tarefas'], ['Você', A.iane, '2.115', '52 tarefas', true], ['Caio', A.caio, '1.870', '45 tarefas'], ['Lia', A.lia, '1.420', 'ex-moradora', false, true], ['Davi', A.davi, '940', '23 tarefas']];
+var FEED = [
+  { day: 'hoje', items: [
+    { who: 'Você', k: 'Você', av: A.iane, verb: 'concluiu', what: 'Lavar a louça do jantar', pts: 50, when: 'há 12 min', icon: 'i-cozinha' },
+    { who: 'Bruno', k: 'Bruno', av: A.bruno, verb: 'assumiu', what: 'Passear com o Thor', when: 'há 1 h', icon: 'i-pets' },
+    { who: 'Caio', k: 'Caio', av: A.caio, verb: 'recebeu automaticamente', what: 'Tirar o lixo', when: 'há 3 h', icon: 'i-lixo' }
+  ] },
+  { day: 'ontem', items: [
+    { who: 'Ana', k: 'Ana', av: A.ana, verb: 'concluiu', what: 'Limpar a geladeira', pts: 100, when: 'ontem às 21h', icon: 'i-cozinha' },
+    { who: 'Davi', k: 'Davi', av: A.davi, verb: 'entrou na casa', what: '', when: 'ontem às 18h', icon: 'i-casa' },
+    { who: 'Ana', k: 'Ana', av: A.ana, verb: 'concluiu', what: 'Regar as plantas', pts: 12, when: 'ontem às 11h · atrasada', icon: 'i-plantas' }
+  ] }
+];
+var __GO = false;
+var __T = ['Main', 'Membro', 'MinhasTarefas', 'Notificacoes', 'Perfil', 'Ranking', 'Temporadas'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.state || {};
+    var aba = s.aba && s.base === this.props.aba ? s.aba : (this.props.aba || 'mes');
+    var base = this.props.aba || 'mes';
+    var tabs = [['mes', 'Este mês'], ['geral', 'Geral'], ['historico', 'Histórico']].map(function (t) {
+      var on = t[0] === aba; return { name: t[1], sel: on ? 'true' : 'false', color: on ? 'var(--text)' : 'var(--text-muted)', line: on ? 'var(--primary)' : 'transparent', pick: function () { self.setState({ aba: t[0], base: base }); } };
+    });
+    var src = aba === 'geral' ? GERAL : MES;
+    var rows = (aba === 'mes' ? src.slice(3) : src).map(function (r, i) {
+      var me = !!r[4];
+      return { pos: (aba === 'mes' ? i + 4 : i + 1) + 'º', name: r[0], av: r[1], pts: r[2], sub: r[3], bg: me ? 'var(--primary-bg)' : 'transparent', pad: me ? 10 : 0, rad: me ? '8px' : '0', op: r[5] ? 0.5 : 1, d: 'd' + (i + 1) };
+    });
+    if (aba === 'mes') rows = [{ pos: '2º', name: 'Você', av: A.iane, pts: '325', sub: '8 tarefas · você está aqui', bg: 'var(--primary-bg)', pad: 10, rad: '8px', op: 1, d: 'd1' }].concat(rows.map(function (r, i) { r.d = 'd' + (i + 2); return r; }));
+    var P = [[MES[1], '2º', 150, 'var(--surface)', 'var(--text)', 'var(--border)', 40, 'flex-start', 36, false, 'd2'], [MES[0], '1º', 190, 'var(--ultramarino)', '#ffffff', 'var(--ultramarino)', 64, 'center', 57, true, 'd1'], [MES[2], '3º', 116, 'var(--surface-alt)', 'var(--text)', 'var(--border)', 40, 'flex-end', 36, false, 'd3']];
+    var podium = P.map(function (p) { return { name: p[0][0], av: p[0][1], pts: p[0][2], pos: p[1], h: p[2], bg: p[3], fg: p[4], bd: p[5], avs: p[6], align: p[7], fs: p[8], crown: p[9], d: p[10], ring: p[9] ? 'var(--lima)' : 'var(--border)' }; });
+    var bal = [];
+    for (var i = 0; i < 10; i++) bal.push({ bg: i < 7 ? (i < 5 ? 'var(--text)' : 'var(--text-muted)') : 'var(--surface-alt)' });
+    var fil = s.fil || 'Todos';
+    var filters = [['Todos'], ['Você', A.iane], ['Ana', A.ana], ['Bruno', A.bruno], ['Caio', A.caio], ['Davi', A.davi]].map(function (f) { var on = f[0] === fil; return { name: f[0], av: f[1] || '', on: on ? 'on' : '', pressed: on ? 'true' : 'false', pick: function () { self.setState({ fil: f[0] }); } }; });
+    var feed = FEED.map(function (g) { return { day: g.day, items: g.items.filter(function (e) { return fil === 'Todos' || e.k === fil; }) }; }).filter(function (g) { return g.items.length; });
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      tabs: tabs, isMes: aba === 'mes', isGeral: aba === 'geral', isHist: aba === 'historico', showList: aba !== 'historico',
+      podium: podium, rows: rows, bal: bal, filters: filters, feed: feed, feedEmpty: feed.length === 0, filterName: fil,
+      help: !!s.help, openHelp: function () { self.setState({ help: true }); }, closeHelp: function () { self.setState({ help: false }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

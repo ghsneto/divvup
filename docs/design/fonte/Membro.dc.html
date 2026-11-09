@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>perfil de morador</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/f25551cbab6b194e9c1439682cdfeafb">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div onClick="{{__nav}}" class="dv phone {{temaCls}}">
+<header class="topbar" style="padding-left:8px"><a class="iconbtn" href="{{backHref.h}}" data-to="{{backHref.t}}" aria-label="Voltar"><span class="ic i-chev-l"></span></a><span class="label muted" style="flex:1">{{ctx}}</span></header>
+<div class="scroll" style="padding:0 16px 24px">
+
+<div style="display:flex;gap:16px;align-items:flex-end">
+<div style="flex:1;min-width:0">
+<span class="st {{roleCls}}">{{role}}</span>
+<h1 class="h1" style="font-size:57px;margin-top:8px">ana</h1>
+<p class="small muted">no Divvup desde mar. 2025</p>
+</div>
+<span class="av a-pop" style="width:96px;height:96px;border:1px solid var(--lima)"><img src="/_blob/f990b1328564f59bb8c0c4b6947416ec" alt=""></span>
+</div>
+
+<div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);margin-top:24px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+<div style="padding:16px 0"><span class="label muted">este mês</span><p class="tnum" style="margin:4px 0 0;font-size:36px;font-weight:800;line-height:1.05;font-variation-settings:'opsz' 96,'wdth' 90">480</p><span class="small muted">1º lugar</span></div>
+<div style="padding:16px 0 16px 12px;border-left:1px solid var(--border)"><span class="label muted">total</span><p class="pts" style="margin:8px 0 0">3.240</p><span class="small muted">81 tarefas</span></div>
+<div style="padding:16px 0 16px 12px;border-left:1px solid var(--border)"><span class="label muted">sequência</span><p class="pts" style="margin:8px 0 0;display:flex;align-items:center;gap:4px"><span class="ic ic-s i-raio"></span>9</p><span class="small muted">recorde 21</span></div>
+</div>
+
+<h2 class="label" style="margin:24px 0 12px">tarefas por categoria · mês</h2>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="5">
+<div style="display:grid;grid-template-columns:104px minmax(0,1fr) 24px;align-items:center;gap:8px">
+<span class="small" style="display:flex;align-items:center;gap:8px"><span class="ic ic-xs {{b.icon}}"></span>{{b.name}}</span>
+<div style="height:14px;background:var(--surface-alt);border-radius:4px;overflow:hidden"><div class="a-grow {{b.d}}" style="height:100%;width:{{b.w}}%;background:{{b.bg}}"></div></div>
+<span class="small tnum" style="font-weight:600;text-align:right">{{b.n}}</span>
+</div>
+</sc-for>
+</div>
+
+<h2 class="label" style="margin:24px 0 12px">medalhas</h2>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<span class="chip" style="cursor:default"><span class="ic ic-s i-trofeu"></span>campeã ×4</span>
+<span class="chip" style="cursor:default"><span class="ic ic-s i-raio"></span>7 dias</span>
+<span class="chip" style="cursor:default"><span class="ic ic-s i-check"></span>primeira tarefa</span>
+<span class="chip" style="cursor:default"><span class="ic ic-s i-relogio"></span>salva-vidas</span>
+</div>
+
+<h2 class="label" style="margin:24px 0 4px">abertas com ela · 2</h2>
+<ul style="list-style:none;margin:0;padding:0">
+<li style="display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)"><span style="width:40px;height:40px;border-radius:4px;overflow:hidden;flex:none"><img src="/_blob/fedd6f71ffcd53e0f5649a76694aaf49" alt="" style="width:100%;height:100%;object-fit:cover"></span><span style="flex:1;font-weight:600">Estender a roupa</span><span class="small muted">amanhã</span></li>
+<li style="display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)"><span style="width:40px;height:40px;border-radius:4px;overflow:hidden;flex:none"><img src="/_blob/95053c824273e7686a9b157ad9538b3b" alt="" style="width:100%;height:100%;object-fit:cover"></span><span style="flex:1;font-weight:600">Varrer a sala</span><span class="small muted">seg.</span></li>
+</ul>
+
+<sc-if value="{{admin}}" hint-placeholder-val="{{false}}">
+<div style="margin-top:28px;padding-top:16px;border-top:1px solid var(--text);display:flex;flex-direction:column;gap:8px">
+<span class="label">ações de admin</span>
+<button type="button" class="btn btn-o" style="justify-content:flex-start" onClick="{{toggleAdmin}}"><span class="ic i-perfil"></span>{{adminLabel}}</button>
+<button type="button" class="btn btn-d" style="justify-content:flex-start" onClick="{{askRemove}}"><span class="ic i-sair"></span>Remover da casa</button>
+</div>
+</sc-if>
+</div>
+
+<sc-if value="{{dlg}}" hint-placeholder-val="{{false}}">
+<div class="scrim" style="justify-content:center"><div class="dialog" role="alertdialog" aria-labelledby="m-t">
+<p class="h3" id="m-t" style="font-size:28px">Remover Ana da casa?</p>
+<p class="small muted" style="margin-top:8px">As tarefas dela voltam para o deck. Os pontos ficam no histórico como ex-moradora.</p>
+<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px"><button type="button" class="btn btn-t" onClick="{{closeDlg}}">Cancelar</button><a class="btn btn-dd" href="{{L.MinhaCasa}}" data-to="MinhaCasa">Remover da casa</a></div>
+</div></div>
+</sc-if>
+<sc-if value="{{snack}}" hint-placeholder-val="{{false}}"><div class="snack" role="status" style="bottom:16px"><span class="ic ic-s i-check" style="color:var(--lima)"></span><span style="flex:1;font-weight:600;font-size:14px">{{snack}}</span></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"go":{"editor":null},"setTema":{"editor":null},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"visao":{"editor":"enum","options":["morador","admin"],"default":"morador"},"$preview":{"width":360,"height":800}}'>
+var B = [['Cozinha', 'i-cozinha', 5], ['Banheiro', 'i-banheiro', 3], ['Lavanderia', 'i-lavanderia', 2], ['Compras', 'i-compras', 1], ['Pets', 'i-pets', 1]];
+var __GO = false;
+var __T = ['MinhaCasa', 'Ranking'];
+function __L() { var o = {}; __T.forEach(function (n) { o[n] = __GO ? undefined : n + '.dc.html'; }); return o; }
+function __u(n) { return { h: n ? (__GO ? undefined : n + '.dc.html') : (__GO ? undefined : '#'), t: n }; }
+function __N(p) { return function (e) { if (!p.go) return; var el = e.target && e.target.closest ? e.target.closest('[data-to]') : null; if (!el) return; var t = el.getAttribute('data-to'); if (!t) return; e.preventDefault(); p.go(t); }; }
+class Component extends DCLogic {
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() { __GO = !!this.props.go;
+    var self = this, s = this.state || {}, adm = this.props.visao === 'admin';
+    var isAdm = s.isAdm == null ? true : s.isAdm;
+    return { L: __L(), __nav: __N(this.props), 
+      temaCls: this.props.tema === 'escuro' ? 'escuro' : '',
+      admin: adm, ctx: adm ? 'membro · visão de admin' : 'morador', backHref: adm ? __u('MinhaCasa') : __u('Ranking'),
+      role: isAdm ? 'admin' : 'moradora', roleCls: isAdm ? 'st-p' : 'st-n',
+      adminLabel: isAdm ? 'Remover admin' : 'Tornar admin',
+      bars: B.map(function (b, i) { return { name: b[0], icon: b[1], n: b[2], w: Math.round(b[2] / 5 * 100), bg: i === 0 ? 'var(--primary)' : 'var(--text-muted)', d: 'd' + (i + 1) }; }),
+      toggleAdmin: function () { clearTimeout(self.t); self.setState({ isAdm: !isAdm, snack: isAdm ? 'Ana agora é moradora' : 'Ana agora é admin' }); self.t = setTimeout(function () { self.setState({ snack: null }); }, 2200); },
+      askRemove: function () { self.setState({ dlg: true }); }, closeDlg: function () { self.setState({ dlg: false }); },
+      dlg: !!s.dlg, snack: s.snack || ''
+    };
+  }
+}
+</script>
+</body>
+</html>
