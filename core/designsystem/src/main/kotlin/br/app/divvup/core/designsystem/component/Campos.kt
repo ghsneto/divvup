@@ -30,6 +30,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import br.app.divvup.core.designsystem.icon.DivvupIcone
 import br.app.divvup.core.designsystem.theme.DivvupTheme
 
@@ -51,6 +52,8 @@ fun DivvupTextField(
     teclado: KeyboardOptions = KeyboardOptions.Default,
     acoesTeclado: KeyboardActions = KeyboardActions.Default,
     final: (@Composable () -> Unit)? = null,
+    erroComLinks: List<Trecho>? = null,
+    abaixo: (@Composable () -> Unit)? = null,
 ) {
     val c = DivvupTheme.colors
     val t = DivvupTheme.typography
@@ -74,7 +77,7 @@ fun DivvupTextField(
                         .height(52.dp)
                         .clip(shape)
                         .background(c.surface, shape)
-                        .border(DivvupTheme.spacing.borda, if (erro != null) c.danger else c.border, shape)
+                        .border(DivvupTheme.spacing.borda, if (erro != null || erroComLinks != null) c.danger else c.border, shape)
                         .padding(start = 16.dp, end = if (final != null) 4.dp else 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -88,16 +91,33 @@ fun DivvupTextField(
                 }
             },
         )
+        abaixo?.invoke()
         erro?.let { MensagemErro(it) }
+        erroComLinks?.let { MensagemErro(it) }
     }
 }
 
 /** `.errmsg`: ícone de alerta 16 + texto 14sp/600 em `danger`. */
 @Composable
 fun MensagemErro(texto: String, modifier: Modifier = Modifier) {
-    Row(modifier, horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-        DivvupIcon(DivvupIcone.Alerta, tamanho = 16.dp, tint = DivvupTheme.colors.danger)
-        Text(texto, style = DivvupTheme.typography.botao, color = DivvupTheme.colors.danger)
+    MensagemErro(listOf(Trecho.Comum(texto)), modifier)
+}
+
+/**
+ * `.errmsg` com link (ex.: "Esse e-mail já tem conta. Entrar"). Links em `danger`.
+ * No desenho é um `<p>` com a margem padrão de 1em (14dp) acima e abaixo, reproduzida aqui.
+ */
+@Composable
+fun MensagemErro(trechos: List<Trecho>, modifier: Modifier = Modifier) {
+    val perigo = DivvupTheme.colors.danger
+    Row(modifier.padding(vertical = 14.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+        DivvupIcon(DivvupIcone.Alerta, tamanho = 16.dp, tint = perigo)
+        DivvupTextoComLinks(
+            trechos.map { if (it is Trecho.Link) it.copy(cor = it.cor ?: perigo) else it },
+            // `.errmsg` só define o tamanho (14px): a altura de linha é a "normal" da fonte (1,2em).
+            estilo = DivvupTheme.typography.botao.copy(lineHeight = 1.2.em),
+            cor = perigo,
+        )
     }
 }
 

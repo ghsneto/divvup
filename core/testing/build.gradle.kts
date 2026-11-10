@@ -10,6 +10,9 @@ android {
 dependencies {
     api(project(":core:model"))
     api(project(":core:designsystem"))
+    api(project(":core:domain"))
+    api(project(":core:data"))
+    api(libs.kotlinx.coroutines.test)
     api(libs.junit4)
     api(libs.kotlin.test)
     api(libs.robolectric)

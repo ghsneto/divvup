@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textos de A1–A5, copiados de docs/design/fonte (Splash, BoasVindas, Entrar, CriarConta, RecuperarSenha). -->
+<resources>
+    <string name="auth_logo">divvup</string>
+    <string name="auth_voltar">Voltar</string>
+
+    <!-- A2 -->
+    <string name="boasvindas_titulo">a casa dividida no swipe</string>
+    <string name="boasvindas_subtitulo">Arrasta pra direita, a tarefa é sua. Arrasta pra esquerda, passa a vez.</string>
+    <string name="boasvindas_criar_conta">Criar conta</string>
+    <string name="boasvindas_google">Continuar com Google</string>
+    <string name="boasvindas_ja_tenho">Já tenho conta</string>
+    <string name="boasvindas_termos_inicio">"Ao continuar, você aceita os "</string>
+    <string name="boasvindas_termos_link">Termos</string>
+    <string name="boasvindas_termos_meio">" e a "</string>
+    <string name="boasvindas_privacidade_link">Política de Privacidade</string>
+    <string name="boasvindas_termos_fim">.</string>
+
+    <!-- A3 -->
+    <string name="entrar_rotulo">de volta</string>
+    <string name="entrar_titulo">entrar</string>
+    <string name="campo_email">e-mail</string>
+    <string name="campo_senha">senha</string>
+    <string name="entrar_esqueci">Esqueci a senha</string>
+    <string name="entrar_botao">Entrar</string>
+    <string name="entrar_carregando">Entrando</string>
+    <string name="entrar_ou">ou</string>
+    <string name="entrar_sem_conta">"Ainda não tem conta? "</string>
+    <string name="entrar_criar_conta">Criar conta</string>
+    <string name="entrar_sem_conexao">Sem conexão. Conecte-se para entrar.</string>
+    <string name="senha_mostrar">Mostrar senha</string>
+    <string name="senha_ocultar">Ocultar senha</string>
+    <string name="erro_senha_incorreta">Senha incorreta. Confere e tenta de novo.</string>
+    <string name="erro_conta_nao_encontrada">Não achamos uma conta com esse e-mail.</string>
+    <string name="erro_muitas_tentativas">Muitas tentativas. Espera uns minutos ou recupera a senha.</string>
+    <string name="erro_email_invalido">Confere o e-mail: falta alguma coisa.</string>
+    <string name="erro_sem_conexao">Sem conexão. Conecte-se e tente de novo.</string>
+    <string name="erro_desconhecido">Algo deu errado. Tenta de novo.</string>
+
+    <!-- A4 -->
+    <string name="criar_rotulo">leva 1 minuto</string>
+    <string name="criar_titulo">criar conta</string>
+    <string name="campo_nome">nome</string>
+    <string name="criar_nome_placeholder">Como te chamam em casa</string>
+    <string name="criar_senha_placeholder">Mínimo 8 caracteres</string>
+    <string name="campo_confirmar_senha">confirmar senha</string>
+    <string name="criar_email_duplicado">"Esse e-mail já tem conta. "</string>
+    <string name="criar_email_duplicado_entrar">Entrar</string>
+    <string name="criar_senhas_diferentes">As senhas não batem.</string>
+    <string name="criar_senha_fraca">Senha fraca. Use pelo menos 8 caracteres com letras e números.</string>
+    <string name="forca_fraca">fraca</string>
+    <string name="forca_razoavel">razoável</string>
+    <string name="forca_boa">boa</string>
+    <string name="forca_forte">forte</string>
+    <string name="criar_termos_inicio">"Li e aceito os "</string>
+    <string name="criar_termos_link">Termos de uso</string>
+    <string name="criar_termos_meio">" e a "</string>
+    <string name="criar_privacidade_link">Política de Privacidade</string>
+    <string name="criar_termos_fim">.</string>
+    <string name="criar_botao">Criar conta</string>
+    <string name="criar_google">Google</string>
+    <string name="criar_ja_tenho">Já tenho conta</string>
+
+    <!-- A5 -->
+    <string name="recuperar_rotulo">acontece</string>
+    <string name="recuperar_titulo">esqueceu a senha?</string>
+    <string name="recuperar_texto">Manda seu e-mail que a gente envia um link pra criar outra.</string>
+    <string name="recuperar_botao">Enviar link</string>
+    <string name="recuperar_enviado_rotulo">enviado</string>
+    <string name="recuperar_enviado_titulo">olha sua caixa de entrada</string>
+    <string name="recuperar_enviado_texto">Mandamos um link para %1$s.</string>
+    <string name="recuperar_enviado_spam">Não chegou em 5 minutos? Confere o spam.</string>
+    <string name="recuperar_voltar">Voltar para entrar</string>
+    <string name="recuperar_outro_email">Usar outro e-mail</string>
+</resources>

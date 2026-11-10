@@ -44,6 +44,8 @@ fun DivvupIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     contador: Int? = null,
+    tamanhoIcone: androidx.compose.ui.unit.Dp = TamanhoIcone.Padrao.dp,
+    tint: androidx.compose.ui.graphics.Color = DivvupTheme.colors.text,
 ) {
     Box(
         modifier
@@ -53,7 +55,7 @@ fun DivvupIconButton(
             .semantics { contentDescription = descricao },
         contentAlignment = Alignment.Center,
     ) {
-        DivvupIcon(icone, tint = DivvupTheme.colors.text)
+        DivvupIcon(icone, tamanho = tamanhoIcone, tint = tint)
         if (contador != null && contador > 0) {
             Contador(contador, Modifier.align(Alignment.TopEnd).offset(x = (-4).dp, y = 4.dp))
         }

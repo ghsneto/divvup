@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Fundo da janela = `background` do tema (sem clarão branco ao abrir). -->
+    <color name="divvup_fundo">#F5F5F0</color>
+
     <!-- Tema da janela. Cores e tipografia da UI vêm do DivvupTheme (Compose). -->
-    <style name="Theme.Divvup" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Divvup" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/divvup_fundo</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <!--
+        Splash do sistema (A1, TELAS.md): só o fundo, sem ícone. O logo do desenho (símbolo + nome)
+        não cabe na área de ícone da Splash Screen API; ele aparece na tela A1 em Compose logo em seguida.
+    -->
+    <style name="Theme.Divvup.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/divvup_fundo</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_sem_icone</item>
+        <item name="postSplashScreenTheme">@style/Theme.Divvup</item>
+    </style>
 </resources>

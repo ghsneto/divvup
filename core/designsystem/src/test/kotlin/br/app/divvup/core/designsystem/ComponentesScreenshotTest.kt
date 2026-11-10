@@ -36,6 +36,7 @@ import br.app.divvup.core.designsystem.component.DivvupSkeleton
 import br.app.divvup.core.designsystem.component.DivvupSnackbar
 import br.app.divvup.core.designsystem.component.DivvupStatusTag
 import br.app.divvup.core.designsystem.component.DivvupTabBar
+import br.app.divvup.core.designsystem.component.DivvupText
 import br.app.divvup.core.designsystem.component.DivvupTextField
 import br.app.divvup.core.designsystem.component.DivvupToggle
 import br.app.divvup.core.designsystem.component.DivvupTopBar
@@ -62,8 +63,8 @@ class ComponentesScreenshotTest {
         val t = DivvupTheme.typography
         val cor = DivvupTheme.colors.text
         Column(Modifier.width(328.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("a casa dividida", style = t.h1, color = cor)
-            Text("escolhe sua cara", style = t.h2, color = cor)
+            DivvupText("a casa dividida", t.h1)
+            DivvupText("escolhe sua cara", t.h2)
             Text("Sair da Rep. Cajueiro?", style = t.h3, color = cor)
             Text("tarefas abertas", style = t.ttl, color = cor)
             Text("Arrasta pra direita, a tarefa é sua.", style = t.body, color = cor)
@@ -200,7 +201,7 @@ class ComponentesScreenshotTest {
             }
             DivvupSheet {
                 DivvupLabel("índice de equilíbrio", cor = DivvupTheme.colors.textMuted)
-                Text("quão dividida está a casa", style = DivvupTheme.typography.h2, color = DivvupTheme.colors.text)
+                DivvupText("quão dividida está a casa", DivvupTheme.typography.h2)
             }
         }
     }

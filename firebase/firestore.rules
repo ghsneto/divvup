@@ -9,5 +9,11 @@ service cloud.firestore {
     match /{document=**} {
       allow read, write: if false;
     }
+
+    // Perfil: cada um lê só o próprio. Criação e campos sensíveis (pontos, casa, sequência)
+    // são do backend (`criarPerfil` e operações da casa).
+    match /users/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+    }
   }
 }

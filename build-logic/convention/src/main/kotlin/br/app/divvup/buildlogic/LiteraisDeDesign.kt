@@ -43,7 +43,8 @@ abstract class VerificarLiteraisDeDesign : DefaultTask() {
 
     private companion object {
         val COR = Regex("""\bColor\s*\(\s*0[xX]""")
-        val MEDIDA = Regex("""\.(dp|sp)\b""")
+        /** Número ou expressão entre parênteses seguidos de `.dp`/`.sp` (ex.: `16.dp`, `(-4).dp`). */
+        val MEDIDA = Regex("""(\d|\))\.(dp|sp)\b""")
     }
 }
 

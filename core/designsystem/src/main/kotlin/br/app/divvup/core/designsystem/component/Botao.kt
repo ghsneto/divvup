@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +20,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import br.app.divvup.core.designsystem.icon.DivvupIcone
 import br.app.divvup.core.designsystem.theme.DivvupColors
@@ -59,6 +62,12 @@ private fun cores(v: VarianteBotao, c: DivvupColors) = when (v) {
 /** Opacidade de `.btn[disabled]`. */
 private const val OPACIDADE_DESABILITADO = 0.42f
 
+/** O "G" do botão "Continuar com Google" (16sp/600 em `primary`, como no desenho). */
+@Composable
+fun MarcaGoogle() {
+    Text("G", style = DivvupTheme.typography.ttl, color = DivvupTheme.colors.primary)
+}
+
 /**
  * Botão `.btn`: mín. 48dp, raio 4, 14sp/600, ícone 24 com espaço 8.
  * `larguraTotal` = `.btn-w`.
@@ -71,9 +80,11 @@ fun DivvupButton(
     variante: VarianteBotao = VarianteBotao.Primario,
     icone: DivvupIcone? = null,
     iconeDepois: DivvupIcone? = null,
+    inicio: (@Composable () -> Unit)? = null,
     habilitado: Boolean = true,
     larguraTotal: Boolean = false,
     corConteudo: Color? = null,
+    carregando: Boolean = false,
 ) {
     val c = cores(variante, DivvupTheme.colors)
     val conteudo = corConteudo ?: c.conteudo
@@ -87,12 +98,19 @@ fun DivvupButton(
             .clip(shape)
             .background(c.fundo, shape)
             .border(DivvupTheme.spacing.borda, c.borda, shape)
-            .clickable(enabled = habilitado, role = Role.Button, onClick = onClick)
+            .clickable(enabled = habilitado && !carregando, role = Role.Button, onClick = onClick)
+            .semantics { if (carregando) stateDescription = texto }
             .padding(PaddingValues(horizontal = horizontal, vertical = 12.dp)),
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CompositionLocalProvider(LocalContentColor provides conteudo) {
+            if (carregando) {
+                // `.shuttle` de 48dp com trilho branco a 30% (estado "carregando" de A3).
+                DivvupProgressBar(Modifier.width(48.dp), trilho = conteudo.copy(alpha = 0.3f), barra = c.fundo)
+                return@CompositionLocalProvider
+            }
+            inicio?.invoke()
             icone?.let { DivvupIcon(it) }
             Text(text = texto, style = DivvupTheme.typography.botao, color = conteudo)
             iconeDepois?.let { DivvupIcon(it) }

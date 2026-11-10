@@ -41,6 +41,10 @@ data class DivvupColors(
     val ultramarino: Color,
     val lima: Color,
     val tinta: Color,
+    /** Texto e marca sobre `ultramarino` (branco nos dois temas, ex.: faixa de A2). */
+    val onUltramarino: Color,
+    /** Papel frio fixo (#F5F5F0), usado em ilustrações sobre ultramarino nos dois temas. */
+    val papel: Color,
     val isDark: Boolean,
 ) {
     /** Swipe à direita (assumir). */
@@ -84,6 +88,8 @@ internal val LightDivvupColors = DivvupColors(
     ultramarino = Ultramarino,
     lima = Lima,
     tinta = Tinta,
+    onUltramarino = Color(0xFFFFFFFF),
+    papel = Color(0xFFF5F5F0),
     isDark = false,
 )
 
@@ -116,5 +122,7 @@ internal val DarkDivvupColors = DivvupColors(
     ultramarino = Ultramarino,
     lima = Lima,
     tinta = Tinta,
+    onUltramarino = Color(0xFFFFFFFF),
+    papel = Color(0xFFF5F5F0),
     isDark = true,
 )

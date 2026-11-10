@@ -5,6 +5,8 @@ plugins {
 
 dependencies {
     api(project(":core:model"))
+    api(libs.kotlinx.coroutines.core)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
 
 // Guarda do invariante: falha o `check` se Android ou Firebase entrarem no classpath do domínio.

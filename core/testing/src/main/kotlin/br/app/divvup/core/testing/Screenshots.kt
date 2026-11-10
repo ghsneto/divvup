@@ -3,7 +3,10 @@ package br.app.divvup.core.testing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import br.app.divvup.core.designsystem.theme.DivvupTheme
@@ -24,11 +27,24 @@ fun capturarNosDoisTemas(
     for (escuro in listOf(false, true)) {
         val sufixo = if (escuro) "__escuro" else ""
         captureRoboImage("$PASTA_SCREENSHOTS/$nome$sufixo.png") {
-            DivvupTheme(darkTheme = escuro) {
-                Box(Modifier.background(DivvupTheme.colors.background).padding(margem.dp)) {
-                    content()
+            // Modo de inspeção: animações infinitas (barra de progresso) ficam paradas.
+            CompositionLocalProvider(LocalInspectionMode provides true) {
+                DivvupTheme(darkTheme = escuro) {
+                    Box(Modifier.background(DivvupTheme.colors.background).padding(margem.dp)) {
+                        content()
+                    }
                 }
             }
         }
     }
 }
+
+/** Captura uma tela inteira em 360×800 dp (a área do artboard de docs/design), nos dois temas. */
+fun capturarTela(nome: String, content: @Composable () -> Unit) {
+    capturarNosDoisTemas(nome, margem = 0) {
+        Box(Modifier.size(LARGURA_ARTBOARD.dp, ALTURA_ARTBOARD.dp)) { content() }
+    }
+}
+
+private const val LARGURA_ARTBOARD = 360
+private const val ALTURA_ARTBOARD = 800

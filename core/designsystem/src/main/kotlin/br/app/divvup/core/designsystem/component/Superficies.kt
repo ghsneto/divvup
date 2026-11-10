@@ -19,9 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import br.app.divvup.core.designsystem.theme.DivvupTheme
@@ -76,20 +78,31 @@ fun DivvupSkeleton(modifier: Modifier = Modifier) {
 
 /** Barra de progresso indeterminada `.shuttle`: trilho 4dp e segmento de 30% em `primary` (1,1 s). */
 @Composable
-fun DivvupProgressBar(modifier: Modifier = Modifier) {
-    val transicao = rememberInfiniteTransition(label = "shuttle")
-    val progresso by transicao.animateFloat(
-        initialValue = -1.2f,
-        targetValue = 3.2f,
-        animationSpec = infiniteRepeatable(tween(durationMillis = 1100, easing = LinearEasing), RepeatMode.Restart),
-        label = "posicao",
-    )
+fun DivvupProgressBar(
+    modifier: Modifier = Modifier,
+    trilho: Color = DivvupTheme.colors.surfaceAlt,
+    barra: Color = DivvupTheme.colors.primary,
+) {
+    // Em previews e screenshots (modo de inspeção) a barra fica parada no início: uma animação
+    // infinita impediria a captura.
+    val progresso = if (LocalInspectionMode.current) {
+        0f
+    } else {
+        val transicao = rememberInfiniteTransition(label = "shuttle")
+        val animado by transicao.animateFloat(
+            initialValue = -1.2f,
+            targetValue = 3.2f,
+            animationSpec = infiniteRepeatable(tween(durationMillis = 1100, easing = LinearEasing), RepeatMode.Restart),
+            label = "posicao",
+        )
+        animado
+    }
     Box(
         modifier
             .fillMaxWidth()
             .height(4.dp)
             .clip(DivvupTheme.shapes.sm)
-            .background(DivvupTheme.colors.surfaceAlt),
+            .background(trilho),
     ) {
         Box(
             Modifier
@@ -97,7 +110,7 @@ fun DivvupProgressBar(modifier: Modifier = Modifier) {
                 .fillMaxHeight()
                 .graphicsLayer { translationX = size.width * progresso }
                 .clip(DivvupTheme.shapes.sm)
-                .background(DivvupTheme.colors.primary),
+                .background(barra),
         )
     }
 }
