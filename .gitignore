@@ -17,3 +17,9 @@ google-services.json
 *.jks
 *.keystore
 keystore.properties
+
+# Backend / Firebase
+node_modules/
+.wrangler/
+*-debug.log
+.dev.vars

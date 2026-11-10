@@ -1,0 +1,20 @@
+# Backend do Divvup (ADR 0001 e 0002). Plano gratuito do Cloudflare Workers.
+name = "divvup-backend"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+# Execução local (`wrangler dev`): sempre contra o Firebase Emulator, projeto fictício.
+[vars]
+FIREBASE_PROJECT_ID = "demo-divvup"
+FIREBASE_AUTH_EMULATOR_HOST = "127.0.0.1:9099"
+FIRESTORE_EMULATOR_HOST = "127.0.0.1:8080"
+
+# Ambiente publicado: único projeto real. A conta de serviço entra como segredo
+# (FIREBASE_SERVICE_ACCOUNT), enviado pela CI a partir de FIREBASE_SERVICE_ACCOUNT_PROD.
+[env.prod]
+name = "divvup-backend"
+
+[env.prod.vars]
+FIREBASE_PROJECT_ID = "divvup-prod"

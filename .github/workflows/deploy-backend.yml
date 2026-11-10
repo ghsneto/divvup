@@ -1,0 +1,61 @@
+name: Deploy do backend
+
+# Publica o Worker no Cloudflare (ambiente prod, ligado a divvup-prod) a cada push na main.
+# Fica inativo até os segredos da issue #41 existirem.
+on:
+  push:
+    branches: [main]
+    paths: [backend/**, .github/workflows/deploy-backend.yml]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Verificar segredos
+        id: segredos
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "Segredos da Cloudflare ausentes (issue #41); deploy pulado."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+        working-directory: .
+
+      - uses: actions/checkout@v5
+        if: steps.segredos.outputs.ok == 'true'
+
+      - uses: actions/setup-node@v5
+        if: steps.segredos.outputs.ok == 'true'
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - if: steps.segredos.outputs.ok == 'true'
+        run: npm ci
+
+      - name: Conta de serviço como segredo do Worker
+        if: steps.segredos.outputs.ok == 'true'
+        env:
+          CONTA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}
+        run: printf '%s' "$CONTA" | npx wrangler secret put FIREBASE_SERVICE_ACCOUNT --env prod
+
+      - name: Publicar
+        if: steps.segredos.outputs.ok == 'true'
+        run: npx wrangler deploy --env prod

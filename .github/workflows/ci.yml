@@ -42,3 +42,35 @@ jobs:
             **/build/test-results/
             **/build/outputs/roborazzi/
           retention-days: 7
+
+  backend:
+    name: Backend e Security Rules (Emulator)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      # O Firestore Emulator roda na JVM.
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - run: npm ci
+
+      - name: Lint e tipos
+        run: npm run lint
+
+      # Projeto fictício demo-divvup: nunca toca divvup-prod (ADR 0002).
+      - name: Testes contra o Firebase Emulator
+        run: npm run test:emulador
+
