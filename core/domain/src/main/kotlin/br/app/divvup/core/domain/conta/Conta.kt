@@ -56,11 +56,15 @@ interface RepositorioDeConta {
 }
 
 /** Para onde a Splash (A1) leva. */
-enum class DestinoInicial { BoasVindas, Onboarding, Deck }
+enum class DestinoInicial { BoasVindas, Onboarding, SuaCasa, Deck }
 
-/** A1: sem sessão → A2; com sessão e sem casa (ou sem perfil) → onboarding (B1); com casa → deck (C1). */
+/**
+ * A1: sem sessão → A2; sem perfil ou sem avatar → onboarding (B1); com avatar e sem casa → B2;
+ * com casa → deck (C1).
+ */
 fun destinoInicial(sessao: Sessao, perfil: Usuario?): DestinoInicial = when {
     sessao is Sessao.Desconectado -> DestinoInicial.BoasVindas
+    perfil?.casaAtualId == null && perfil?.avatarId != null -> DestinoInicial.SuaCasa
     perfil?.casaAtualId == null -> DestinoInicial.Onboarding
     else -> DestinoInicial.Deck
 }

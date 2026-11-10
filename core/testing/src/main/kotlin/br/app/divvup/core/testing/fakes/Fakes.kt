@@ -1,9 +1,13 @@
 package br.app.divvup.core.testing.fakes
 
 import br.app.divvup.core.data.conexao.MonitorDeConexao
+import br.app.divvup.core.domain.casa.RepositorioDeCasa
+import br.app.divvup.core.domain.casa.ResultadoCasa
 import br.app.divvup.core.domain.conta.RepositorioDeConta
 import br.app.divvup.core.domain.conta.ResultadoConta
 import br.app.divvup.core.domain.conta.Sessao
+import br.app.divvup.core.model.Casa
+import br.app.divvup.core.model.TipoDeCasa
 import br.app.divvup.core.model.Usuario
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -67,4 +71,20 @@ class FakeRepositorioDeConta(
 class FakeMonitorDeConexao(online: Boolean = true) : MonitorDeConexao {
     val estado = MutableStateFlow(online)
     override val online: StateFlow<Boolean> = estado
+}
+
+/** Repositório de casa em memória. */
+class FakeRepositorioDeCasa(casaInicial: Casa? = null) : RepositorioDeCasa {
+    val casa = MutableStateFlow(casaInicial)
+    override val casaAtual: StateFlow<Casa?> = casa
+
+    var resultadoCriar: ResultadoCasa<String> = ResultadoCasa.Ok("casa-teste")
+    val chamadas = mutableListOf<String>()
+
+    override suspend fun criarCasa(nome: String, tipo: TipoDeCasa, anunciar: Boolean): ResultadoCasa<String> {
+        chamadas += "criar:$nome:$tipo:$anunciar"
+        val r = resultadoCriar
+        if (r is ResultadoCasa.Ok) casa.value = Casa(r.valor, nome, tipo, "2026-11")
+        return r
+    }
 }

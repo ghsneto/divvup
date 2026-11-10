@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado de docs/design/assets/d9c92a38909b721c330d5ebc54fd0207.svg (casa padrão do topo de C1) por docs/design/ferramentas/svg_para_vector.py. Não edite à mão. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="160dp"
+    android:height="100dp"
+    android:viewportWidth="320"
+    android:viewportHeight="200">
+    <path
+        android:pathData="M0,0h320v200h-320Z"
+        android:fillColor="#2F2BD9" />
+    <path
+        android:pathData="M242,46a20,20 0 1,0 40,0a20,20 0 1,0 -40,0Z"
+        android:fillColor="#C9F24D" />
+    <path
+        android:pathData="M70,94h180v106h-180Z"
+        android:fillColor="#F5F5F0"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+    <path
+        android:pathData="M60 94 L160 58 L260 94Z"
+        android:fillColor="#C9F24D"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M88,106h40v30h-40Z"
+        android:fillColor="#F5F5F0"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+    <path
+        android:pathData="M108 106 v30"
+        android:fillColor="#000000"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="3"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+    <path
+        android:pathData="M136,106h40v30h-40Z"
+        android:fillColor="#F5F5F0"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+    <path
+        android:pathData="M156 106 v30"
+        android:fillColor="#000000"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="3"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+    <path
+        android:pathData="M184,106h40v30h-40Z"
+        android:fillColor="#F5F5F0"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+    <path
+        android:pathData="M204 106 v30"
+        android:fillColor="#000000"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="3"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+    <path
+        android:pathData="M88,154h40v30h-40Z"
+        android:fillColor="#F5F5F0"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+    <path
+        android:pathData="M108 154 v30"
+        android:fillColor="#000000"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="3"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+    <path
+        android:pathData="M140,154h40v46h-40Z"
+        android:fillColor="#C9F24D"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+    <path
+        android:pathData="M184,154h40v30h-40Z"
+        android:fillColor="#F5F5F0"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+    <path
+        android:pathData="M204 154 v30"
+        android:fillColor="#000000"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="3"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+    <path
+        android:pathData="M0,194h320v6h-320Z"
+        android:fillColor="#0C0F18" />
+    <path
+        android:pathData="M20 196c4-20 14-30 20-30s14 10 18 30z"
+        android:fillColor="#0C0F18" />
+    <path
+        android:pathData="M276 196c2-14 8-22 14-22s12 8 14 22z"
+        android:fillColor="#0C0F18" />
+</vector>

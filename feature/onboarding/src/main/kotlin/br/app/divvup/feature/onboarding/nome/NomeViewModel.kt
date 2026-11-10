@@ -54,6 +54,9 @@ class NomeViewModel @Inject constructor(private val conta: RepositorioDeConta) :
 
     fun aoEscolherAvatar(id: String) = _estado.update { it.copy(avatarId = id) }
 
+    /** A navegação para B2 já aconteceu: voltar para B1 não deve avançar de novo. */
+    fun aoNavegar() = _estado.update { it.copy(concluido = false) }
+
     fun continuar() {
         val atual = _estado.value
         val id = uid

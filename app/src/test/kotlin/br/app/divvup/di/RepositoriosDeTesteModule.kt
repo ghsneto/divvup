@@ -2,8 +2,10 @@ package br.app.divvup.di
 
 import br.app.divvup.core.data.conexao.MonitorDeConexao
 import br.app.divvup.core.data.di.RepositoriosModule
+import br.app.divvup.core.domain.casa.RepositorioDeCasa
 import br.app.divvup.core.domain.conta.RepositorioDeConta
 import br.app.divvup.core.testing.fakes.FakeMonitorDeConexao
+import br.app.divvup.core.testing.fakes.FakeRepositorioDeCasa
 import br.app.divvup.core.testing.fakes.FakeRepositorioDeConta
 import dagger.Module
 import dagger.Provides
@@ -17,6 +19,9 @@ import javax.inject.Singleton
 object RepositoriosDeTesteModule {
     @Provides @Singleton
     fun conta(): RepositorioDeConta = FakeRepositorioDeConta()
+
+    @Provides @Singleton
+    fun casa(): RepositorioDeCasa = FakeRepositorioDeCasa()
 
     @Provides @Singleton
     fun conexao(): MonitorDeConexao = FakeMonitorDeConexao()

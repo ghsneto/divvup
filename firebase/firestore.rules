@@ -10,6 +10,22 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // Membro ativo da casa (SPEC §4.3 members/{uid}.status).
+    function membroAtivo(casaId) {
+      let membro = /databases/$(database)/documents/houses/$(casaId)/members/$(request.auth.uid);
+      return request.auth != null && exists(membro) && get(membro).data.status == 'ACTIVE';
+    }
+
+    // Casa e tudo dentro dela: só membros ativos leem. Toda escrita é do backend
+    // (criarCasa, convites, tarefas, pontos).
+    match /houses/{casaId} {
+      allow read: if membroAtivo(casaId);
+
+      match /{documento=**} {
+        allow read: if membroAtivo(casaId);
+      }
+    }
+
     // Perfil: cada um lê só o próprio. Criação e campos sensíveis (pontos, casa, sequência)
     // são do backend (`criarPerfil` e operações da casa).
     match /users/{uid} {

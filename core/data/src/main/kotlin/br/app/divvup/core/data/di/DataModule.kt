@@ -3,9 +3,11 @@ package br.app.divvup.core.data.di
 import android.content.Context
 import br.app.divvup.core.data.ConfiguracaoFirebase
 import br.app.divvup.core.data.backend.FonteDeToken
+import br.app.divvup.core.data.casa.RepositorioDeCasaFirebase
 import br.app.divvup.core.data.conexao.MonitorDeConexao
 import br.app.divvup.core.data.conexao.MonitorDeConexaoAndroid
 import br.app.divvup.core.data.conta.RepositorioDeContaFirebase
+import br.app.divvup.core.domain.casa.RepositorioDeCasa
 import br.app.divvup.core.domain.conta.RepositorioDeConta
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
@@ -80,6 +82,9 @@ object FirebaseModule {
 abstract class RepositoriosModule {
     @Binds
     abstract fun repositorioDeConta(impl: RepositorioDeContaFirebase): RepositorioDeConta
+
+    @Binds
+    abstract fun repositorioDeCasa(impl: RepositorioDeCasaFirebase): RepositorioDeCasa
 
     @Binds
     abstract fun monitorDeConexao(impl: MonitorDeConexaoAndroid): MonitorDeConexao

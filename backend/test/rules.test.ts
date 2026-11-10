@@ -31,7 +31,8 @@ describe("Security Rules (padrão negar)", () => {
 
   it("nega leitura e escrita de coleções não liberadas, mesmo logado", async () => {
     const db = ambiente.authenticatedContext("uid-1").firestore();
-    await assertFails(getDoc(doc(db, "houses/h1")));
+    await assertFails(getDoc(doc(db, "reports/r1")));
+    await assertFails(setDoc(doc(db, "reports/r1"), { nome: "x" }));
     await assertFails(setDoc(doc(db, "houses/h1"), { nome: "x" }));
   });
 });
@@ -84,5 +85,52 @@ describe("Security Rules de users/{uid}", () => {
     const db = ambiente.authenticatedContext("uid-1").firestore();
     await assertFails(setDoc(doc(db, "users/uid-1"), { displayName: "Iane", totalPoints: 9999 }));
     await assertFails(setDoc(doc(db, "users/uid-3"), { displayName: "Novo", totalPoints: 0 }));
+  });
+});
+
+describe("Security Rules de houses/{casaId}", () => {
+  let ambiente: RulesTestEnvironment;
+
+  beforeAll(async () => {
+    const [host, porta] = FIRESTORE.split(":");
+    ambiente = await initializeTestEnvironment({
+      projectId: PROJETO,
+      firestore: {
+        rules: readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../../firebase/firestore.rules"), "utf8"),
+        host: host ?? "127.0.0.1",
+        port: Number(porta),
+      },
+    });
+    await ambiente.withSecurityRulesDisabled(async (ctx) => {
+      const db = ctx.firestore();
+      await setDoc(doc(db, "houses/h1"), { name: "Rep. Cajueiro", memberCount: 2 });
+      await setDoc(doc(db, "houses/h1/members/ativo"), { role: "ADMIN", status: "ACTIVE" });
+      await setDoc(doc(db, "houses/h1/members/saiu"), { role: "MEMBER", status: "LEFT" });
+      await setDoc(doc(db, "houses/h1/tasks/t1"), { title: "Lavar a louça", points: 50 });
+    });
+  });
+
+  afterAll(() => ambiente.cleanup());
+
+  it("membro ativo lê a casa e o que tem dentro", async () => {
+    const db = ambiente.authenticatedContext("ativo").firestore();
+    await assertSucceeds(getDoc(doc(db, "houses/h1")));
+    await assertSucceeds(getDoc(doc(db, "houses/h1/members/saiu")));
+    await assertSucceeds(getDoc(doc(db, "houses/h1/tasks/t1")));
+  });
+
+  it("quem saiu, quem nunca entrou e quem não está logado não leem", async () => {
+    for (const ctx of [ambiente.authenticatedContext("saiu"), ambiente.authenticatedContext("estranho"), ambiente.unauthenticatedContext()]) {
+      const db = ctx.firestore();
+      await assertFails(getDoc(doc(db, "houses/h1")));
+      await assertFails(getDoc(doc(db, "houses/h1/tasks/t1")));
+    }
+  });
+
+  it("nem membro ativo grava direto na casa (tudo passa pelo backend)", async () => {
+    const db = ambiente.authenticatedContext("ativo").firestore();
+    await assertFails(updateDoc(doc(db, "houses/h1"), { name: "Outra" }));
+    await assertFails(setDoc(doc(db, "houses/h1/members/novo"), { role: "ADMIN", status: "ACTIVE" }));
+    await assertFails(updateDoc(doc(db, "houses/h1/tasks/t1"), { points: 100 }));
   });
 });

@@ -62,3 +62,9 @@ fun DivvupAvatarDaGaleria(
         },
     )
 }
+
+/** Imagem da casa no topo de C1 (ilustração padrão do desenho; foto de capa só na v1.1). */
+@Composable
+fun DivvupAvatarDaCasa(tamanho: Dp, modifier: Modifier = Modifier, descricao: String? = null) {
+    DivvupAvatar(painterResource(R.drawable.ilu_casa_padrao), tamanho, modifier, descricao)
+}

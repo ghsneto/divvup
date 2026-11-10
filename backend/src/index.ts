@@ -2,6 +2,7 @@ import { autenticar } from "./auth.js";
 import { type Env } from "./env.js";
 import { ErroHttp, json, respostaDeErro } from "./erros.js";
 import { Firestore } from "./firestore.js";
+import { criarCasa } from "./operacoes/casa.js";
 import { criarPerfil } from "./operacoes/perfil.js";
 
 /**
@@ -9,6 +10,7 @@ import { criarPerfil } from "./operacoes/perfil.js";
  * - `GET /saude`: verificação de disponibilidade, sem autenticação.
  * - `POST /v1/eu`: devolve o usuário autenticado e se o perfil `users/{uid}` existe.
  * - `POST /v1/criarPerfil` `{nome}`: cria `users/{uid}` com os valores iniciais (idempotente).
+ * - `POST /v1/criarCasa` `{nome, tipo, anunciar}`: cria a casa com quem pediu como admin (R-02, R-03).
  * As operações protegidas da SPEC §4.2 entram aqui, uma rota por operação.
  */
 export default {
@@ -26,6 +28,11 @@ export default {
       if (req.method === "POST" && url.pathname === "/v1/criarPerfil") {
         const usuario = await autenticar(req, env);
         return json(await criarPerfil(new Firestore(env), usuario, await lerJson(req)));
+      }
+
+      if (req.method === "POST" && url.pathname === "/v1/criarCasa") {
+        const usuario = await autenticar(req, env);
+        return json(await criarCasa(new Firestore(env), usuario, await lerJson(req)));
       }
 
       throw new ErroHttp(404, "rota-inexistente");

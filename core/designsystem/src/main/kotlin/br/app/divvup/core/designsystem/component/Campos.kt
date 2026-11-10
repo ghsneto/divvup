@@ -29,6 +29,8 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import br.app.divvup.core.designsystem.icon.DivvupIcone
@@ -54,10 +56,15 @@ fun DivvupTextField(
     final: (@Composable () -> Unit)? = null,
     erroComLinks: List<Trecho>? = null,
     abaixo: (@Composable () -> Unit)? = null,
+    /** Estilo do texto digitado (padrão `body`; B3 usa 20/600). */
+    estiloTexto: TextStyle? = null,
+    /** Altura da caixa (padrão 52, `.in`; B3 usa 56). */
+    altura: Dp = AlturaCampo,
 ) {
     val c = DivvupTheme.colors
     val t = DivvupTheme.typography
     val shape = DivvupTheme.shapes.sm
+    val estilo = estiloTexto ?: t.body
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         rotulo?.let { DivvupLabel(it) }
         BasicTextField(
@@ -65,7 +72,7 @@ fun DivvupTextField(
             onValueChange = onValorMudou,
             enabled = habilitado,
             singleLine = linhaUnica,
-            textStyle = t.body.copy(color = c.text),
+            textStyle = estilo.copy(color = c.text),
             cursorBrush = SolidColor(c.primary),
             visualTransformation = transformacao,
             keyboardOptions = teclado,
@@ -74,7 +81,7 @@ fun DivvupTextField(
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .height(52.dp)
+                        .height(altura)
                         .clip(shape)
                         .background(c.surface, shape)
                         .border(DivvupTheme.spacing.borda, if (erro != null || erroComLinks != null) c.danger else c.border, shape)
@@ -83,7 +90,7 @@ fun DivvupTextField(
                 ) {
                     Box(Modifier.weight(1f)) {
                         if (valor.isEmpty() && placeholder != null) {
-                            Text(placeholder, style = t.body, color = c.textMuted, maxLines = 1)
+                            Text(placeholder, style = estilo, color = c.textMuted, maxLines = 1)
                         }
                         campo()
                     }
@@ -150,3 +157,6 @@ fun DivvupToggle(
         )
     }
 }
+
+/** Altura padrão do campo (`.in`). */
+private val AlturaCampo = 52.dp

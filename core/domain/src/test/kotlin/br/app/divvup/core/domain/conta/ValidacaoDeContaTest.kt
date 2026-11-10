@@ -53,6 +53,8 @@ class ValidacaoDeContaTest {
         assertEquals(DestinoInicial.BoasVindas, destinoInicial(Sessao.Desconectado, null))
         assertEquals(DestinoInicial.Onboarding, destinoInicial(Sessao.Conectado("u"), null))
         assertEquals(DestinoInicial.Onboarding, destinoInicial(Sessao.Conectado("u"), semCasa))
+        // B1 já feito (avatar escolhido) e ainda sem casa: volta direto para B2.
+        assertEquals(DestinoInicial.SuaCasa, destinoInicial(Sessao.Conectado("u"), semCasa.copy(avatarId = "avataaars:divvup-01")))
         assertEquals(DestinoInicial.Deck, destinoInicial(Sessao.Conectado("u"), semCasa.copy(casaAtualId = "h1")))
     }
 }
