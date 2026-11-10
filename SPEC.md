@@ -128,13 +128,13 @@
   - `:core:data` (repositórios, Firebase)
   - `:core:testing`
   - `:feature:auth`, `:feature:onboarding`, `:feature:house`, `:feature:deck`, `:feature:tasks`, `:feature:ranking`, `:feature:notifications`, `:feature:profile`, `:feature:discover` (v1.1)
-- Build flavors `dev` e `prod` apontando para projetos Firebase distintos.
+- Build flavors: `dev` aponta para o **Firebase Emulator** (local); `prod` aponta para o único projeto real, `divvup-prod` (ADR 0002).
 - Textos sempre em `strings.xml` (pt-BR), prontos para i18n.
 
 ### 4.2 Backend (custo zero: Firebase Spark + Cloudflare Workers)
 - **Restrição:** nesta fase o projeto **não tem custo de infraestrutura**. Só se usa plano gratuito; nada que exija cartão, conta de faturamento ou pré-pagamento (decisão em [ADR 0001](docs/adr/0001-custo-zero-firebase-spark-cloudflare-workers.md)).
-- **Firebase, plano Spark (gratuito):** **Auth** (e-mail/senha e Google), **Firestore** (tempo real e cache offline no app), **FCM**, **Crashlytics**, **Analytics**. Projetos `divvup-dev` e `divvup-prod`. **Cloud Functions não são usadas** (exigem o plano Blaze).
-- **Cloudflare Workers, plano gratuito:** o backend, em TypeScript, na pasta `backend/`. Valida o ID token do Firebase Auth em cada chamada, grava no Firestore com uma conta de serviço (transações pela API do Firestore) e envia push pela API HTTP v1 do FCM. Ambientes `dev` e `prod`, cada um ligado ao seu projeto Firebase.
+- **Firebase, plano Spark (gratuito):** **Auth** (e-mail/senha e Google), **Firestore** (tempo real e cache offline no app), **FCM**, **Crashlytics**, **Analytics**. Um único projeto, `divvup-prod` (ADR 0002); desenvolvimento e testes automatizados usam o Firebase Emulator. **Cloud Functions não são usadas** (exigem o plano Blaze).
+- **Cloudflare Workers, plano gratuito:** o backend, em TypeScript, na pasta `backend/`. Valida o ID token do Firebase Auth em cada chamada, grava no Firestore com uma conta de serviço (transações pela API do Firestore) e envia push pela API HTTP v1 do FCM. Ambiente local (`wrangler dev`, ligado ao Emulator) e um ambiente publicado ligado a `divvup-prod`.
 - **Regra central de segurança:** o cliente **nunca grava** pontos, status de atribuição, papéis ou vínculo com casa. Essas mutações são **operações do backend** (endpoints HTTPS do Worker, chamados com o ID token) e rodam em transação:
   `createHouse`, `createInvite`, `revokeInvite`, `joinWithCode`, `leaveHouse`, `removeMember`, `setRole`, `claimTask`, `passTask`, `undoLastAction`, `returnTask`, `completeTask`, `cancelTask`, `deleteAccount`; v1.1: `requestToJoin`, `reviewJoinRequest`, `setListing`, `reportHouse`.
 - **Tarefas agendadas** (Cron Triggers do Worker): atribuição automática e lembretes de prazo (a cada 15 min), marcação de atraso, virada de temporada (dia 1º, 00:00 BRT), entrega de pushes retidos pelo horário silencioso, limpeza de convites e notificações expiradas.

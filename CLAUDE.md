@@ -12,7 +12,7 @@ App Android (Kotlin + Jetpack Compose + Firebase) de divisão gamificada de tare
 - O cliente **nunca grava** pontos, status de atribuição, papéis ou vínculo com casa. Isso é sempre uma operação do backend (Worker) com transação (SPEC §4.2).
 - Pontos: 25 / 50 / 100; meia pontuação após o prazo; nunca negativos.
 - Endereço exato (número) nunca exposto publicamente.
-- Testes e desenvolvimento usam o **Firebase Emulator** ou o projeto `divvup-dev`. **Nunca** apontar para `divvup-prod` em desenvolvimento.
+- Há **um só projeto Firebase real, `divvup-prod`** (ADR 0002). Testes automatizados, CI e desenvolvimento local usam **só o Firebase Emulator** (flavor `dev`). Testes manuais em aparelho usam `divvup-prod` (flavor `prod`). **Nunca** rodar testes automatizados, scripts, seeds ou limpezas contra `divvup-prod`.
 - Nenhum segredo (chaves, `google-services.json` de prod, keystore) é commitado.
 
 ## Arquitetura
@@ -30,7 +30,7 @@ App Android (Kotlin + Jetpack Compose + Firebase) de divisão gamificada de tare
 - Originais no Claude Design: telas https://claude.ai/artifact/FCk2g4sxMAj8zyKA7soACw · protótipo https://claude.ai/artifact/JS5bWp4d6nNk2KMTDh4XRk · design system https://claude.ai/artifact/UjULqNSrf5z5nr8z4KdEQq. Se o desenho mudar lá, atualize `docs/design/` no mesmo PR do código.
 - Valores do desenho em px = dp; tamanhos de fonte = sp. Textos do desenho são a cópia final (exceto dados de exemplo) e vão para `strings.xml` como estão.
 - Toda cor, tipografia, forma e espaçamento vem de `DivvupTheme` em `:core:designsystem`. **Nada de valores literais nas telas** (o lint barra `Color(0x…)`, `.dp` e `.sp` fora de `:core:designsystem`).
-- Ícones, ilustrações e avatares vêm de `docs/design/{icones,ilustracoes,avatares}` convertidos para vector drawable; nunca redesenhe nem troque por Material Icons.
+- Ícones e ilustrações vêm de `docs/design/{icones,ilustracoes}` convertidos para vector drawable; nunca redesenhe nem troque por Material Icons. Avatares são DiceBear avataaars (R-32), não os de `docs/design/avatares`.
 - Swipe aceitar = `accent` (lima); passar = `danger`. Lima nunca como texto sobre fundo claro.
 - Títulos em minúsculas, sem emoji na UI, números no formato pt-BR, todos os textos em `strings.xml`.
 - Toda tela tem estados carregando / vazio / erro / sem permissão. Testar claro e escuro.
