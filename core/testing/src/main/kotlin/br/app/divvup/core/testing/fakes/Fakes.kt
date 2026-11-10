@@ -1,16 +1,23 @@
 package br.app.divvup.core.testing.fakes
 
 import br.app.divvup.core.data.conexao.MonitorDeConexao
+import br.app.divvup.core.domain.casa.ErroDeConvite
 import br.app.divvup.core.domain.casa.RepositorioDeCasa
+import br.app.divvup.core.domain.casa.RepositorioDeConvites
+import br.app.divvup.core.domain.casa.ResultadoConvite
+import br.app.divvup.core.domain.casa.VALIDADE_CONVITE
 import br.app.divvup.core.domain.casa.ResultadoCasa
 import br.app.divvup.core.domain.conta.RepositorioDeConta
 import br.app.divvup.core.domain.conta.ResultadoConta
 import br.app.divvup.core.domain.conta.Sessao
 import br.app.divvup.core.model.Casa
+import br.app.divvup.core.model.Convite
+import br.app.divvup.core.model.Membro
 import br.app.divvup.core.model.TipoDeCasa
 import br.app.divvup.core.model.Usuario
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.time.Instant
 
 /** Repositório de conta em memória para testes de ViewModel e de UI. */
 class FakeRepositorioDeConta(
@@ -86,5 +93,41 @@ class FakeRepositorioDeCasa(casaInicial: Casa? = null) : RepositorioDeCasa {
         val r = resultadoCriar
         if (r is ResultadoCasa.Ok) casa.value = Casa(r.valor, nome, tipo, "2026-11")
         return r
+    }
+}
+
+/** Convites e moradores em memória. */
+class FakeRepositorioDeConvites(
+    convitesIniciais: List<Convite> = emptyList(),
+    membrosIniciais: List<Membro> = emptyList(),
+) : RepositorioDeConvites {
+    val listaDeConvites = MutableStateFlow(convitesIniciais)
+    val listaDeMembros = MutableStateFlow(membrosIniciais)
+    override val convites: StateFlow<List<Convite>> = listaDeConvites
+    override val membros: StateFlow<List<Membro>> = listaDeMembros
+
+    var proximoCodigo = "K7PQ2X"
+    var resultadoEntrar: ResultadoConvite<String> = ResultadoConvite.Ok("casa-teste")
+    var falhaAoCriar: ErroDeConvite? = null
+    val chamadas = mutableListOf<String>()
+
+    override suspend fun criar(): ResultadoConvite<Convite> {
+        chamadas += "criar"
+        falhaAoCriar?.let { return ResultadoConvite.Falha(it) }
+        val agora = Instant.parse("2026-11-10T12:00:00Z")
+        val novo = Convite(proximoCodigo, "uid-teste", "Iane", agora, agora.plus(VALIDADE_CONVITE), null, null, false, null)
+        listaDeConvites.value = listOf(novo) + listaDeConvites.value
+        return ResultadoConvite.Ok(novo)
+    }
+
+    override suspend fun revogar(codigo: String): ResultadoConvite<Unit> {
+        chamadas += "revogar:$codigo"
+        listaDeConvites.value = listaDeConvites.value.map { if (it.codigo == codigo) it.copy(revogado = true) else it }
+        return ResultadoConvite.Ok(Unit)
+    }
+
+    override suspend fun entrar(codigo: String): ResultadoConvite<String> {
+        chamadas += "entrar:$codigo"
+        return resultadoEntrar
     }
 }

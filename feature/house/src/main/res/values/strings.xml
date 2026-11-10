@@ -31,4 +31,58 @@
         <item>novembro</item>
         <item>dezembro</item>
     </string-array>
+
+    <!-- B8 (docs/design/fonte/Convide.dc.html) -->
+    <string name="convide_rotulo">casa criada</string>
+    <string name="convide_depois">Fazer isso depois</string>
+    <string name="convide_titulo">chama a galera</string>
+    <string name="convide_texto">Quem usar o código entra direto na %1$s, sem precisar de aprovação.</string>
+    <string name="convide_codigo">código de convite</string>
+    <string name="convide_codigo_descricao">Código %1$s</string>
+    <string name="convide_validade">vale por 24 h · uso único</string>
+    <string name="convide_compartilhar">Compartilhar</string>
+    <string name="convide_copiar">Copiar</string>
+    <string name="convide_outro">Gerar outro código</string>
+    <string name="convide_depois_dica">Você pode gerar e revogar códigos depois em Minha casa › Convites.</string>
+    <string name="convide_copiado">Código copiado</string>
+    <string name="convide_novo">Código novo gerado. O anterior continua ativo.</string>
+    <string name="convide_mensagem">Entra na %1$s no Divvup com o código %2$s. Vale por 24 h e só pra uma pessoa.</string>
+    <string name="convide_erro">Não deu para gerar o código. Confere a conexão e tenta de novo.</string>
+
+    <!-- G2 (docs/design/fonte/Convites.dc.html) -->
+    <string name="convites_voltar">Voltar</string>
+    <string name="convites_rotulo">minha casa</string>
+    <string name="convites_titulo">convites</string>
+    <string name="convites_texto">Cada código vale 24 h e entra uma pessoa só.</string>
+    <string name="convites_gerar">Gerar código</string>
+    <string name="convites_ativo">ativo</string>
+    <string name="convites_usado">usado</string>
+    <string name="convites_expirado">expirado</string>
+    <string name="convites_revogado">revogado</string>
+    <string name="convites_revogar">Revogar</string>
+    <string name="convites_compartilhar">Compartilhar %1$s</string>
+    <string name="convites_gerado">Código %1$s gerado</string>
+    <string name="convites_revogado_msg">Código %1$s revogado</string>
+    <string name="convites_voce">você</string>
+    <string name="convites_meta_ativo">por %1$s · expira em %2$s</string>
+    <string name="convites_meta_usado">usado por %1$s · %2$s</string>
+    <string name="convites_meta_expirado">por %1$s · expirou %2$s</string>
+    <string name="convites_meta_revogado">por %1$s · revogado %2$s</string>
+    <string name="convites_horas_min">%1$d h %2$d min</string>
+    <string name="convites_min">%1$d min</string>
+    <string name="convites_erro">Não deu certo. Confere a conexão e tenta de novo.</string>
+    <string name="momento_hoje">hoje às %1$s</string>
+    <string name="momento_ontem">ontem às %1$s</string>
+    <string name="momento_hora">%1$dh</string>
+    <string name="momento_hora_min">%1$dh%2$02d</string>
+    <string name="momento_data">%1$02d/%2$02d</string>
+    <string-array name="dias_semana_curtos">
+        <item>seg.</item>
+        <item>ter.</item>
+        <item>qua.</item>
+        <item>qui.</item>
+        <item>sex.</item>
+        <item>sáb.</item>
+        <item>dom.</item>
+    </string-array>
 </resources>

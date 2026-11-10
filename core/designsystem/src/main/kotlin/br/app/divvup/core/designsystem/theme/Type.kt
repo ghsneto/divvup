@@ -26,6 +26,9 @@ private fun bricolage(weight: Int, opsz: Float, wdth: Float) = Font(
 /** Títulos (`h1`, `h2` e números grandes): wght 800, opsz 96, wdth 90. */
 val BricolageDisplay = FontFamily(bricolage(weight = 800, opsz = 96f, wdth = 90f))
 
+/** Mesma largura e tamanho ótico do display, em 600 (códigos de convite em G2). */
+val BricolageDisplaySemi = FontFamily(bricolage(weight = 600, opsz = 96f, wdth = 90f))
+
 /** Texto (`.dv`): opsz 14, wdth 100, pesos 400 e 600. */
 val BricolageText = FontFamily(
     bricolage(weight = 400, opsz = 14f, wdth = 100f),
@@ -80,4 +83,8 @@ data class DivvupTypography(
     val label: TextStyle = estilo(BricolageText, 600, 12, 1.33f, 0.12f),
     /** `.pts` 20/1.2, 600, números tabulares. */
     val pts: TextStyle = estilo(BricolageText, 600, 20, 1.2f, tnum = true),
+    /** Código de convite na lista (G2): 20, 600, display, +0,12em, tabular. */
+    val codigo: TextStyle = estilo(BricolageDisplaySemi, 600, 20, 1.2f, 0.12f, tnum = true),
+    /** Caracteres do código grande (B8): 36, 800, display, tabular. */
+    val codigoGrande: TextStyle = estilo(BricolageDisplay, 800, 36, 1.2f, tnum = true),
 )

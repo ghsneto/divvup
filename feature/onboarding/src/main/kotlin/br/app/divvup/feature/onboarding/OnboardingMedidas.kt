@@ -48,6 +48,21 @@ internal object OnboardingMedidas {
     val seloPequenoFonte = 12.sp
     val rodapeBotaoTopo = 12.dp
     val rodapeBotaoFundo = 20.dp
+
+    // B4 Codigo.
+    val codigoTextoMaximo = 280.dp
+    val caixaCodigo = 64.dp
+    val caixaCodigoFonte = 28.sp
+
+    // B5 BemVindo.
+    val bemVindoTopo = 56.dp
+    val bemVindoFundo = 28.dp
+    val bemVindoPadding = 20.dp
+    val avatarMembro = 40.dp
+    val avatarSobreposto = (-14).dp
+    val numeroTarefas = 57.sp
+    val miniatura = 72.dp
+    val botaoBora = 56.dp
 }
 
 /** Passos do onboarding (TELAS.md: B1 → B2 → B3/B4 → B6 → B7). */

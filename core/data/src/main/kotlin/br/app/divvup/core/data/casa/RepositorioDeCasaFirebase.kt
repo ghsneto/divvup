@@ -8,15 +8,10 @@ import br.app.divvup.core.domain.casa.ResultadoCasa
 import br.app.divvup.core.domain.casa.normalizarNomeDaCasa
 import br.app.divvup.core.model.Casa
 import br.app.divvup.core.model.TipoDeCasa
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -30,19 +25,14 @@ import javax.inject.Singleton
 
 @Singleton
 class RepositorioDeCasaFirebase @Inject constructor(
-    private val auth: FirebaseAuth,
-    private val firestore: FirebaseFirestore,
+    private val atual: CasaAtualFirebase,
     private val backend: ClienteBackend,
 ) : RepositorioDeCasa {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val casaAtual: Flow<Casa?> = uidAtual()
-        .flatMapLatest { uid ->
-            if (uid == null) flowOf(null) else observar(firestore.collection("users").document(uid)).map { it?.getString("currentHouseId") }
-        }
-        .distinctUntilChanged()
+    override val casaAtual: Flow<Casa?> = atual.casaId
         .flatMapLatest { casaId ->
-            if (casaId == null) flowOf(null) else observar(firestore.collection("houses").document(casaId)).map { it?.paraCasa() }
+            if (casaId == null) flowOf(null) else observar(atual.firestore.collection("houses").document(casaId)).map { it?.paraCasa() }
         }
         .distinctUntilChanged()
 
@@ -60,23 +50,16 @@ class RepositorioDeCasaFirebase @Inject constructor(
         ResultadoCasa.Falha(erroDeCasa(e))
     }
 
-    private fun uidAtual(): Flow<String?> = callbackFlow {
-        val ouvinte = FirebaseAuth.AuthStateListener { trySend(it.currentUser?.uid) }
-        auth.addAuthStateListener(ouvinte)
-        awaitClose { auth.removeAuthStateListener(ouvinte) }
-    }.distinctUntilChanged()
-
-    /** Documento em tempo real; `null` se não existe ou se a leitura é negada (ex.: saiu da casa). */
-    private fun observar(ref: DocumentReference): Flow<DocumentSnapshot?> = callbackFlow {
-        val registro = ref.addSnapshotListener { doc, erro ->
-            trySend(if (erro != null || doc == null || !doc.exists()) null else doc)
-        }
-        awaitClose { registro.remove() }
-    }
-
     private fun DocumentSnapshot.paraCasa(): Casa? {
         val tipo = getString("type")?.let { t -> TipoDeCasa.entries.firstOrNull { it.name == t } } ?: return null
-        return Casa(id = id, nome = getString("name").orEmpty(), tipo = tipo, temporada = getString("currentSeason").orEmpty())
+        return Casa(
+            id = id,
+            nome = getString("name").orEmpty(),
+            tipo = tipo,
+            temporada = getString("currentSeason").orEmpty(),
+            bairro = getString("neighborhood"),
+            cidade = getString("city"),
+        )
     }
 }
 

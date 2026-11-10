@@ -48,4 +48,33 @@
     <string name="criar_pronto">pronto</string>
     <string name="criar_existe">%1$s existe</string>
     <string name="criar_bora">Bora aprender o swipe</string>
+
+    <!-- B4 -->
+    <string name="codigo_rotulo">convite</string>
+    <string name="codigo_titulo">digita o código</string>
+    <string name="codigo_texto">São 6 caracteres. Vale por 24 h e só pra uma pessoa.</string>
+    <string name="codigo_campo">Código de convite</string>
+    <string name="codigo_colar">Colar código</string>
+    <string name="codigo_entrar">Entrar na casa</string>
+    <string name="codigo_invalido">Esse código não existe.</string>
+    <string name="codigo_invalido_mais">Confere letra por letra com quem te mandou.</string>
+    <string name="codigo_expirado">Esse código expirou.</string>
+    <string name="codigo_expirado_mais">Peça um novo código para quem te convidou.</string>
+    <string name="codigo_usado">Esse código já foi usado.</string>
+    <string name="codigo_usado_mais">Cada código serve pra uma pessoa só.</string>
+    <string name="codigo_ja_em_casa">Você já está numa casa.</string>
+    <string name="codigo_ja_em_casa_mais">Pra entrar nesta, saia da sua casa atual primeiro.</string>
+    <string name="codigo_sem_conexao">Não deu para entrar. Confere a conexão e tenta de novo.</string>
+
+    <!-- B5 -->
+    <string name="bemvindo_rotulo">você entrou na</string>
+    <string name="bemvindo_local">%1$s · %2$s</string>
+    <string name="bemvindo_e_voce">e agora você</string>
+    <plurals name="bemvindo_tarefas">
+        <item quantity="one">tarefa aberta</item>
+        <item quantity="other">tarefas abertas</item>
+    </plurals>
+    <string name="bemvindo_esperando">esperando alguém no deck agora</string>
+    <string name="bemvindo_temporada">O mês vale 1 temporada. Quem fizer mais pontos até dia %1$s leva a medalha.</string>
+    <string name="bemvindo_bora">Bora</string>
 </resources>

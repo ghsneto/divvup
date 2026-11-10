@@ -10,6 +10,11 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.compose.ui.platform.LocalClipboard
+import br.app.divvup.feature.onboarding.bemvindo.BemVindoScreen
+import br.app.divvup.feature.onboarding.bemvindo.BemVindoViewModel
+import br.app.divvup.feature.onboarding.codigo.CodigoScreen
+import br.app.divvup.feature.onboarding.codigo.CodigoViewModel
 import br.app.divvup.feature.onboarding.casa.CriarCasaScreen
 import br.app.divvup.feature.onboarding.casa.CriarCasaViewModel
 import br.app.divvup.feature.onboarding.casa.SuaCasaScreen
@@ -28,17 +33,23 @@ import kotlinx.serialization.Serializable
 /** B3. */
 @Serializable data object RotaCriarCasa
 
+/** B4. */
+@Serializable data object RotaCodigo
+
+/** B5. */
+@Serializable data object RotaBemVindo
+
 /** Chave em que E3 devolve o avatar escolhido (igual a `GaleriaArgs.RESULTADO`). */
 const val RESULTADO_AVATAR = "avatarEscolhido"
 
 class OnboardingAcoes(
     /** Abre E3 em modo onboarding com o avatar atual. */
     val aoAbrirGaleria: (avatarAtual: String) -> Unit,
-    /** B2 "tenho um código" → B4. */
-    val aoTenhoCodigo: () -> Unit,
     /** B2 "Sair da conta": a sessão já foi encerrada. */
     val aoSair: () -> Unit,
-    /** Casa criada (ou a pessoa já tinha casa): segue para o tutorial/estrutura principal. */
+    /** Casa criada (B3): segue para "chama a galera" (B8). */
+    val aoCriarCasa: () -> Unit,
+    /** Entrou numa casa (B5 "Bora") ou já tinha casa: segue para a estrutura principal. */
     val aoTerCasa: () -> Unit,
 )
 
@@ -46,6 +57,8 @@ fun NavGraphBuilder.grafoDeOnboarding(nav: NavController, acoes: OnboardingAcoes
     composable<RotaNome> { entrada -> NomeRota(entrada, acoes, aoConcluir = { nav.navigate(RotaSuaCasa) }) }
     composable<RotaSuaCasa> { SuaCasaRota(nav, acoes) }
     composable<RotaCriarCasa> { CriarCasaRota(nav, acoes) }
+    composable<RotaCodigo> { CodigoRota(nav) }
+    composable<RotaBemVindo> { BemVindoRota(acoes) }
 }
 
 @Composable
@@ -81,7 +94,7 @@ private fun SuaCasaRota(nav: NavController, acoes: OnboardingAcoes, viewModel: S
         primeiroNome = nome,
         aoVoltar = { nav.popBackStack() },
         aoCriar = { nav.navigate(RotaCriarCasa) },
-        aoTenhoCodigo = acoes.aoTenhoCodigo,
+        aoTenhoCodigo = { nav.navigate(RotaCodigo) },
         aoSair = { escopo.launch { viewModel.sair(); acoes.aoSair() } },
     )
 }
@@ -98,6 +111,36 @@ private fun CriarCasaRota(nav: NavController, acoes: OnboardingAcoes, viewModel:
         aoEscolherTipo = viewModel::aoEscolherTipo,
         aoAnunciar = viewModel::aoAnunciar,
         aoCriar = viewModel::criar,
-        aoSeguir = acoes.aoTerCasa,
+        aoSeguir = acoes.aoCriarCasa,
     )
+}
+
+@Composable
+private fun CodigoRota(nav: NavController, viewModel: CodigoViewModel = hiltViewModel()) {
+    val estado by viewModel.estado.collectAsStateWithLifecycle()
+    val clipboard = LocalClipboard.current
+    val escopo = rememberCoroutineScope()
+    LaunchedEffect(estado.entrou) {
+        if (estado.entrou) {
+            viewModel.aoNavegar()
+            nav.navigate(RotaBemVindo) { popUpTo(nav.graph.id) { inclusive = true } }
+        }
+    }
+    CodigoScreen(
+        estado = estado,
+        aoVoltar = { nav.popBackStack() },
+        aoDigitar = viewModel::aoDigitar,
+        aoColar = {
+            escopo.launch {
+                clipboard.getClipEntry()?.clipData?.takeIf { it.itemCount > 0 }?.getItemAt(0)?.text?.let { viewModel.aoDigitar(it.toString()) }
+            }
+        },
+        aoEntrar = viewModel::entrar,
+    )
+}
+
+@Composable
+private fun BemVindoRota(acoes: OnboardingAcoes, viewModel: BemVindoViewModel = hiltViewModel()) {
+    val estado by viewModel.estado.collectAsStateWithLifecycle()
+    BemVindoScreen(estado, aoBora = acoes.aoTerCasa)
 }
