@@ -9,7 +9,7 @@ App Android (Kotlin + Jetpack Compose + Firebase) de divisão gamificada de tare
 
 ## Invariantes que não podem ser quebrados
 - Pacote/applicationId: **`br.app.divvup`**. Nunca alterar.
-- O cliente **nunca grava** pontos, status de atribuição, papéis ou vínculo com casa. Isso é sempre Callable Function com transação (SPEC §4.2).
+- O cliente **nunca grava** pontos, status de atribuição, papéis ou vínculo com casa. Isso é sempre uma operação do backend (Worker) com transação (SPEC §4.2).
 - Pontos: 25 / 50 / 100; meia pontuação após o prazo; nunca negativos.
 - Endereço exato (número) nunca exposto publicamente.
 - Testes e desenvolvimento usam o **Firebase Emulator** ou o projeto `divvup-dev`. **Nunca** apontar para `divvup-prod` em desenvolvimento.
@@ -19,7 +19,7 @@ App Android (Kotlin + Jetpack Compose + Firebase) de divisão gamificada de tare
 - Single-Activity, Navigation Compose, MVVM + UDF (`StateFlow` de estado imutável), Hilt, Coroutines/Flow.
 - Módulos: `:app`, `:core:{designsystem,model,domain,data,testing}`, `:feature:{auth,onboarding,house,deck,tasks,ranking,notifications,profile,discover}`.
 - `:core:domain` é Kotlin puro (sem Android/Firebase): toda regra de cálculo mora lá e é testada por unidade.
-- Cloud Functions em TypeScript em `functions/`, testadas no Emulator.
+- **Custo zero** (ADR 0001): Firebase só no plano Spark (Auth, Firestore, FCM, Crashlytics, Analytics), **sem Cloud Functions**. Backend em Cloudflare Workers (TypeScript) em `backend/`, testado contra o Firebase Emulator. Não adote nada que exija cartão, conta de faturamento ou pré-pagamento sem perguntar.
 - minSdk 26, compileSdk 37, targetSdk 37, JDK 21. Flavors `dev` / `prod` (dimensão `ambiente`).
 - Convenções de build em `build-logic/` (`divvup.android.application`, `.library`, `.compose`, `.feature`, `divvup.hilt`, `divvup.jvm.library`); versões em `gradle/libs.versions.toml`. Só adote versões publicadas há pelo menos duas semanas.
 - Verificação completa (a mesma da CI): `./gradlew check assembleDevDebug assembleProdDebug`. `check` roda lint estrito (aviso = erro), testes unitários dos dois flavors e a guarda `verificarDominioPuro`.
@@ -41,7 +41,7 @@ App Android (Kotlin + Jetpack Compose + Firebase) de divisão gamificada de tare
   1. existe teste de screenshot (Roborazzi) de cada estado desenhado, em claro e escuro, a 360×800 dp;
   2. você comparou lado a lado o screenshot gerado com `docs/design/png/<Artboard>.png` (e `__escuro`) e listou no PR qualquer diferença restante, com o motivo;
   3. os screenshots aprovados estão commitados e a CI os verifica (`verifyRoborazzi*`).
-- Regras de domínio e Functions: escreva o teste junto (de preferência antes).
+- Regras de domínio e operações do backend: escreva o teste junto (de preferência antes).
 - Commits pequenos, mensagem em português, referenciando `R-xx` quando aplicável.
 
 ## Agent skills
