@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textos da estrutura principal (docs/design/fonte/Main.dc.html). -->
+<resources>
+    <string name="principal_imagem_casa">Imagem da casa</string>
+    <string name="principal_temporada">%1$s · %2$s</string>
+    <plurals name="principal_faltam_dias">
+        <item quantity="one">falta %1$d dia</item>
+        <item quantity="other">faltam %1$d dias</item>
+    </plurals>
+    <string name="principal_ultimo_dia">último dia</string>
+    <string name="principal_notificacoes">Notificações</string>
+    <plurals name="principal_notificacoes_nao_lidas">
+        <item quantity="one">Notificações, %1$d não lida</item>
+        <item quantity="other">Notificações, %1$d não lidas</item>
+    </plurals>
+    <string name="aba_deck">Deck</string>
+    <string name="aba_minhas_tarefas">Minhas tarefas</string>
+    <string name="aba_ranking">Ranking</string>
+    <string name="aba_perfil">Perfil</string>
+    <string-array name="meses">
+        <item>janeiro</item>
+        <item>fevereiro</item>
+        <item>março</item>
+        <item>abril</item>
+        <item>maio</item>
+        <item>junho</item>
+        <item>julho</item>
+        <item>agosto</item>
+        <item>setembro</item>
+        <item>outubro</item>
+        <item>novembro</item>
+        <item>dezembro</item>
+    </string-array>
+</resources>

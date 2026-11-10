@@ -50,7 +50,7 @@ const camposDeRest = (f: Record<string, ValorRest>): Documento =>
 
 /** Escrita dentro de um commit (atômico; com `transacao`, falha se algo lido mudou). */
 export type Escrita =
-  | { tipo: "gravar"; caminho: string; dados: Documento; exigirInexistente?: boolean }
+  | { tipo: "gravar"; caminho: string; dados: Documento; exigirInexistente?: boolean; exigirExistente?: boolean; campos?: string[] }
   | { tipo: "apagar"; caminho: string };
 
 interface ContaDeServico {
@@ -126,7 +126,10 @@ export class Firestore {
       const nome = `${this.raiz}/${e.caminho}`;
       if (e.tipo === "apagar") return { delete: nome };
       const w: Record<string, unknown> = { update: { name: nome, fields: camposParaRest(e.dados) } };
+      // Com `campos`, só esses campos mudam (updateMask); sem, o documento é substituído.
+      if (e.campos) w["updateMask"] = { fieldPaths: e.campos };
       if (e.exigirInexistente) w["currentDocument"] = { exists: false };
+      if (e.exigirExistente) w["currentDocument"] = { exists: true };
       return w;
     });
     const resp = await this.chamar(`${this.base}:commit`, {

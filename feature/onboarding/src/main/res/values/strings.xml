@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Textos de B1 (docs/design/fonte/OnbNome.dc.html). -->
+<!-- Textos de B1, B2 e B3 (docs/design/fonte/OnbNome, OnbCasa e CriarCasa). -->
 <resources>
     <string name="onb_passo">%1$d/%2$d</string>
     <string name="onb_passo_descricao">Passo %1$d de %2$d</string>
@@ -13,4 +13,39 @@
     <string name="nome_dica">É assim que a casa vai te ver no ranking.</string>
     <string name="nome_continuar">Continuar</string>
     <string name="nome_erro">Não deu para salvar. Confere a conexão e tenta de novo.</string>
+    <string name="onb_voltar">Voltar</string>
+
+    <!-- B2 -->
+    <string name="casa_oi">oi, %1$s</string>
+    <string name="casa_titulo">e a sua casa?</string>
+    <string name="casa_criar_rotulo">você vira admin</string>
+    <string name="casa_criar_titulo">criar uma casa</string>
+    <string name="casa_criar_texto">Dá um nome, escolhe o tipo e chama o pessoal com um código.</string>
+    <string name="casa_codigo_exemplo" translatable="false">K7·P</string>
+    <string name="casa_codigo_titulo">tenho um código</string>
+    <string name="casa_codigo_texto">Alguém da casa te mandou 6 letras.</string>
+    <string name="casa_procurar">Procurar uma vaga</string>
+    <string name="casa_procurar_descricao">Procurar uma vaga, chega na versão 1.1</string>
+    <string name="casa_versao_11" translatable="false">v1.1</string>
+    <string name="casa_sair">Sair da conta</string>
+
+    <!-- B3 -->
+    <string name="criar_titulo">batiza a casa</string>
+    <string name="criar_nome">nome da casa</string>
+    <string name="criar_nome_exemplo">Ex.: Rep. Cajueiro</string>
+    <string name="criar_nome_vazio">Dá um nome pra casa.</string>
+    <string name="criar_tipo">tipo</string>
+    <string name="criar_tipo_republica">República</string>
+    <string name="criar_tipo_republica_texto">Estudantes dividindo a casa</string>
+    <string name="criar_tipo_moradia">Moradia compartilhada</string>
+    <string name="criar_tipo_moradia_texto">Quem divide apê ou casa</string>
+    <string name="criar_tipo_casal">Casal/Família</string>
+    <string name="criar_tipo_casal_texto">Casa de casal ou família</string>
+    <string name="criar_anunciar">Anunciar vagas</string>
+    <string name="criar_anunciar_texto">A casa aparece na busca depois que você preencher vagas e endereço. O número da casa nunca é público.</string>
+    <string name="criar_acao">Criar casa</string>
+    <string name="criar_erro_conexao">Não deu para criar a casa. Confere a conexão e tenta de novo.</string>
+    <string name="criar_pronto">pronto</string>
+    <string name="criar_existe">%1$s existe</string>
+    <string name="criar_bora">Bora aprender o swipe</string>
 </resources>

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">divvup</string>
-    <!-- Destinos provisórios até B2 (#8) e o deck (#11) existirem. -->
+    <!-- Destinos provisórios até as próximas issues existirem. -->
     <string name="provisorio_rotulo">em construção</string>
-    <string name="provisorio_casa">sua casa</string>
+    <string name="provisorio_codigo">entrar com código</string>
     <string name="provisorio_deck">deck</string>
+    <string name="provisorio_minhas_tarefas">minhas tarefas</string>
+    <string name="provisorio_ranking">ranking</string>
+    <string name="provisorio_perfil">perfil</string>
+    <string name="provisorio_notificacoes">notificações</string>
     <string name="provisorio_sair">Sair</string>
 </resources>
