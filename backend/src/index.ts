@@ -4,6 +4,7 @@ import { ErroHttp, json, respostaDeErro } from "./erros.js";
 import { Firestore } from "./firestore.js";
 import { criarCasa } from "./operacoes/casa.js";
 import { criarConvite, entrarComCodigo, revogarConvite } from "./operacoes/convites.js";
+import { alterarPapel, editarCasa, removerMembro, sairDaCasa } from "./operacoes/membros.js";
 import { criarPerfil } from "./operacoes/perfil.js";
 
 /**
@@ -13,6 +14,8 @@ import { criarPerfil } from "./operacoes/perfil.js";
  * - `POST /v1/criarPerfil` `{nome}`: cria `users/{uid}` com os valores iniciais (idempotente).
  * - `POST /v1/criarCasa` `{nome, tipo, anunciar}`: cria a casa com quem pediu como admin (R-02, R-03).
  * - `POST /v1/criarConvite`, `/v1/revogarConvite` `{codigo}`, `/v1/entrarComCodigo` `{codigo}` (R-06).
+ * - `POST /v1/alterarPapel` `{uid, papel}`, `/v1/removerMembro` `{uid}`, `/v1/sairDaCasa`,
+ *   `/v1/editarCasa` `{nome, tipo, cidade?, bairro?, rua?}` (R-03, R-04).
  * As operações protegidas da SPEC §4.2 entram aqui, uma rota por operação.
  */
 export default {
@@ -50,6 +53,18 @@ export default {
       if (req.method === "POST" && url.pathname === "/v1/entrarComCodigo") {
         const usuario = await autenticar(req, env);
         return json(await entrarComCodigo(new Firestore(env), usuario, await lerJson(req)));
+      }
+
+      const operacoes: Record<string, (db: Firestore, u: Awaited<ReturnType<typeof autenticar>>, corpo: unknown) => Promise<unknown>> = {
+        "/v1/alterarPapel": alterarPapel,
+        "/v1/removerMembro": (db, u, corpo) => removerMembro(db, u, corpo),
+        "/v1/sairDaCasa": (db, u) => sairDaCasa(db, u),
+        "/v1/editarCasa": editarCasa,
+      };
+      const operacao = operacoes[url.pathname];
+      if (req.method === "POST" && operacao) {
+        const usuario = await autenticar(req, env);
+        return json(await operacao(new Firestore(env), usuario, await lerJson(req)));
       }
 
       throw new ErroHttp(404, "rota-inexistente");

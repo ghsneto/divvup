@@ -60,13 +60,17 @@ fun DivvupTextField(
     estiloTexto: TextStyle? = null,
     /** Altura da caixa (padrão 52, `.in`; B3 usa 56). */
     altura: Dp = AlturaCampo,
+    /** Rótulo `small muted` em vez de `label` (campos de endereço em G4). */
+    rotuloDiscreto: Boolean = false,
 ) {
     val c = DivvupTheme.colors
     val t = DivvupTheme.typography
     val shape = DivvupTheme.shapes.sm
     val estilo = estiloTexto ?: t.body
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        rotulo?.let { DivvupLabel(it) }
+        rotulo?.let {
+            if (rotuloDiscreto) Text(it, style = t.small, color = c.textMuted) else DivvupLabel(it)
+        }
         BasicTextField(
             value = valor,
             onValueChange = onValorMudou,

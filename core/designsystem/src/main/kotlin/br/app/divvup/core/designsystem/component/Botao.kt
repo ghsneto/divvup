@@ -85,6 +85,8 @@ fun DivvupButton(
     larguraTotal: Boolean = false,
     corConteudo: Color? = null,
     carregando: Boolean = false,
+    /** `justify-content: flex-start` (ações de admin em G3). */
+    alinharInicio: Boolean = false,
 ) {
     val c = cores(variante, DivvupTheme.colors)
     val conteudo = corConteudo ?: c.conteudo
@@ -101,7 +103,7 @@ fun DivvupButton(
             .clickable(enabled = habilitado && !carregando, role = Role.Button, onClick = onClick)
             .semantics { if (carregando) stateDescription = texto }
             .padding(PaddingValues(horizontal = horizontal, vertical = 12.dp)),
-        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+        horizontalArrangement = Arrangement.spacedBy(8.dp, if (alinharInicio) Alignment.Start else Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CompositionLocalProvider(LocalContentColor provides conteudo) {

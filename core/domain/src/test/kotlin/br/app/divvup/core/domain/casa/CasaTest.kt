@@ -30,4 +30,10 @@ class CasaTest {
         assertEquals(ResumoDaTemporada(11, 0), resumoDaTemporada(LocalDate.of(2026, 11, 30)))
         assertEquals(ResumoDaTemporada(2, 28), resumoDaTemporada(LocalDate.of(2028, 2, 1)))
     }
+
+    @Test
+    fun `posicao no mes divide empates`() {
+        fun m(uid: String, pts: Int) = br.app.divvup.core.model.Membro(uid, uid, null, br.app.divvup.core.model.Papel.MEMBER, true, pts, null)
+        assertEquals(mapOf("a" to 1, "b" to 2, "c" to 2, "d" to 4), posicoesNoMes(listOf(m("a", 480), m("b", 300), m("c", 300), m("d", 100))))
+    }
 }

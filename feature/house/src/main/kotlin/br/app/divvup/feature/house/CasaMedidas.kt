@@ -26,4 +26,16 @@ internal object CasaMedidas {
     val revogarPaddingV = 8.dp
     val revogarPaddingH = 4.dp
     val snackFundo = 24.dp
+
+    // G1 MinhaCasa.
+    val cartaoConvidarAltura = 150.dp
+    val cartaoConvidarTitulo = 20.sp
+    val seloPequenoAltura = 18.dp
+    val seloPequenoFonte = 12.sp
+    val sairTopo = 28.dp
+
+    // D3/G3 Membro.
+    val avatarMembro = 96.dp
+    val numeroDoMes = 36.sp
+    val dialogoTitulo = 28.sp
 }

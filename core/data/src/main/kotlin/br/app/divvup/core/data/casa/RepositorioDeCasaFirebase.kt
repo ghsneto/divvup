@@ -2,11 +2,13 @@ package br.app.divvup.core.data.casa
 
 import br.app.divvup.core.data.backend.ClienteBackend
 import br.app.divvup.core.data.backend.ErroDoBackend
+import br.app.divvup.core.domain.casa.DadosDaCasa
 import br.app.divvup.core.domain.casa.ErroDeCasa
 import br.app.divvup.core.domain.casa.RepositorioDeCasa
 import br.app.divvup.core.domain.casa.ResultadoCasa
 import br.app.divvup.core.domain.casa.normalizarNomeDaCasa
 import br.app.divvup.core.model.Casa
+import br.app.divvup.core.model.Papel
 import br.app.divvup.core.model.TipoDeCasa
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.CancellationException
@@ -36,6 +38,38 @@ class RepositorioDeCasaFirebase @Inject constructor(
         }
         .distinctUntilChanged()
 
+    override suspend fun alterarPapel(uid: String, papel: Papel): ResultadoCasa<Unit> = executar {
+        backend.chamar("alterarPapel", buildJsonObject { put("uid", JsonPrimitive(uid)); put("papel", JsonPrimitive(papel.name)) })
+    }
+
+    override suspend fun removerMembro(uid: String): ResultadoCasa<Unit> = executar {
+        backend.chamar("removerMembro", buildJsonObject { put("uid", JsonPrimitive(uid)) })
+    }
+
+    override suspend fun sair(): ResultadoCasa<Unit> = executar { backend.chamar("sairDaCasa") }
+
+    override suspend fun editar(dados: DadosDaCasa): ResultadoCasa<Unit> = executar {
+        backend.chamar(
+            "editarCasa",
+            buildJsonObject {
+                put("nome", JsonPrimitive(normalizarNomeDaCasa(dados.nome)))
+                put("tipo", JsonPrimitive(dados.tipo.name))
+                put("cidade", JsonPrimitive(dados.cidade.trim()))
+                put("bairro", JsonPrimitive(dados.bairro.trim()))
+                put("rua", JsonPrimitive(dados.rua.trim()))
+            },
+        )
+    }
+
+    private inline fun executar(bloco: () -> Any): ResultadoCasa<Unit> = try {
+        bloco()
+        ResultadoCasa.Ok(Unit)
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        ResultadoCasa.Falha(erroDeCasa(e))
+    }
+
     override suspend fun criarCasa(nome: String, tipo: TipoDeCasa, anunciar: Boolean): ResultadoCasa<String> = try {
         val corpo = buildJsonObject {
             put("nome", JsonPrimitive(normalizarNomeDaCasa(nome)))
@@ -59,6 +93,8 @@ class RepositorioDeCasaFirebase @Inject constructor(
             temporada = getString("currentSeason").orEmpty(),
             bairro = getString("neighborhood"),
             cidade = getString("city"),
+            rua = getString("street"),
+            anuncioAtivo = getBoolean("listing.enabled") == true,
         )
     }
 }
@@ -66,6 +102,8 @@ class RepositorioDeCasaFirebase @Inject constructor(
 /** Traduz a falha do backend (campo `erro`) ou da rede. */
 internal fun erroDeCasa(e: Exception): ErroDeCasa = when {
     e is ErroDoBackend && e.codigo == "ja-em-casa" -> ErroDeCasa.JaEmCasa
+    e is ErroDoBackend && e.codigo == "nao-admin" -> ErroDeCasa.NaoAdmin
+    e is ErroDoBackend && e.codigo == "ultimo-admin" -> ErroDeCasa.UltimoAdmin
     e is ErroDoBackend -> ErroDeCasa.Desconhecido
     e is IOException -> ErroDeCasa.SemConexao
     else -> ErroDeCasa.Desconhecido

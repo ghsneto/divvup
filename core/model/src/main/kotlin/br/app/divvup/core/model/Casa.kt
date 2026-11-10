@@ -12,6 +12,9 @@ data class Casa(
     val temporada: String,
     val bairro: String? = null,
     val cidade: String? = null,
+    val rua: String? = null,
+    /** "Anunciar vagas" ligado (`listing.enabled`, v1.1). */
+    val anuncioAtivo: Boolean = false,
 )
 
 /** Papel do morador (`members/{uid}.role`, R-03). */
@@ -26,6 +29,7 @@ data class Membro(
     val ativo: Boolean,
     val pontosDoMes: Int,
     val entrouEm: java.time.Instant?,
+    val pontosTotais: Int = 0,
 )
 
 /** Código de convite (`houses/{id}/invites/{codigo}`, R-06). */

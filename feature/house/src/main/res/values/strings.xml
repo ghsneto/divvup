@@ -85,4 +85,87 @@
         <item>sáb.</item>
         <item>dom.</item>
     </string-array>
+
+    <!-- G1 (docs/design/fonte/MinhaCasa.dc.html) -->
+    <string name="minhacasa_voltar_rotulo">perfil</string>
+    <plurals name="minhacasa_moradores">
+        <item quantity="one">morador</item>
+        <item quantity="other">moradores</item>
+    </plurals>
+    <string name="minhacasa_temporada">temporada</string>
+    <string name="minhacasa_convidar">convidar moradores</string>
+    <plurals name="minhacasa_codigos_ativos">
+        <item quantity="one">%1$d código ativo</item>
+        <item quantity="other">%1$d códigos ativos</item>
+    </plurals>
+    <string name="minhacasa_editar">Editar casa</string>
+    <string name="minhacasa_anuncio">Anúncio</string>
+    <string name="minhacasa_anuncio_descricao">Anúncio, chega na versão 1.1</string>
+    <string name="minhacasa_moradores_rotulo">moradores</string>
+    <string name="minhacasa_solicitacoes">Solicitações de entrada</string>
+    <string name="minhacasa_solicitacoes_descricao">Solicitações de entrada, chega na versão 1.1</string>
+    <string name="versao_11" translatable="false">v1.1</string>
+    <string name="minhacasa_voce">Você</string>
+    <string name="minhacasa_admin">admin</string>
+    <string name="minhacasa_desde">desde %1$s</string>
+    <string name="minhacasa_pts">%1$s pts</string>
+    <string name="minhacasa_sair">Sair da casa</string>
+    <string name="minhacasa_sair_titulo">Sair da %1$s?</string>
+    <string name="minhacasa_sair_texto">Suas tarefas assumidas voltam para o deck. Seus pontos ficam no histórico da casa como ex-morador, e suas medalhas seguem com você.</string>
+    <string name="minhacasa_ficar">Ficar</string>
+    <string name="tipo_republica">república</string>
+    <string name="tipo_moradia">moradia compartilhada</string>
+    <string name="tipo_casal">casal/família</string>
+    <string name="data_hoje">hoje</string>
+    <string name="data_ontem">ontem</string>
+    <string name="data_mes_ano">%1$s %2$d</string>
+    <string-array name="meses_curtos">
+        <item>jan.</item>
+        <item>fev.</item>
+        <item>mar.</item>
+        <item>abr.</item>
+        <item>maio</item>
+        <item>jun.</item>
+        <item>jul.</item>
+        <item>ago.</item>
+        <item>set.</item>
+        <item>out.</item>
+        <item>nov.</item>
+        <item>dez.</item>
+    </string-array>
+
+    <!-- D3/G3 (docs/design/fonte/Membro.dc.html) -->
+    <string name="membro_rotulo">morador</string>
+    <string name="membro_rotulo_admin">membro · visão de admin</string>
+    <string name="membro_papel_morador">morador</string>
+    <string name="membro_na_casa_desde">na casa desde %1$s</string>
+    <string name="membro_este_mes">este mês</string>
+    <string name="membro_lugar">%1$dº lugar</string>
+    <string name="membro_total">total</string>
+    <string name="membro_acoes">ações de admin</string>
+    <string name="membro_tornar_admin">Tornar admin</string>
+    <string name="membro_remover_admin">Remover admin</string>
+    <string name="membro_remover">Remover da casa</string>
+    <string name="membro_remover_titulo">Remover %1$s da casa?</string>
+    <string name="membro_remover_texto">As tarefas de %1$s voltam para o deck. Os pontos ficam no histórico como ex-morador.</string>
+    <string name="membro_cancelar">Cancelar</string>
+    <string name="membro_agora_admin">%1$s agora é admin</string>
+    <string name="membro_agora_morador">%1$s agora é morador</string>
+    <string name="membro_ultimo_admin">A casa precisa de pelo menos um admin.</string>
+
+    <!-- G4 (docs/design/fonte/EditarCasa.dc.html) -->
+    <string name="editar_titulo">editar casa</string>
+    <string name="editar_nome">nome</string>
+    <string name="editar_tipo">tipo</string>
+    <string name="editar_tipo_republica">República</string>
+    <string name="editar_tipo_moradia">Moradia compartilhada</string>
+    <string name="editar_tipo_casal">Casal/Família</string>
+    <string name="editar_aviso_casal">Casal/Família não aparece na busca. Ao salvar, o anúncio de vagas será desligado.</string>
+    <string name="editar_onde">onde fica</string>
+    <string name="editar_cidade">Cidade</string>
+    <string name="editar_bairro">Bairro</string>
+    <string name="editar_rua">Rua</string>
+    <string name="editar_privado">Só os moradores veem isso. O número fica no anúncio, e só para quem você aprovar.</string>
+    <string name="editar_salvar">Salvar</string>
+    <string name="editar_nome_vazio">Dá um nome pra casa.</string>
 </resources>
