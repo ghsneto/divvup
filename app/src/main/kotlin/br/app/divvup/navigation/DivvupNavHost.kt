@@ -34,7 +34,10 @@ import br.app.divvup.feature.auth.navegacao.limparPilha
 import br.app.divvup.feature.onboarding.navegacao.OnboardingAcoes
 import br.app.divvup.feature.onboarding.navegacao.RotaNome
 import br.app.divvup.feature.onboarding.navegacao.RotaSuaCasa
+import br.app.divvup.feature.house.navegacao.RotaConvide
+import br.app.divvup.feature.house.navegacao.RotaConvites
 import br.app.divvup.feature.house.navegacao.RotaPrincipal
+import br.app.divvup.feature.house.navegacao.telasDeConvite
 import br.app.divvup.feature.house.navegacao.telaPrincipal
 import br.app.divvup.feature.house.principal.Aba
 import br.app.divvup.feature.onboarding.navegacao.grafoDeOnboarding
@@ -45,9 +48,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import javax.inject.Inject
 
-/** Destinos ainda não construídos: B4 código (#9) e F1 notificações. Provisórios. */
-@Serializable data object RotaCodigoProvisoria
-
+/** Destino ainda não construído: F1 notificações. Provisório. */
 @Serializable data object RotaNotificacoesProvisoria
 
 /** Páginas legais (issue #29/#30). */
@@ -87,11 +88,12 @@ fun DivvupNavHost() {
             nav,
             OnboardingAcoes(
                 aoAbrirGaleria = { atual -> nav.navigate(RotaGaleria(avatarInicial = atual, soEscolher = true)) },
-                aoTenhoCodigo = { nav.navigate(RotaCodigoProvisoria) },
                 aoSair = aoSair,
+                aoCriarCasa = { nav.navigate(RotaConvide) { limparPilha(nav) } },
                 aoTerCasa = { nav.navigate(RotaPrincipal) { limparPilha(nav) } },
             ),
         )
+        telasDeConvite(nav, aoConcluirConvide = { nav.navigate(RotaPrincipal) { limparPilha(nav) } })
         telaGaleria(nav)
         telaPrincipal(aoAbrirNotificacoes = { nav.navigate(RotaNotificacoesProvisoria) }) { aba ->
             val titulo = when (aba) {
@@ -100,10 +102,13 @@ fun DivvupNavHost() {
                 Aba.Ranking -> R.string.provisorio_ranking
                 Aba.Perfil -> R.string.provisorio_perfil
             }
-            // Só o perfil oferece "Sair" (como E1); as outras abas chegam nas próximas issues.
-            EmConstrucao(stringResource(titulo), aoSair = aoSair.takeIf { aba == Aba.Perfil })
+            // Só o perfil oferece "Sair" e "Convites" (até G1 Minha casa, #10); as outras abas chegam nas próximas issues.
+            EmConstrucao(
+                stringResource(titulo),
+                aoSair = aoSair.takeIf { aba == Aba.Perfil },
+                aoConvites = { nav.navigate(RotaConvites) }.takeIf { aba == Aba.Perfil },
+            )
         }
-        composable<RotaCodigoProvisoria> { EmConstrucao(stringResource(R.string.provisorio_codigo), aoSair = null) }
         composable<RotaNotificacoesProvisoria> { EmConstrucao(stringResource(R.string.provisorio_notificacoes), aoSair = null) }
     }
 }
@@ -114,7 +119,7 @@ class SessaoViewModel @Inject constructor(private val conta: RepositorioDeConta)
 }
 
 @Composable
-private fun EmConstrucao(titulo: String, aoSair: (() -> Unit)?, viewModel: SessaoViewModel = hiltViewModel()) {
+private fun EmConstrucao(titulo: String, aoSair: (() -> Unit)?, aoConvites: (() -> Unit)? = null, viewModel: SessaoViewModel = hiltViewModel()) {
     val escopo = rememberCoroutineScope()
     val e = DivvupTheme.spacing
     Column(
@@ -123,6 +128,9 @@ private fun EmConstrucao(titulo: String, aoSair: (() -> Unit)?, viewModel: Sessa
     ) {
         DivvupLabel(stringResource(R.string.provisorio_rotulo), cor = DivvupTheme.colors.textMuted)
         Text(titulo, style = DivvupTheme.typography.h2, color = DivvupTheme.colors.text)
+        if (aoConvites != null) {
+            DivvupButton(stringResource(R.string.provisorio_convites), onClick = aoConvites, variante = VarianteBotao.Contorno)
+        }
         if (aoSair != null) {
             DivvupButton(
                 stringResource(R.string.provisorio_sair),

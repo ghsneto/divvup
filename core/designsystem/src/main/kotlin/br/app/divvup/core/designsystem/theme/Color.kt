@@ -45,6 +45,8 @@ data class DivvupColors(
     val onUltramarino: Color,
     /** Papel frio fixo (#F5F5F0), usado em ilustrações sobre ultramarino nos dois temas. */
     val papel: Color,
+    /** Superfícies fixas sobre `tinta` nos dois temas (cartão do código em B8 e C1 "conflito"). */
+    val sobreTinta: CoresSobreTinta = CoresSobreTinta(),
     val isDark: Boolean,
 ) {
     /** Swipe à direita (assumir). */
@@ -54,6 +56,15 @@ data class DivvupColors(
     /** Swipe à esquerda (passar a vez). */
     val passar: Color get() = danger
 }
+
+/** Texto, texto secundário, caixas e linhas sobre o fundo `tinta`, iguais nos dois temas. */
+@Immutable
+data class CoresSobreTinta(
+    val texto: Color = Color(0xFFF2F3F5),
+    val textoMudo: Color = Color(0xFF9EA1AA),
+    val caixa: Color = Color(0xFF272B36),
+    val linha: Color = Color(0xFF3D414D),
+)
 
 private val Ultramarino = Color(0xFF2F2BD9)
 private val Lima = Color(0xFFC9F24D)

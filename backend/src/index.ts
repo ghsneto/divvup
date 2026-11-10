@@ -3,6 +3,7 @@ import { type Env } from "./env.js";
 import { ErroHttp, json, respostaDeErro } from "./erros.js";
 import { Firestore } from "./firestore.js";
 import { criarCasa } from "./operacoes/casa.js";
+import { criarConvite, entrarComCodigo, revogarConvite } from "./operacoes/convites.js";
 import { criarPerfil } from "./operacoes/perfil.js";
 
 /**
@@ -11,6 +12,7 @@ import { criarPerfil } from "./operacoes/perfil.js";
  * - `POST /v1/eu`: devolve o usuário autenticado e se o perfil `users/{uid}` existe.
  * - `POST /v1/criarPerfil` `{nome}`: cria `users/{uid}` com os valores iniciais (idempotente).
  * - `POST /v1/criarCasa` `{nome, tipo, anunciar}`: cria a casa com quem pediu como admin (R-02, R-03).
+ * - `POST /v1/criarConvite`, `/v1/revogarConvite` `{codigo}`, `/v1/entrarComCodigo` `{codigo}` (R-06).
  * As operações protegidas da SPEC §4.2 entram aqui, uma rota por operação.
  */
 export default {
@@ -33,6 +35,21 @@ export default {
       if (req.method === "POST" && url.pathname === "/v1/criarCasa") {
         const usuario = await autenticar(req, env);
         return json(await criarCasa(new Firestore(env), usuario, await lerJson(req)));
+      }
+
+      if (req.method === "POST" && url.pathname === "/v1/criarConvite") {
+        const usuario = await autenticar(req, env);
+        return json(await criarConvite(new Firestore(env), usuario));
+      }
+
+      if (req.method === "POST" && url.pathname === "/v1/revogarConvite") {
+        const usuario = await autenticar(req, env);
+        return json(await revogarConvite(new Firestore(env), usuario, await lerJson(req)));
+      }
+
+      if (req.method === "POST" && url.pathname === "/v1/entrarComCodigo") {
+        const usuario = await autenticar(req, env);
+        return json(await entrarComCodigo(new Firestore(env), usuario, await lerJson(req)));
       }
 
       throw new ErroHttp(404, "rota-inexistente");

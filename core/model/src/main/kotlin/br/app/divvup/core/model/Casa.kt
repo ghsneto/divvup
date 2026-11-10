@@ -10,4 +10,33 @@ data class Casa(
     val tipo: TipoDeCasa,
     /** Temporada (mês) corrente no formato `yyyy-MM`. */
     val temporada: String,
+    val bairro: String? = null,
+    val cidade: String? = null,
+)
+
+/** Papel do morador (`members/{uid}.role`, R-03). */
+enum class Papel { ADMIN, MEMBER }
+
+/** Morador da casa (`houses/{id}/members/{uid}`). */
+data class Membro(
+    val uid: String,
+    val nome: String,
+    val avatarId: String?,
+    val papel: Papel,
+    val ativo: Boolean,
+    val pontosDoMes: Int,
+    val entrouEm: java.time.Instant?,
+)
+
+/** Código de convite (`houses/{id}/invites/{codigo}`, R-06). */
+data class Convite(
+    val codigo: String,
+    val criadoPor: String,
+    val criadoPorNome: String,
+    val criadoEm: java.time.Instant,
+    val expiraEm: java.time.Instant,
+    val usadoPorNome: String?,
+    val usadoEm: java.time.Instant?,
+    val revogado: Boolean,
+    val revogadoEm: java.time.Instant?,
 )
