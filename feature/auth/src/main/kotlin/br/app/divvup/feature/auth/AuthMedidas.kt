@@ -48,4 +48,8 @@ internal object AuthMedidas {
     val seloEnviadoForaX = 18.dp
     val seloEnviadoForaY = 16.dp
     val envelopeTraco = 4.dp
+
+    // Snackbar (`.snack`): 12 das laterais e 84 do fundo.
+    val snackLateral = 12.dp
+    val snackFundo = 84.dp
 }

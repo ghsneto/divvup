@@ -48,5 +48,6 @@ internal fun ErroDeConta.mensagem(): Int = when (this) {
     ErroDeConta.SemConexao -> R.string.erro_sem_conexao
     ErroDeConta.EmailJaCadastrado -> R.string.criar_email_duplicado
     ErroDeConta.SenhaFraca -> R.string.criar_senha_fraca
+    ErroDeConta.GoogleIndisponivel -> R.string.erro_google
     ErroDeConta.Desconhecido -> R.string.erro_desconhecido
 }

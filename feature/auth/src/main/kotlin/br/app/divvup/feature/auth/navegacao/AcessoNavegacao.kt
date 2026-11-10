@@ -8,6 +8,7 @@ import br.app.divvup.core.domain.conta.DestinoInicial
 import br.app.divvup.feature.auth.boasvindas.BoasVindasScreen
 import br.app.divvup.feature.auth.criarconta.CriarContaRota
 import br.app.divvup.feature.auth.entrar.EntrarRota
+import br.app.divvup.feature.auth.google.ComLoginGoogle
 import br.app.divvup.feature.auth.recuperar.RecuperarSenhaRota
 import br.app.divvup.feature.auth.splash.SplashRota
 import kotlinx.serialization.Serializable
@@ -27,8 +28,6 @@ import kotlinx.serialization.Serializable
 class AcessoAcoes(
     /** A1 decidiu: onboarding (B1) ou deck (C1). */
     val aoDecidir: (DestinoInicial) -> Unit,
-    /** "Continuar com Google" (issue #6). */
-    val aoGoogle: () -> Unit,
     val aoTermos: () -> Unit,
     val aoPrivacidade: () -> Unit,
 )
@@ -49,34 +48,42 @@ fun NavGraphBuilder.grafoDeAcesso(nav: NavController, acoes: AcessoAcoes) {
             }
         })
     }
+    // Depois do login com Google, a Splash decide entre onboarding e deck (R-01).
+    val aposGoogle = { nav.navigate(RotaSplash) { limparPilha(nav) } }
     composable<RotaBoasVindas> {
-        BoasVindasScreen(
-            aoCriarConta = { nav.navigate(RotaCriarConta) },
-            aoGoogle = acoes.aoGoogle,
-            aoJaTenhoConta = { nav.navigate(RotaEntrar) },
-            aoTermos = acoes.aoTermos,
-            aoPrivacidade = acoes.aoPrivacidade,
-        )
+        ComLoginGoogle(aoEntrar = aposGoogle) { aoGoogle ->
+            BoasVindasScreen(
+                aoCriarConta = { nav.navigate(RotaCriarConta) },
+                aoGoogle = aoGoogle,
+                aoJaTenhoConta = { nav.navigate(RotaEntrar) },
+                aoTermos = acoes.aoTermos,
+                aoPrivacidade = acoes.aoPrivacidade,
+            )
+        }
     }
     composable<RotaEntrar> {
-        EntrarRota(
-            aoVoltar = { nav.popBackStack() },
-            aoEsqueci = { nav.navigate(RotaRecuperarSenha) },
-            aoCriarConta = { nav.navigate(RotaCriarConta) { popUpTo<RotaBoasVindas>() } },
-            aoGoogle = acoes.aoGoogle,
-            // Depois de entrar, a Splash decide entre onboarding e deck.
-            aoEntrar = { nav.navigate(RotaSplash) { limparPilha(nav) } },
-        )
+        ComLoginGoogle(aoEntrar = aposGoogle) { aoGoogle ->
+            EntrarRota(
+                aoVoltar = { nav.popBackStack() },
+                aoEsqueci = { nav.navigate(RotaRecuperarSenha) },
+                aoCriarConta = { nav.navigate(RotaCriarConta) { popUpTo<RotaBoasVindas>() } },
+                aoGoogle = aoGoogle,
+                // Depois de entrar, a Splash decide entre onboarding e deck.
+                aoEntrar = { nav.navigate(RotaSplash) { limparPilha(nav) } },
+            )
+        }
     }
     composable<RotaCriarConta> {
-        CriarContaRota(
-            aoVoltar = { nav.popBackStack() },
-            aoEntrar = { nav.navigate(RotaEntrar) { popUpTo<RotaBoasVindas>() } },
-            aoGoogle = acoes.aoGoogle,
-            aoTermos = acoes.aoTermos,
-            aoPrivacidade = acoes.aoPrivacidade,
-            aoCriar = { acoes.aoDecidir(DestinoInicial.Onboarding) },
-        )
+        ComLoginGoogle(aoEntrar = aposGoogle) { aoGoogle ->
+            CriarContaRota(
+                aoVoltar = { nav.popBackStack() },
+                aoEntrar = { nav.navigate(RotaEntrar) { popUpTo<RotaBoasVindas>() } },
+                aoGoogle = aoGoogle,
+                aoTermos = acoes.aoTermos,
+                aoPrivacidade = acoes.aoPrivacidade,
+                aoCriar = { acoes.aoDecidir(DestinoInicial.Onboarding) },
+            )
+        }
     }
     composable<RotaRecuperarSenha> {
         RecuperarSenhaRota(aoVoltar = { nav.popBackStack() })

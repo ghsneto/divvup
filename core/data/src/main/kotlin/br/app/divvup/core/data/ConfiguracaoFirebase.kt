@@ -13,6 +13,8 @@ data class ConfiguracaoFirebase(
     val hostEmulador: String?,
     /** URL base do Worker, sem barra final. */
     val urlBackend: String,
+    /** ID do cliente OAuth web do projeto (login com Google); vazio se não configurado. */
+    val googleWebClientId: String = "",
 ) {
     val usaEmulador: Boolean get() = hostEmulador != null
 }

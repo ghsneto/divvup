@@ -33,3 +33,20 @@ export function tokenSemAssinatura(declaracoes: Record<string, unknown>): string
   const b64 = (o: unknown) => Buffer.from(JSON.stringify(o)).toString("base64url");
   return `${b64({ alg: "none", typ: "JWT" })}.${b64(declaracoes)}.`;
 }
+
+/** Entra no Auth Emulator como se fosse pelo Google (token de IdP falso, aceito só no Emulator). */
+export async function entrarComGoogle(nome: string, foto: string, email = `g${Date.now()}@gmail.com`) {
+  const idTokenGoogle = JSON.stringify({ sub: `google-${email}`, email, email_verified: true, name: nome, picture: foto });
+  const resp = await fetch(`http://${AUTH}/identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key=chave-falsa`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      requestUri: "http://localhost",
+      postBody: `id_token=${encodeURIComponent(idTokenGoogle)}&providerId=google.com`,
+      returnSecureToken: true,
+    }),
+  });
+  if (!resp.ok) throw new Error(`signInWithIdp: ${resp.status} ${await resp.text()}`);
+  const corpo = (await resp.json()) as { localId: string; idToken: string };
+  return { uid: corpo.localId, token: corpo.idToken };
+}

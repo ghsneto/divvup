@@ -65,7 +65,6 @@ fun DivvupNavHost() {
                     val rota: Any = if (destino == DestinoInicial.Deck) RotaDeckProvisorio else RotaOnboardingProvisoria
                     nav.navigate(rota) { limparPilha(nav) }
                 },
-                aoGoogle = {},
                 aoTermos = { links.openUri(URL_TERMOS) },
                 aoPrivacidade = { links.openUri(URL_PRIVACIDADE) },
             ),

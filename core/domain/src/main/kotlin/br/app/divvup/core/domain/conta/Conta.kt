@@ -12,6 +12,7 @@ sealed interface ErroDeConta {
     data object EmailJaCadastrado : ErroDeConta
     data object SenhaFraca : ErroDeConta
     data object SemConexao : ErroDeConta
+    data object GoogleIndisponivel : ErroDeConta
     data object Desconhecido : ErroDeConta
 }
 
@@ -35,6 +36,12 @@ interface RepositorioDeConta {
 
     /** Cria a conta no Auth e o perfil `users/{uid}` pelo backend (o cliente não grava pontos). */
     suspend fun criarConta(nome: String, email: String, senha: String): ResultadoConta<Unit>
+
+    /**
+     * Entra (ou cria a conta) com o ID token da conta Google (R-01). No primeiro acesso, o perfil é
+     * criado pelo backend com nome e foto do Google.
+     */
+    suspend fun entrarComGoogle(idTokenGoogle: String): ResultadoConta<Unit>
 
     /** Sempre "sucesso" para e-mail válido: não revela se a conta existe (TELAS.md A5). */
     suspend fun enviarRecuperacao(email: String): ResultadoConta<Unit>

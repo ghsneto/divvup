@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { Firestore } from "../src/firestore.js";
 import worker from "../src/index.js";
-import { criarUsuario, envLocal, limparFirestore } from "./ambiente.js";
+import { criarUsuario, entrarComGoogle, envLocal, limparFirestore } from "./ambiente.js";
 
 const criarPerfil = (token: string, corpo: unknown) =>
   worker.fetch(
@@ -50,6 +50,13 @@ describe("criarPerfil", () => {
     expect((await criarPerfil(token, { nome: "   " })).status).toBe(400);
     expect((await criarPerfil(token, { nome: "x".repeat(41) })).status).toBe(400);
     expect((await criarPerfil(token, {})).status).toBe(400);
+  });
+
+  it("no login com Google usa nome e foto do provedor (R-01)", async () => {
+    const { uid, token } = await entrarComGoogle("Bruno Lima", "https://exemplo.dev/bruno.png");
+    const resp = await criarPerfil(token, {});
+    expect(await resp.json()).toEqual({ criado: true });
+    expect(await db.ler(`users/${uid}`)).toMatchObject({ displayName: "Bruno Lima", photoUrl: "https://exemplo.dev/bruno.png" });
   });
 
   it("exige login", async () => {

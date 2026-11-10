@@ -10,6 +10,7 @@ import br.app.divvup.core.testing.fakes.FakeMonitorDeConexao
 import br.app.divvup.core.testing.fakes.FakeRepositorioDeConta
 import br.app.divvup.feature.auth.criarconta.CriarContaViewModel
 import br.app.divvup.feature.auth.entrar.EntrarViewModel
+import br.app.divvup.feature.auth.google.LoginGoogleViewModel
 import br.app.divvup.feature.auth.recuperar.RecuperarSenhaViewModel
 import br.app.divvup.feature.auth.splash.SplashViewModel
 import kotlinx.coroutines.flow.first
@@ -119,6 +120,23 @@ class AcessoViewModelTest {
         vm.aoMudarEmail("iane2@email.com")
         assertFalse(vm.estado.value.emailDuplicado)
         assertTrue(vm.estado.value.botaoHabilitado)
+    }
+
+    @Test
+    fun `login com Google entra e, se falhar, mostra o erro (R-01)`() = runTest {
+        val config = br.app.divvup.core.data.ConfiguracaoFirebase("demo-divvup", "k", "a", "s", "10.0.2.2", "http://x", "web-id")
+        val repo = FakeRepositorioDeConta()
+        val vm = LoginGoogleViewModel(repo, config)
+        vm.aoToken("token-google")
+        assertTrue(vm.estado.value.entrou)
+        assertEquals(listOf("google:token-google"), repo.chamadas)
+
+        val repoFalha = FakeRepositorioDeConta().apply { resultadoGoogle = ResultadoConta.Falha(ErroDeConta.SemConexao) }
+        val vm2 = LoginGoogleViewModel(repoFalha, config)
+        vm2.aoToken("t")
+        assertEquals(ErroDeConta.SemConexao, vm2.estado.value.erro)
+        vm2.limparErro()
+        assertNull(vm2.estado.value.erro)
     }
 
     @Test

@@ -33,6 +33,14 @@ class FakeRepositorioDeConta(
         return resultadoCriar
     }
 
+    var resultadoGoogle: ResultadoConta<Unit> = ResultadoConta.Ok(Unit)
+
+    override suspend fun entrarComGoogle(idTokenGoogle: String): ResultadoConta<Unit> {
+        chamadas += "google:$idTokenGoogle"
+        if (resultadoGoogle is ResultadoConta.Ok) _sessao.value = Sessao.Conectado("uid-google")
+        return resultadoGoogle
+    }
+
     override suspend fun enviarRecuperacao(email: String): ResultadoConta<Unit> {
         chamadas += "recuperar:$email"
         return resultadoRecuperar

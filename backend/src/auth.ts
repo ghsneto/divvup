@@ -10,6 +10,9 @@ const CHAVES_FIREBASE = createRemoteJWKSet(
 export interface Usuario {
   uid: string;
   email?: string;
+  /** Nome e foto do provedor (ex.: conta Google), quando o token traz. */
+  nome?: string;
+  foto?: string;
 }
 
 /**
@@ -42,6 +45,8 @@ export async function autenticar(req: Request, env: Env, chaves: JWTVerifyGetKey
   if (typeof payload.sub !== "string" || payload.sub.length === 0) throw naoAutenticado("sem sub");
   const usuario: Usuario = { uid: payload.sub };
   if (typeof payload["email"] === "string") usuario.email = payload["email"];
+  if (typeof payload["name"] === "string") usuario.nome = payload["name"];
+  if (typeof payload["picture"] === "string") usuario.foto = payload["picture"];
   return usuario;
 }
 

@@ -35,6 +35,7 @@
     <string name="erro_muitas_tentativas">Muitas tentativas. Espera uns minutos ou recupera a senha.</string>
     <string name="erro_email_invalido">Confere o e-mail: falta alguma coisa.</string>
     <string name="erro_sem_conexao">Sem conexão. Conecte-se e tente de novo.</string>
+    <string name="erro_google">Não deu para entrar com o Google. Tenta de novo ou use o e-mail.</string>
     <string name="erro_desconhecido">Algo deu errado. Tenta de novo.</string>
 
     <!-- A4 -->

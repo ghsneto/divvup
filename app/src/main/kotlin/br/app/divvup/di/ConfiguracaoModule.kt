@@ -20,5 +20,6 @@ object ConfiguracaoModule {
         gcmSenderId = BuildConfig.FIREBASE_SENDER_ID,
         hostEmulador = BuildConfig.FIREBASE_EMULADOR_HOST.ifEmpty { null },
         urlBackend = BuildConfig.URL_BACKEND.trimEnd('/'),
+        googleWebClientId = BuildConfig.GOOGLE_WEB_CLIENT_ID,
     )
 }

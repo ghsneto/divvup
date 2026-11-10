@@ -18,7 +18,11 @@ val googleServices: Map<String, String> = run {
     val cliente = (raiz["client"] as List<Map<String, Any?>>).first { c ->
         ((c["client_info"] as Map<String, Any?>)["android_client_info"] as Map<String, Any?>)["package_name"] == "br.app.divvup"
     }
+    // Cliente OAuth "web" (tipo 3): o serverClientId do login com Google (Credential Manager).
+    val clienteWeb = (cliente["oauth_client"] as? List<Map<String, Any?>>).orEmpty()
+        .firstOrNull { it["client_type"].toString().startsWith("3") }?.get("client_id")?.toString()
     mapOf(
+        "googleWebClientId" to (clienteWeb ?: ""),
         "projectId" to projeto["project_id"].toString(),
         "gcmSenderId" to projeto["project_number"].toString(),
         "applicationId" to (cliente["client_info"] as Map<String, Any?>)["mobilesdk_app_id"].toString(),
@@ -46,6 +50,8 @@ android {
             buildConfigField("String", "FIREBASE_SENDER_ID", texto("000000000000"))
             buildConfigField("String", "FIREBASE_EMULADOR_HOST", texto(hostEmulador))
             buildConfigField("String", "URL_BACKEND", texto("http://$hostEmulador:8787"))
+            // O Auth Emulator aceita qualquer conta Google; o ID web vem do google-services.json, se houver.
+            buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", texto(googleServices["googleWebClientId"] ?: ""))
         }
         getByName("prod") {
             buildConfigField("String", "FIREBASE_PROJECT_ID", texto(googleServices["projectId"] ?: "divvup-prod"))
@@ -54,6 +60,7 @@ android {
             buildConfigField("String", "FIREBASE_SENDER_ID", texto(googleServices["gcmSenderId"] ?: ""))
             buildConfigField("String", "FIREBASE_EMULADOR_HOST", texto(""))
             buildConfigField("String", "URL_BACKEND", texto(urlBackendProd))
+            buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", texto(googleServices["googleWebClientId"] ?: ""))
         }
     }
 

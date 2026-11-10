@@ -8,6 +8,7 @@ import br.app.divvup.core.domain.conta.Sessao
 import br.app.divvup.core.model.Usuario
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.awaitClose
@@ -42,6 +43,12 @@ class RepositorioDeContaFirebase @Inject constructor(
     override suspend fun criarConta(nome: String, email: String, senha: String): ResultadoConta<Unit> = executar {
         auth.createUserWithEmailAndPassword(email.trim(), senha).await()
         criarPerfil(nome)
+    }
+
+    override suspend fun entrarComGoogle(idTokenGoogle: String): ResultadoConta<Unit> = executar {
+        auth.signInWithCredential(GoogleAuthProvider.getCredential(idTokenGoogle, null)).await()
+        // Idempotente: só cria no primeiro acesso, com nome e foto do Google (vindos do token).
+        backend.chamar("criarPerfil")
     }
 
     override suspend fun enviarRecuperacao(email: String): ResultadoConta<Unit> = try {
