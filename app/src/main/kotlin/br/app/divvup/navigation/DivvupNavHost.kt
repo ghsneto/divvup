@@ -35,9 +35,10 @@ import br.app.divvup.feature.onboarding.navegacao.OnboardingAcoes
 import br.app.divvup.feature.onboarding.navegacao.RotaNome
 import br.app.divvup.feature.onboarding.navegacao.RotaSuaCasa
 import br.app.divvup.feature.house.navegacao.RotaConvide
-import br.app.divvup.feature.house.navegacao.RotaConvites
+import br.app.divvup.feature.house.navegacao.RotaMinhaCasa
 import br.app.divvup.feature.house.navegacao.RotaPrincipal
 import br.app.divvup.feature.house.navegacao.telasDeConvite
+import br.app.divvup.feature.house.navegacao.telasDeMembros
 import br.app.divvup.feature.house.navegacao.telaPrincipal
 import br.app.divvup.feature.house.principal.Aba
 import br.app.divvup.feature.onboarding.navegacao.grafoDeOnboarding
@@ -94,6 +95,7 @@ fun DivvupNavHost() {
             ),
         )
         telasDeConvite(nav, aoConcluirConvide = { nav.navigate(RotaPrincipal) { limparPilha(nav) } })
+        telasDeMembros(nav, aoSairDaCasa = { nav.navigate(RotaSuaCasa) { limparPilha(nav) } })
         telaGaleria(nav)
         telaPrincipal(aoAbrirNotificacoes = { nav.navigate(RotaNotificacoesProvisoria) }) { aba ->
             val titulo = when (aba) {
@@ -102,11 +104,11 @@ fun DivvupNavHost() {
                 Aba.Ranking -> R.string.provisorio_ranking
                 Aba.Perfil -> R.string.provisorio_perfil
             }
-            // Só o perfil oferece "Sair" e "Convites" (até G1 Minha casa, #10); as outras abas chegam nas próximas issues.
+            // Até E1 (#26), o perfil provisório leva a G1 "Minha casa" e oferece "Sair".
             EmConstrucao(
                 stringResource(titulo),
                 aoSair = aoSair.takeIf { aba == Aba.Perfil },
-                aoConvites = { nav.navigate(RotaConvites) }.takeIf { aba == Aba.Perfil },
+                aoMinhaCasa = { nav.navigate(RotaMinhaCasa) }.takeIf { aba == Aba.Perfil },
             )
         }
         composable<RotaNotificacoesProvisoria> { EmConstrucao(stringResource(R.string.provisorio_notificacoes), aoSair = null) }
@@ -119,7 +121,7 @@ class SessaoViewModel @Inject constructor(private val conta: RepositorioDeConta)
 }
 
 @Composable
-private fun EmConstrucao(titulo: String, aoSair: (() -> Unit)?, aoConvites: (() -> Unit)? = null, viewModel: SessaoViewModel = hiltViewModel()) {
+private fun EmConstrucao(titulo: String, aoSair: (() -> Unit)?, aoMinhaCasa: (() -> Unit)? = null, viewModel: SessaoViewModel = hiltViewModel()) {
     val escopo = rememberCoroutineScope()
     val e = DivvupTheme.spacing
     Column(
@@ -128,8 +130,8 @@ private fun EmConstrucao(titulo: String, aoSair: (() -> Unit)?, aoConvites: (() 
     ) {
         DivvupLabel(stringResource(R.string.provisorio_rotulo), cor = DivvupTheme.colors.textMuted)
         Text(titulo, style = DivvupTheme.typography.h2, color = DivvupTheme.colors.text)
-        if (aoConvites != null) {
-            DivvupButton(stringResource(R.string.provisorio_convites), onClick = aoConvites, variante = VarianteBotao.Contorno)
+        if (aoMinhaCasa != null) {
+            DivvupButton(stringResource(R.string.provisorio_minha_casa), onClick = aoMinhaCasa, variante = VarianteBotao.Contorno)
         }
         if (aoSair != null) {
             DivvupButton(

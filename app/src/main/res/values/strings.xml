@@ -3,7 +3,7 @@
     <string name="app_name">divvup</string>
     <!-- Destinos provisórios até as próximas issues existirem. -->
     <string name="provisorio_rotulo">em construção</string>
-    <string name="provisorio_convites">Convites</string>
+    <string name="provisorio_minha_casa">Minha casa</string>
     <string name="provisorio_deck">deck</string>
     <string name="provisorio_minhas_tarefas">minhas tarefas</string>
     <string name="provisorio_ranking">ranking</string>

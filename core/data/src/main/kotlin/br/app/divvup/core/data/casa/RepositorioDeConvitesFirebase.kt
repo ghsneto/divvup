@@ -106,4 +106,5 @@ private fun DocumentSnapshot.paraMembro(): Membro = Membro(
     ativo = getString("status") == "ACTIVE",
     pontosDoMes = getLong("seasonPoints")?.toInt() ?: 0,
     entrouEm = instante("joinedAt"),
+    pontosTotais = getLong("totalPoints")?.toInt() ?: 0,
 )

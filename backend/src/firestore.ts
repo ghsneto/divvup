@@ -97,6 +97,20 @@ export class Firestore {
     return nomes.map((n) => porNome.get(n));
   }
 
+  /** Documentos de uma subcoleção (`runQuery`), com o id de cada um; dentro de transação, se dada. */
+  async listar(colecao: string, transacao?: string): Promise<{ uid: string; dados: Documento }[]> {
+    const corte = colecao.lastIndexOf("/");
+    const pai = colecao.slice(0, corte);
+    const corpo: Record<string, unknown> = { structuredQuery: { from: [{ collectionId: colecao.slice(corte + 1) }] } };
+    if (transacao) corpo["transaction"] = transacao;
+    const resp = await this.chamar(`${this.base}/${pai}:runQuery`, { method: "POST", body: JSON.stringify(corpo) });
+    await garantirOk(resp, "runQuery");
+    const itens = (await resp.json()) as { document?: { name: string; fields?: Record<string, ValorRest> } }[];
+    return itens
+      .flatMap((i) => (i.document ? [i.document] : []))
+      .map((d) => ({ uid: d.name.slice(d.name.lastIndexOf("/") + 1), dados: camposDeRest(d.fields ?? {}) }));
+  }
+
   /** Grava e apaga atomicamente, sem transação de leitura. */
   async commit(escritas: Escrita[]): Promise<void> {
     await this.enviarCommit(escritas);
@@ -111,13 +125,29 @@ export class Firestore {
       const resp = await this.chamar(`${this.base}:beginTransaction`, { method: "POST", body: "{}" });
       await garantirOk(resp, "beginTransaction");
       const { transaction } = (await resp.json()) as { transaction: string };
-      const { escritas, resultado } = await corpo(transaction);
+      let lido: { escritas: Escrita[]; resultado: T };
+      try {
+        lido = await corpo(transaction);
+      } catch (erro) {
+        // Erro de regra (ex.: 409 ja-em-casa): desfaz para soltar as travas de leitura na hora.
+        await this.desfazer(transaction);
+        throw erro;
+      }
+      const { escritas, resultado } = lido;
       try {
         await this.enviarCommit(escritas, transaction);
         return resultado;
       } catch (erro) {
         if (!(erro instanceof ConflitoDeTransacao) || tentativa >= 5) throw erro;
       }
+    }
+  }
+
+  private async desfazer(transacao: string): Promise<void> {
+    try {
+      await this.chamar(`${this.base}:rollback`, { method: "POST", body: JSON.stringify({ transaction: transacao }) });
+    } catch {
+      // Sem rede para o rollback: a transação expira sozinha no Firestore.
     }
   }
 

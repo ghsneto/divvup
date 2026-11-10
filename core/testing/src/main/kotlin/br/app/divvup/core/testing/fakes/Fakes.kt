@@ -1,6 +1,7 @@
 package br.app.divvup.core.testing.fakes
 
 import br.app.divvup.core.data.conexao.MonitorDeConexao
+import br.app.divvup.core.domain.casa.DadosDaCasa
 import br.app.divvup.core.domain.casa.ErroDeConvite
 import br.app.divvup.core.domain.casa.RepositorioDeCasa
 import br.app.divvup.core.domain.casa.RepositorioDeConvites
@@ -13,6 +14,7 @@ import br.app.divvup.core.domain.conta.Sessao
 import br.app.divvup.core.model.Casa
 import br.app.divvup.core.model.Convite
 import br.app.divvup.core.model.Membro
+import br.app.divvup.core.model.Papel
 import br.app.divvup.core.model.TipoDeCasa
 import br.app.divvup.core.model.Usuario
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -93,6 +95,29 @@ class FakeRepositorioDeCasa(casaInicial: Casa? = null) : RepositorioDeCasa {
         val r = resultadoCriar
         if (r is ResultadoCasa.Ok) casa.value = Casa(r.valor, nome, tipo, "2026-11")
         return r
+    }
+
+    var resultadoOperacao: ResultadoCasa<Unit> = ResultadoCasa.Ok(Unit)
+
+    override suspend fun alterarPapel(uid: String, papel: Papel): ResultadoCasa<Unit> {
+        chamadas += "papel:$uid:$papel"
+        return resultadoOperacao
+    }
+
+    override suspend fun removerMembro(uid: String): ResultadoCasa<Unit> {
+        chamadas += "remover:$uid"
+        return resultadoOperacao
+    }
+
+    override suspend fun sair(): ResultadoCasa<Unit> {
+        chamadas += "sair"
+        if (resultadoOperacao is ResultadoCasa.Ok) casa.value = null
+        return resultadoOperacao
+    }
+
+    override suspend fun editar(dados: DadosDaCasa): ResultadoCasa<Unit> {
+        chamadas += "editar:${dados.nome}:${dados.tipo}:${dados.cidade}:${dados.bairro}:${dados.rua}"
+        return resultadoOperacao
     }
 }
 
