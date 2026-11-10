@@ -15,6 +15,10 @@ FIRESTORE_EMULATOR_HOST = "127.0.0.1:8080"
 # (FIREBASE_SERVICE_ACCOUNT), enviado pela CI a partir de FIREBASE_SERVICE_ACCOUNT_PROD.
 [env.prod]
 name = "divvup-backend"
+# Domínio personalizado (gratuito; a zona divvup.app.br está na mesma conta). O wrangler cria o
+# registro DNS. O endereço *.workers.dev continua ativo como reserva.
+routes = [{ pattern = "api.divvup.app.br", custom_domain = true }]
+preview_urls = false
 
 [env.prod.vars]
 FIREBASE_PROJECT_ID = "divvup-prod"

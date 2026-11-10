@@ -30,7 +30,8 @@ val googleServices: Map<String, String> = run {
     )
 }
 val hostEmulador = providers.gradleProperty("divvup.emulador.host").getOrElse("10.0.2.2")
-val urlBackendProd = providers.gradleProperty("divvup.backend.url").getOrElse("")
+// Backend publicado (issue #41). Pode ser trocado com -Pdivvup.backend.url=...
+val urlBackendProd = providers.gradleProperty("divvup.backend.url").getOrElse("https://api.divvup.app.br")
 
 fun texto(valor: String) = "\"" + valor.replace("\"", "\\\"") + "\""
 
