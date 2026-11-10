@@ -149,14 +149,16 @@ Animações em `@keyframes` no fim do estilo das telas: entrada lateral (`dv-in-
 |---|---|
 | [`icones/`](icones) | 56 ícones de traço (24×24, `stroke-width` 2, ponta reta), com o nome da classe `i-*`. Viram vector drawables `ic_<nome>`. |
 | [`ilustracoes/`](ilustracoes) | ilustração de cada categoria de tarefa (topo do cartão): cozinha, banheiro, lavanderia, limpeza geral, lixo, compras, pets, plantas, manutenção, outros. |
-| [`avatares/`](avatares) | os 24 avatares da galeria (E3), na ordem do desenho. |
+| [`avatares/`](avatares) | os 24 avatares do desenho da E3, **só como referência visual**: o app usa DiceBear avataaars (R-32). |
+| [`avatares-dicebear/`](avatares-dicebear) | os 24 avatares DiceBear avataaars do app (SVG) e `catalogo.json` com estilo, seed e opções de cada `avatarId`. Gerados por [`ferramentas/avatares`](ferramentas/avatares) com as cores da marca, na ordem e com as características da galeria do desenho. |
 | [`fotos/`](fotos) | fotos de exemplo de casa (só para previews; v1.1). |
 | [`assets/`](assets) | todos os arquivos com o id original do Claude Design (`/_blob/<id>`), usados por `fonte/` e pelo renderizador. |
 
 ## Diferenças encontradas ao copiar (decididas)
 
 - **Escala tipográfica:** o README do design system cita `h1` 64, `h2` 40, `body` 18. As telas usam a escala acima (57/45/16), igual ao `Type.kt`. **Vale a das telas.**
-- **Avatares — EM ABERTO (R-32):** a SPEC exige DiceBear estilo avataaars com `avatarId` = estilo + seed; o desenho usa 24 avatares próprios, chapados (`avatares/`). Como contradiz uma regra, precisa de decisão antes da issue #7.
+- **Avatares (decidido em 2026-11-10: vale a R-32):** o desenho usa 24 avatares próprios, chapados (`avatares/`), mas a SPEC exige DiceBear estilo avataaars com `avatarId` = estilo + seed. **No app vão 24 avatares DiceBear avataaars**; o layout da E3 (grade, tamanhos, seleção) segue o desenho. Os arquivos de `avatares/` ficam só como referência visual e não entram no app.
+- **Foto de perfil (decidido em 2026-11-10, ADR 0003):** "Usar foto" (B1), "Usar uma foto" e "Remover foto" (E2/E3) ficam **escondidos na v1.0**; o perfil usa só os avatares.
 - **Componentes:** a issue #2 pedia `TaskCard`, `PointsBadge`, `Chip`, `Button`, `Logo`, `Avatar`; o design system tinha `Ranking` e `SiteHeader`. **Vale o inventário acima**: `SiteHeader` fica de fora (é web); o pódio/lista de ranking é construído na issue do ranking (#17).
 - **Falha no desenho:** em `NovaTarefa` o campo descrição mostra `[object Object]`. É erro do mockup: o campo deve aparecer vazio com o placeholder.
 

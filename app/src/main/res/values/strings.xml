@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">divvup</string>
-    <!-- Tela provisória do esqueleto (issue #1); some quando a Splash (A1) existir. -->
-    <string name="placeholder_titulo">divvup</string>
+    <!-- Destinos provisórios até B2 (#8) e o deck (#11) existirem. -->
+    <string name="provisorio_rotulo">em construção</string>
+    <string name="provisorio_casa">sua casa</string>
+    <string name="provisorio_deck">deck</string>
+    <string name="provisorio_sair">Sair</string>
 </resources>

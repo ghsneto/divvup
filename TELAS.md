@@ -88,7 +88,7 @@ Indicador de progresso discreto no topo (passos B1 → B2 → B3/B4 → B6 → B
 
 ### B1 · Como te chamam
 - **Campos:** nome de exibição (pré-preenchido do cadastro/Google).
-- **Avatar:** avatar atual grande + "Escolher avatar" → abre E3 em modo onboarding. Opção "Usar foto" (câmera/galeria).
+- **Avatar:** avatar atual grande + "Escolher avatar" → abre E3 em modo onboarding. O link "Usar foto" do desenho fica escondido na v1.0 (ADR 0003).
 - **Ação:** "Continuar".
 
 ### B2 · Sua casa
@@ -235,11 +235,11 @@ Indicador de progresso discreto no topo (passos B1 → B2 → B3/B4 → B6 → B
   - Excluir conta → E7
 
 ### E2 · Editar perfil
-- Nome, avatar (→ E3), foto (adicionar/remover). E-mail somente leitura. "Alterar senha" (só conta com e-mail).
+- Nome, avatar (→ E3). Foto (adicionar/remover) fica fora da v1.0 (ADR 0003). E-mail somente leitura. "Alterar senha" (só conta com e-mail).
 
 ### E3 · Galeria de avatar
 - Grade de ~24 avatares avataaars (R-32), item selecionado destacado com borda `primary`.
-- Opção "Usar uma foto" (câmera/galeria, recorte circular) e "Remover foto".
+- "Usar uma foto" e "Remover foto" ficam escondidos na v1.0 (ADR 0003).
 - **Ação:** "Salvar".
 
 ### E4 · Preferências de notificação

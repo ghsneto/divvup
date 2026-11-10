@@ -1,0 +1,81 @@
+package br.app.divvup.core.designsystem.icon
+
+import androidx.annotation.DrawableRes
+import br.app.divvup.core.designsystem.R
+
+// Gerado a partir de docs/design/icones (classes `i-*` do estilo das telas). Traço 2, ponta reta.
+// Para regenerar: python3 docs/design/ferramentas/svg_para_vector.py docs/design/icones core/designsystem/src/main/res/drawable ic_
+
+/** Ícones do Divvup. Nunca troque por Material Icons nem redesenhe (CLAUDE.md). */
+enum class DivvupIcone(@param:DrawableRes val res: Int) {
+    Ajuda(R.drawable.ic_ajuda),
+    Alerta(R.drawable.ic_alerta),
+    Balanca(R.drawable.ic_balanca),
+    Bandeira(R.drawable.ic_bandeira),
+    Banheiro(R.drawable.ic_banheiro),
+    Cadeado(R.drawable.ic_cadeado),
+    Calendario(R.drawable.ic_calendario),
+    Camera(R.drawable.ic_camera),
+    Casa(R.drawable.ic_casa),
+    Chat(R.drawable.ic_chat),
+    Check(R.drawable.ic_check),
+    ChevD(R.drawable.ic_chev_d),
+    ChevL(R.drawable.ic_chev_l),
+    ChevR(R.drawable.ic_chev_r),
+    Compartilhar(R.drawable.ic_compartilhar),
+    Compras(R.drawable.ic_compras),
+    Config(R.drawable.ic_config),
+    Copiar(R.drawable.ic_copiar),
+    Cozinha(R.drawable.ic_cozinha),
+    Deck(R.drawable.ic_deck),
+    Desfazer(R.drawable.ic_desfazer),
+    Devolver(R.drawable.ic_devolver),
+    Editar(R.drawable.ic_editar),
+    Email(R.drawable.ic_email),
+    Filtro(R.drawable.ic_filtro),
+    Imagem(R.drawable.ic_imagem),
+    Info(R.drawable.ic_info),
+    Lavanderia(R.drawable.ic_lavanderia),
+    Limpeza(R.drawable.ic_limpeza),
+    Lista(R.drawable.ic_lista),
+    Lixo(R.drawable.ic_lixo),
+    Local(R.drawable.ic_local),
+    Lua(R.drawable.ic_lua),
+    Mais(R.drawable.ic_mais),
+    Manutencao(R.drawable.ic_manutencao),
+    Mapa(R.drawable.ic_mapa),
+    Medalha(R.drawable.ic_medalha),
+    Menu(R.drawable.ic_menu),
+    Offline(R.drawable.ic_offline),
+    Olho(R.drawable.ic_olho),
+    Outros(R.drawable.ic_outros),
+    Perfil(R.drawable.ic_perfil),
+    Pets(R.drawable.ic_pets),
+    Plantas(R.drawable.ic_plantas),
+    Raio(R.drawable.ic_raio),
+    Ranking(R.drawable.ic_ranking),
+    Refresh(R.drawable.ic_refresh),
+    Relogio(R.drawable.ic_relogio),
+    Sair(R.drawable.ic_sair),
+    SetaR(R.drawable.ic_seta_r),
+    Sino(R.drawable.ic_sino),
+    Sol(R.drawable.ic_sol),
+    Tarefas(R.drawable.ic_tarefas),
+    Trofeu(R.drawable.ic_trofeu),
+    Usuarios(R.drawable.ic_usuarios),
+    X(R.drawable.ic_x),
+}
+
+/** Ilustração do topo do cartão de tarefa, por categoria (docs/design/ilustracoes). */
+enum class IlustracaoCategoria(@param:DrawableRes val res: Int) {
+    Banheiro(R.drawable.ilu_categoria_banheiro),
+    Compras(R.drawable.ilu_categoria_compras),
+    Cozinha(R.drawable.ilu_categoria_cozinha),
+    Lavanderia(R.drawable.ilu_categoria_lavanderia),
+    LimpezaGeral(R.drawable.ilu_categoria_limpeza_geral),
+    Lixo(R.drawable.ilu_categoria_lixo),
+    Manutencao(R.drawable.ilu_categoria_manutencao),
+    Outros(R.drawable.ilu_categoria_outros),
+    Pets(R.drawable.ilu_categoria_pets),
+    Plantas(R.drawable.ilu_categoria_plantas),
+}

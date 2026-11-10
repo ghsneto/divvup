@@ -9,28 +9,28 @@ App Android (Kotlin + Jetpack Compose + Firebase) de divisão gamificada de tare
 
 ## Invariantes que não podem ser quebrados
 - Pacote/applicationId: **`br.app.divvup`**. Nunca alterar.
-- O cliente **nunca grava** pontos, status de atribuição, papéis ou vínculo com casa. Isso é sempre Callable Function com transação (SPEC §4.2).
+- O cliente **nunca grava** pontos, status de atribuição, papéis ou vínculo com casa. Isso é sempre uma operação do backend (Worker) com transação (SPEC §4.2).
 - Pontos: 25 / 50 / 100; meia pontuação após o prazo; nunca negativos.
 - Endereço exato (número) nunca exposto publicamente.
-- Testes e desenvolvimento usam o **Firebase Emulator** ou o projeto `divvup-dev`. **Nunca** apontar para `divvup-prod` em desenvolvimento.
+- Há **um só projeto Firebase real, `divvup-prod`** (ADR 0002). Testes automatizados, CI e desenvolvimento local usam **só o Firebase Emulator** (flavor `dev`). Testes manuais em aparelho usam `divvup-prod` (flavor `prod`). **Nunca** rodar testes automatizados, scripts, seeds ou limpezas contra `divvup-prod`.
 - Nenhum segredo (chaves, `google-services.json` de prod, keystore) é commitado.
 
 ## Arquitetura
 - Single-Activity, Navigation Compose, MVVM + UDF (`StateFlow` de estado imutável), Hilt, Coroutines/Flow.
 - Módulos: `:app`, `:core:{designsystem,model,domain,data,testing}`, `:feature:{auth,onboarding,house,deck,tasks,ranking,notifications,profile,discover}`.
 - `:core:domain` é Kotlin puro (sem Android/Firebase): toda regra de cálculo mora lá e é testada por unidade.
-- Cloud Functions em TypeScript em `functions/`, testadas no Emulator.
+- **Custo zero** (ADR 0001): Firebase só no plano Spark (Auth, Firestore, FCM, Crashlytics, Analytics), **sem Cloud Functions**. Backend em Cloudflare Workers (TypeScript) em `backend/`, testado contra o Firebase Emulator. Não adote nada que exija cartão, conta de faturamento ou pré-pagamento sem perguntar.
 - minSdk 26, compileSdk 37, targetSdk 37, JDK 21. Flavors `dev` / `prod` (dimensão `ambiente`).
 - Convenções de build em `build-logic/` (`divvup.android.application`, `.library`, `.compose`, `.feature`, `divvup.hilt`, `divvup.jvm.library`); versões em `gradle/libs.versions.toml`. Só adote versões publicadas há pelo menos duas semanas.
-- Verificação completa (a mesma da CI): `./gradlew check assembleDevDebug assembleProdDebug`. `check` roda lint estrito (aviso = erro), testes unitários dos dois flavors e a guarda `verificarDominioPuro`.
+- Verificação completa (a mesma da CI): `./gradlew check verifyRoborazziDebug assembleDevDebug assembleProdDebug`. `check` roda lint estrito (aviso = erro), testes unitários dos dois flavors e as guardas `verificarDominioPuro` e `verificarLiteraisDeDesign`. Screenshots: `./gradlew recordRoborazziDebug` grava; imagens aprovadas ficam em `src/test/screenshots` de cada módulo. Backend: `cd backend && npm run lint && npm run test:emulador` (Node 24, Java 21).
 
 ## Design
 - **O app tem que ficar igual ao desenho.** A referência está versionada em [`docs/design/`](docs/design/README.md): leia o README dela antes de mexer em qualquer UI. Ela traz o mapa código da TELAS.md → artboard, os PNGs claro/escuro de cada tela, o HTML-fonte com as medidas exatas, tokens, ícones, ilustrações e avatares.
 - Ordem de precedência: telas (`docs/design/fonte` + estilo das telas) → PNGs → [TELAS.md](TELAS.md) (comportamento, estados, navegação) → design system → SPEC. Regra de negócio `R-xx` sempre vence o desenho; se o desenho a contradiz, pare e pergunte.
 - Originais no Claude Design: telas https://claude.ai/artifact/FCk2g4sxMAj8zyKA7soACw · protótipo https://claude.ai/artifact/JS5bWp4d6nNk2KMTDh4XRk · design system https://claude.ai/artifact/UjULqNSrf5z5nr8z4KdEQq. Se o desenho mudar lá, atualize `docs/design/` no mesmo PR do código.
 - Valores do desenho em px = dp; tamanhos de fonte = sp. Textos do desenho são a cópia final (exceto dados de exemplo) e vão para `strings.xml` como estão.
-- Toda cor, tipografia, forma e espaçamento vem de `DivvupTheme` em `:core:designsystem`. **Nada de valores literais nas telas** (o lint barra `Color(0x…)`, `.dp` e `.sp` fora de `:core:designsystem`).
-- Ícones, ilustrações e avatares vêm de `docs/design/{icones,ilustracoes,avatares}` convertidos para vector drawable; nunca redesenhe nem troque por Material Icons.
+- Toda cor, tipografia, forma e espaçamento vem de `DivvupTheme` em `:core:designsystem`. **Nada de valores literais nas telas.** A guarda `verificarLiteraisDeDesign` (no `check`) barra `Color(0x…)` fora do design system e só aceita `.dp`/`.sp` em arquivos `*Medidas.kt` de cada módulo, com medidas nomeadas tiradas do desenho (cite o artboard).
+- Ícones e ilustrações vêm de `docs/design/{icones,ilustracoes}` convertidos para vector drawable; nunca redesenhe nem troque por Material Icons. Avatares são DiceBear avataaars (R-32), não os de `docs/design/avatares`.
 - Swipe aceitar = `accent` (lima); passar = `danger`. Lima nunca como texto sobre fundo claro.
 - Títulos em minúsculas, sem emoji na UI, números no formato pt-BR, todos os textos em `strings.xml`.
 - Toda tela tem estados carregando / vazio / erro / sem permissão. Testar claro e escuro.
@@ -41,7 +41,7 @@ App Android (Kotlin + Jetpack Compose + Firebase) de divisão gamificada de tare
   1. existe teste de screenshot (Roborazzi) de cada estado desenhado, em claro e escuro, a 360×800 dp;
   2. você comparou lado a lado o screenshot gerado com `docs/design/png/<Artboard>.png` (e `__escuro`) e listou no PR qualquer diferença restante, com o motivo;
   3. os screenshots aprovados estão commitados e a CI os verifica (`verifyRoborazzi*`).
-- Regras de domínio e Functions: escreva o teste junto (de preferência antes).
+- Regras de domínio e operações do backend: escreva o teste junto (de preferência antes).
 - Commits pequenos, mensagem em português, referenciando `R-xx` quando aplicável.
 
 ## Agent skills

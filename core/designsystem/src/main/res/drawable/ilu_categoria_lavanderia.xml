@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado de docs/design/ilustracoes/categoria-lavanderia.svg por docs/design/ferramentas/svg_para_vector.py. Não edite à mão. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="160dp"
+    android:height="100dp"
+    android:viewportWidth="320"
+    android:viewportHeight="200">
+    <path
+        android:pathData="M0,0h320v200h-320Z"
+        android:fillColor="#2F2BD9" />
+    <path
+        android:pathData="M0 42Q160 84 320 42"
+        android:strokeColor="#F5F5F0"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+    <path
+        android:pathData="M94 64l26-6q12 14 24 0l26 6 16 28-20 8-2 56h-64l-2-56-20-8z"
+        android:fillColor="#C9F24D"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M206 68h28v54q0 16-16 16h-22q-12 0-12-12t12-12h10z"
+        android:fillColor="#F5F5F0"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M240 66h28v40h-28z"
+        android:fillColor="#0C0F18"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M240 106h28v14h-28z"
+        android:fillColor="#C9F24D"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M114,48h8v20h-8Z"
+        android:fillColor="#0C0F18"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M142,50h8v20h-8Z"
+        android:fillColor="#0C0F18"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M216,56h8v20h-8Z"
+        android:fillColor="#0C0F18"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M250,56h8v18h-8Z"
+        android:fillColor="#0C0F18"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M120 172q4 8 0 12q-4-4 0-12z"
+        android:fillColor="#F5F5F0" />
+    <path
+        android:pathData="M150 166q4 8 0 12q-4-4 0-12z"
+        android:fillColor="#F5F5F0" />
+    <path
+        android:pathData="M218 156q4 8 0 12q-4-4 0-12z"
+        android:fillColor="#F5F5F0" />
+</vector>

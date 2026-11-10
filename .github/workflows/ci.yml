@@ -26,10 +26,11 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      # `check` = lint (todas as variantes, aviso vira erro) + testes unitários
-      # (dev e prod) + guarda de :core:domain Kotlin puro.
+      # `check` = lint (aviso vira erro) + testes unitários (dev e prod) + guardas
+      # (:core:domain puro, sem literais de design). `verifyRoborazziDebug` compara os
+      # screenshots com as imagens aprovadas em src/test/screenshots.
       - name: Build e verificação
-        run: ./gradlew check assembleDevDebug assembleProdDebug --stacktrace
+        run: ./gradlew check verifyRoborazziDebug assembleDevDebug assembleProdDebug --stacktrace
 
       - name: Relatórios
         if: failure()
@@ -39,4 +40,37 @@ jobs:
           path: |
             **/build/reports/
             **/build/test-results/
+            **/build/outputs/roborazzi/
           retention-days: 7
+
+  backend:
+    name: Backend e Security Rules (Emulator)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      # O Firestore Emulator roda na JVM.
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - run: npm ci
+
+      - name: Lint e tipos
+        run: npm run lint
+
+      # Projeto fictício demo-divvup: nunca toca divvup-prod (ADR 0002).
+      - name: Testes contra o Firebase Emulator
+        run: npm run test:emulador
+

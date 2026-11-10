@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textos de B1 (docs/design/fonte/OnbNome.dc.html). -->
+<resources>
+    <string name="onb_passo">%1$d/%2$d</string>
+    <string name="onb_passo_descricao">Passo %1$d de %2$d</string>
+    <string name="nome_titulo">como te chamam?</string>
+    <string name="nome_escolha_rapida">escolha rápida</string>
+    <string name="nome_seu_avatar">Seu avatar</string>
+    <string name="nome_escolher_avatar">Escolher avatar</string>
+    <string name="nome_avatar_n">Avatar %1$d</string>
+    <string name="nome_ver_todos">Ver todos os avatares</string>
+    <string name="nome_campo">nome de exibição</string>
+    <string name="nome_dica">É assim que a casa vai te ver no ranking.</string>
+    <string name="nome_continuar">Continuar</string>
+    <string name="nome_erro">Não deu para salvar. Confere a conexão e tenta de novo.</string>
+</resources>

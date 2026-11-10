@@ -79,7 +79,7 @@
 ### 3.7 Gamificação
 - R-30 · **Medalhas v1.0:** primeira tarefa · sequência de 7 dias · campeão do mês · 100 tarefas concluídas · salva-vidas (assumiu ocorrência a menos de 48 h do prazo).
 - R-31 · **Sequência diária:** dias consecutivos com ao menos uma conclusão.
-- R-32 · **Avatares:** DiceBear estilo **avataaars**. v1.0: galeria de ~24 avatares com seeds pré-escolhidas, **empacotados como SVG no app** (sem rede), livres para todos. Foto pessoal opcional sobrepõe o avatar. `avatarId` guarda `estilo + seed + opções` para um **editor de avatar** futuro (geração em Cloud Function com `@dicebear/core`, nunca pela API pública).
+- R-32 · **Avatares:** DiceBear estilo **avataaars**. v1.0: galeria de ~24 avatares com seeds pré-escolhidas, **empacotados como SVG no app** (sem rede), livres para todos. Foto pessoal **fica fora da v1.0** (ADR 0003): armazenar imagens sem custo não cabe no plano atual; o campo `photoUrl` continua no modelo (guarda a foto do Google) para quando entrar. `avatarId` guarda `estilo + seed + opções` para um **editor de avatar** futuro (geração no backend com `@dicebear/core`, nunca pela API pública).
 
 ### 3.8 Notificações
 - R-33 · Eventos e destinatários:
@@ -128,15 +128,18 @@
   - `:core:data` (repositórios, Firebase)
   - `:core:testing`
   - `:feature:auth`, `:feature:onboarding`, `:feature:house`, `:feature:deck`, `:feature:tasks`, `:feature:ranking`, `:feature:notifications`, `:feature:profile`, `:feature:discover` (v1.1)
-- Build flavors `dev` e `prod` apontando para projetos Firebase distintos.
+- Build flavors: `dev` aponta para o **Firebase Emulator** (local); `prod` aponta para o único projeto real, `divvup-prod` (ADR 0002).
 - Textos sempre em `strings.xml` (pt-BR), prontos para i18n.
 
-### 4.2 Backend (Firebase, plano Blaze)
-- **Auth**, **Firestore**, **Cloud Functions** (TypeScript), **FCM**, **Crashlytics**, **Analytics**. v1.1: Maps SDK for Android + Places API.
-- Projetos `divvup-dev` e `divvup-prod`. Alerta de orçamento em R$ 10.
-- **Regra central de segurança:** o cliente **nunca grava** pontos, status de atribuição, papéis ou vínculo com casa. Essas mutações são **Callable Functions** com transação:
-  `createHouse`, `createInvite`, `revokeInvite`, `joinWithCode`, `leaveHouse`, `removeMember`, `setRole`, `claimTask`, `passTask`, `undoLastAction`, `returnTask`, `completeTask`, `cancelTask`, `deleteAccount`; v1.1: `requestToJoin`, `reviewJoinRequest`, `setListing`, `reportHouse`.
-- **Funções agendadas:** atribuição automática e lembretes de prazo (a cada 15 min), marcação de atraso, virada de temporada (dia 1º, 00:00 BRT), entrega de pushes retidos pelo horário silencioso, limpeza de convites e notificações expiradas (TTL).
+### 4.2 Backend (custo zero: Firebase Spark + Cloudflare Workers)
+- **Restrição:** nesta fase o projeto **não tem custo de infraestrutura**. Só se usa plano gratuito; nada que exija cartão, conta de faturamento ou pré-pagamento (decisão em [ADR 0001](docs/adr/0001-custo-zero-firebase-spark-cloudflare-workers.md)).
+- **Firebase, plano Spark (gratuito):** **Auth** (e-mail/senha e Google), **Firestore** (tempo real e cache offline no app), **FCM**, **Crashlytics**, **Analytics**. Um único projeto, `divvup-prod` (ADR 0002), com Firestore em `southamerica-east1` (São Paulo, imutável); desenvolvimento e testes automatizados usam o Firebase Emulator. **Cloud Functions não são usadas** (exigem o plano Blaze).
+- **Cloudflare Workers, plano gratuito:** o backend, em TypeScript, na pasta `backend/`. Valida o ID token do Firebase Auth em cada chamada, grava no Firestore com uma conta de serviço (transações pela API do Firestore) e envia push pela API HTTP v1 do FCM. Ambiente local (`wrangler dev`, ligado ao Emulator) e um ambiente publicado ligado a `divvup-prod`.
+- **Regra central de segurança:** o cliente **nunca grava** pontos, status de atribuição, papéis ou vínculo com casa. Essas mutações são **operações do backend** (endpoints HTTPS do Worker, chamados com o ID token) e rodam em transação:
+  `criarPerfil` (cria `users/{uid}` com valores iniciais, idempotente), `createHouse`, `createInvite`, `revokeInvite`, `joinWithCode`, `leaveHouse`, `removeMember`, `setRole`, `claimTask`, `passTask`, `undoLastAction`, `returnTask`, `completeTask`, `cancelTask`, `deleteAccount`; v1.1: `requestToJoin`, `reviewJoinRequest`, `setListing`, `reportHouse`.
+- **Tarefas agendadas** (Cron Triggers do Worker): atribuição automática e lembretes de prazo (a cada 15 min), marcação de atraso, virada de temporada (dia 1º, 00:00 BRT), entrega de pushes retidos pelo horário silencioso, limpeza de convites e notificações expiradas.
+- **Cotas gratuitas são o teto de uso.** Modelar para poucas leituras (ex.: ranking pré-calculado num documento por casa) e acompanhar o consumo; ultrapassar a cota derruba o serviço até o dia seguinte, não gera cobrança.
+- **Em aberto (v1.1):** Maps SDK e Places API exigem conta de faturamento no Google Cloud; antes da v1.1 decidir alternativa sem custo ou rever a restrição.
 - Security Rules isolam cada casa: leitura só para membros ativos; escrita direta só em campos não sensíveis (ex.: preferências do próprio usuário, criação de tarefa).
 
 ### 4.3 Modelo de dados (Firestore)
@@ -173,7 +176,7 @@ reports/{id}                 houseId, reporterId, reason, createdAt   ← v1.1
 
 ### 4.4 Qualidade
 - Testes unitários: ViewModels e `:core:domain` (pontos, meia pontuação, índice, temporada, desempates).
-- **Firebase Emulator**: Security Rules e Cloud Functions (corridas no `claimTask`, atribuição automática, expiração de convite).
+- **Firebase Emulator** (Auth + Firestore) com o backend rodando localmente (`wrangler dev`): Security Rules e operações do backend (corridas no `claimTask`, atribuição automática, expiração de convite).
 - Testes de UI Compose no fluxo de swipe e desfazer.
 - **GitHub Actions**: build + testes + lint a cada push/PR.
 
@@ -239,7 +242,7 @@ Login → nome + avatar → criar casa / tenho um código (v1.1: procurar casas)
 
 | Marco | Conteúdo | Pronto quando |
 |---|---|---|
-| **M0 · Fundação** | projeto multi-módulo, `:core:designsystem`, Firebase dev/prod, emuladores, CI | app vazio com tema roda nos dois temas; CI verde |
+| **M0 · Fundação** | projeto multi-módulo, `:core:designsystem`, Firebase dev/prod (Spark), backend em Workers, emuladores, CI | app vazio com tema roda nos dois temas; CI verde |
 | **M1 · Conta e casa** | auth, perfil + avatar, criar casa, convites, entrar com código, papéis, sair | 2 aparelhos na mesma casa |
 | **M2 · Tarefas e Match** | criar tarefa, deck, passe, desfazer, devolver, limite 5, concluir + pontos | swipe em um aparelho some no outro |
 | **M3 · Justiça** | temporadas, ranking mensal/geral, histórico, atribuição automática, atraso e meia pontuação | regras cobertas por testes no Emulator |
@@ -254,7 +257,7 @@ Login → nome + avatar → criar casa / tenho um código (v1.1: procurar casas)
 
 ## 8. Conformidade (Play Store / LGPD)
 
-- Política de privacidade e termos publicados em `divvup.app.br`.
+- Política de privacidade e termos publicados em `divvup.app.br` (enquanto o domínio não for registrado, no endereço gratuito `*.pages.dev` do Cloudflare Pages).
 - Exclusão de conta **no app** e por **página web**; apaga dados pessoais e anonimiza a participação no histórico das casas.
 - Formulário de Segurança de Dados (Data Safety) preenchido conforme Firebase + localização (v1.1).
 - Localização exata de casas nunca é pública (R-40); anúncio exige termo aceito (R-39).
@@ -264,4 +267,4 @@ Login → nome + avatar → criar casa / tenho um código (v1.1: procurar casas)
 ---
 
 ## 9. Fora de escopo (v1.0)
-Recorrência · verificação de conclusão por foto · múltiplas casas por usuário · categorias personalizadas · rankings entre casas · monetização · iOS/web · outros idiomas.
+Recorrência · foto de perfil própria (ADR 0003) · verificação de conclusão por foto · múltiplas casas por usuário · categorias personalizadas · rankings entre casas · monetização · iOS/web · outros idiomas.

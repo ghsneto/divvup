@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado de docs/design/ilustracoes/categoria-banheiro.svg por docs/design/ferramentas/svg_para_vector.py. Não edite à mão. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="160dp"
+    android:height="100dp"
+    android:viewportWidth="320"
+    android:viewportHeight="200">
+    <path
+        android:pathData="M0,0h320v200h-320Z"
+        android:fillColor="#0C0F18" />
+    <path
+        android:pathData="M60 40l5 15 15 5-15 5-5 15-5-15-15-5 15-5z"
+        android:fillColor="#C9F24D" />
+    <path
+        android:pathData="M268 30l3 9 9 3-9 3-3 9-3-9-9-3 9-3z"
+        android:fillColor="#C9F24D" />
+    <path
+        android:pathData="M262 150l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"
+        android:fillColor="#F5F5F0" />
+    <path
+        android:pathData="M106,34h72a6,6 0 0,1 6,6v48a6,6 0 0,1 -6,6h-72a6,6 0 0,1 -6,-6v-48a6,6 0 0,1 6,-6Z"
+        android:fillColor="#F5F5F0"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M164,46h12v8h-12Z"
+        android:fillColor="#0C0F18"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M88 104h120v10c0 28-24 44-50 46l6 22h-44l6-24c-22-6-38-20-38-44z"
+        android:fillColor="#F5F5F0"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M89,96h118a7,7 0 0,1 7,7v0a7,7 0 0,1 -7,7h-118a7,7 0 0,1 -7,-7v0a7,7 0 0,1 7,-7Z"
+        android:fillColor="#2F2BD9"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M238 58l-8 92"
+        android:strokeColor="#C9F24D"
+        android:strokeWidth="8"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M216,146h28a4,4 0 0,1 4,4v18a4,4 0 0,1 -4,4h-28a4,4 0 0,1 -4,-4v-18a4,4 0 0,1 4,-4Z"
+        android:fillColor="#2F2BD9"
+        android:strokeColor="#F5F5F0"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+</vector>
