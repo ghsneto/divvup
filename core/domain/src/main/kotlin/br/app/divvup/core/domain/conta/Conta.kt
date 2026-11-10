@@ -48,6 +48,9 @@ interface RepositorioDeConta {
 
     suspend fun sair()
 
+    /** B1/E3: grava nome de exibição e avatar no próprio perfil (campos não sensíveis, R-32). */
+    suspend fun salvarPerfil(uid: String, nome: String, avatarId: String): ResultadoConta<Unit>
+
     /** Perfil do usuário conectado; `null` se ainda não existe. */
     suspend fun perfil(uid: String): ResultadoConta<Usuario?>
 }

@@ -2,7 +2,8 @@ import type { Usuario } from "../auth.js";
 import { ErroHttp } from "../erros.js";
 import type { Documento, Firestore } from "../firestore.js";
 
-export const NOME_MAXIMO = 40;
+/** Igual ao `maxlength` do nome de exibição em B1. */
+export const NOME_MAXIMO = 24;
 
 /** Horário silencioso padrão (R-35). */
 export const SILENCIO_PADRAO = { start: "22:00", end: "08:00" };

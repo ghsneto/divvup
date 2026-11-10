@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textos de E3 (docs/design/fonte/Avatar.dc.html). -->
+<resources>
+    <string name="avatar_voltar">Voltar</string>
+    <string name="avatar_rotulo">avatar</string>
+    <string name="avatar_titulo">escolhe sua cara</string>
+    <string name="avatar_escolhido">Avatar escolhido</string>
+    <plurals name="avatar_texto">
+        <item quantity="one">%1$d avatar, liberado. O editor completo vem depois.</item>
+        <item quantity="many">%1$d avatares, todos liberados. O editor completo vem depois.</item>
+        <item quantity="other">%1$d avatares, todos liberados. O editor completo vem depois.</item>
+    </plurals>
+    <string name="avatar_galeria">Avatares</string>
+    <string name="avatar_n">Avatar %1$d</string>
+    <string name="avatar_salvar">Salvar</string>
+    <string name="avatar_erro">Não deu para salvar. Confere a conexão e tenta de novo.</string>
+</resources>

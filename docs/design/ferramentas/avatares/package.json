@@ -1,0 +1,13 @@
+{
+  "name": "divvup-avatares",
+  "private": true,
+  "type": "module",
+  "description": "Gera a galeria de 24 avatares DiceBear avataaars (R-32) em SVG e WebP.",
+  "scripts": {
+    "gerar": "node gerar.mjs"
+  },
+  "devDependencies": {
+    "@dicebear/avataaars": "9.4.3",
+    "@dicebear/core": "9.4.3"
+  }
+}

@@ -31,13 +31,18 @@ import br.app.divvup.feature.auth.navegacao.RotaBoasVindas
 import br.app.divvup.feature.auth.navegacao.RotaSplash
 import br.app.divvup.feature.auth.navegacao.grafoDeAcesso
 import br.app.divvup.feature.auth.navegacao.limparPilha
+import br.app.divvup.feature.onboarding.navegacao.OnboardingAcoes
+import br.app.divvup.feature.onboarding.navegacao.RotaNome
+import br.app.divvup.feature.onboarding.navegacao.grafoDeOnboarding
+import br.app.divvup.feature.profile.navegacao.RotaGaleria
+import br.app.divvup.feature.profile.navegacao.telaGaleria
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import javax.inject.Inject
 
-/** Destinos ainda não construídos: onboarding (#7) e deck (#11). Provisórios, com "Sair". */
-@Serializable data object RotaOnboardingProvisoria
+/** Destinos ainda não construídos: B2 sua casa (#8) e deck (#11). Provisórios, com "Sair". */
+@Serializable data object RotaCasaProvisoria
 
 @Serializable data object RotaDeckProvisorio
 
@@ -62,15 +67,22 @@ fun DivvupNavHost() {
             nav,
             AcessoAcoes(
                 aoDecidir = { destino ->
-                    val rota: Any = if (destino == DestinoInicial.Deck) RotaDeckProvisorio else RotaOnboardingProvisoria
+                    val rota: Any = if (destino == DestinoInicial.Deck) RotaDeckProvisorio else RotaNome
                     nav.navigate(rota) { limparPilha(nav) }
                 },
                 aoTermos = { links.openUri(URL_TERMOS) },
                 aoPrivacidade = { links.openUri(URL_PRIVACIDADE) },
             ),
         )
-        composable<RotaOnboardingProvisoria> {
-            EmConstrucao(stringResource(R.string.provisorio_onboarding), aoSair = { nav.navigate(RotaBoasVindas) { limparPilha(nav) } })
+        grafoDeOnboarding(
+            OnboardingAcoes(
+                aoAbrirGaleria = { atual -> nav.navigate(RotaGaleria(avatarInicial = atual, soEscolher = true)) },
+                aoConcluirNome = { nav.navigate(RotaCasaProvisoria) },
+            ),
+        )
+        telaGaleria(nav)
+        composable<RotaCasaProvisoria> {
+            EmConstrucao(stringResource(R.string.provisorio_casa), aoSair = { nav.navigate(RotaBoasVindas) { limparPilha(nav) } })
         }
         composable<RotaDeckProvisorio> {
             EmConstrucao(stringResource(R.string.provisorio_deck), aoSair = { nav.navigate(RotaBoasVindas) { limparPilha(nav) } })

@@ -68,6 +68,14 @@ class RepositorioDeContaFirebase @Inject constructor(
 
     override suspend fun sair() = auth.signOut()
 
+    override suspend fun salvarPerfil(uid: String, nome: String, avatarId: String): ResultadoConta<Unit> = executar {
+        // As Rules só permitem ao dono mudar displayName e avatarId (firebase/firestore.rules).
+        firestore.collection("users").document(uid)
+            .update(mapOf("displayName" to nome.trim(), "avatarId" to avatarId))
+            .await()
+            .let { }
+    }
+
     override suspend fun perfil(uid: String): ResultadoConta<Usuario?> = executar {
         val doc = firestore.collection("users").document(uid).get().await()
         if (!doc.exists()) {

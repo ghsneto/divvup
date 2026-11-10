@@ -48,7 +48,7 @@ describe("criarPerfil", () => {
   it("rejeita nome vazio ou longo demais", async () => {
     const { token } = await criarUsuario();
     expect((await criarPerfil(token, { nome: "   " })).status).toBe(400);
-    expect((await criarPerfil(token, { nome: "x".repeat(41) })).status).toBe(400);
+    expect((await criarPerfil(token, { nome: "x".repeat(25) })).status).toBe(400);
     expect((await criarPerfil(token, {})).status).toBe(400);
   });
 

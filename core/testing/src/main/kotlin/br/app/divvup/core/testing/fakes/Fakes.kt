@@ -50,6 +50,16 @@ class FakeRepositorioDeConta(
         _sessao.value = Sessao.Desconectado
     }
 
+    var resultadoSalvar: ResultadoConta<Unit> = ResultadoConta.Ok(Unit)
+
+    override suspend fun salvarPerfil(uid: String, nome: String, avatarId: String): ResultadoConta<Unit> {
+        chamadas += "salvar:$uid:$nome:$avatarId"
+        if (resultadoSalvar is ResultadoConta.Ok) {
+            perfilAtual = (perfilAtual ?: Usuario(uid, nome, null, null, null)).copy(nome = nome, avatarId = avatarId)
+        }
+        return resultadoSalvar
+    }
+
     override suspend fun perfil(uid: String): ResultadoConta<Usuario?> = ResultadoConta.Ok(perfilAtual)
 }
 

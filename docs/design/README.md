@@ -150,6 +150,7 @@ Animações em `@keyframes` no fim do estilo das telas: entrada lateral (`dv-in-
 | [`icones/`](icones) | 56 ícones de traço (24×24, `stroke-width` 2, ponta reta), com o nome da classe `i-*`. Viram vector drawables `ic_<nome>`. |
 | [`ilustracoes/`](ilustracoes) | ilustração de cada categoria de tarefa (topo do cartão): cozinha, banheiro, lavanderia, limpeza geral, lixo, compras, pets, plantas, manutenção, outros. |
 | [`avatares/`](avatares) | os 24 avatares do desenho da E3, **só como referência visual**: o app usa DiceBear avataaars (R-32). |
+| [`avatares-dicebear/`](avatares-dicebear) | os 24 avatares DiceBear avataaars do app (SVG) e `catalogo.json` com estilo, seed e opções de cada `avatarId`. Gerados por [`ferramentas/avatares`](ferramentas/avatares) com as cores da marca, na ordem e com as características da galeria do desenho. |
 | [`fotos/`](fotos) | fotos de exemplo de casa (só para previews; v1.1). |
 | [`assets/`](assets) | todos os arquivos com o id original do Claude Design (`/_blob/<id>`), usados por `fonte/` e pelo renderizador. |
 

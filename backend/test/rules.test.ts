@@ -1,5 +1,5 @@
 import { assertFails, assertSucceeds, initializeTestEnvironment, type RulesTestEnvironment } from "@firebase/rules-unit-testing";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -64,6 +64,20 @@ describe("Security Rules de users/{uid}", () => {
   it("ninguém lê o perfil de outra pessoa nem sem login", async () => {
     await assertFails(getDoc(doc(ambiente.authenticatedContext("uid-1").firestore(), "users/uid-2")));
     await assertFails(getDoc(doc(ambiente.unauthenticatedContext().firestore(), "users/uid-1")));
+  });
+
+  it("o dono muda nome e avatar da galeria (B1/E3, R-32)", async () => {
+    const db = ambiente.authenticatedContext("uid-1").firestore();
+    await assertSucceeds(updateDoc(doc(db, "users/uid-1"), { displayName: "Iane S.", avatarId: "avataaars:divvup-07" }));
+  });
+
+  it("não aceita avatar fora da galeria, nome inválido, outros campos ou perfil alheio", async () => {
+    const db = ambiente.authenticatedContext("uid-1").firestore();
+    await assertFails(updateDoc(doc(db, "users/uid-1"), { displayName: "Iane", avatarId: "avataaars:divvup-25" }));
+    await assertFails(updateDoc(doc(db, "users/uid-1"), { displayName: "", avatarId: "avataaars:divvup-01" }));
+    await assertFails(updateDoc(doc(db, "users/uid-1"), { displayName: "x".repeat(25), avatarId: "avataaars:divvup-01" }));
+    await assertFails(updateDoc(doc(db, "users/uid-1"), { displayName: "Iane", avatarId: "avataaars:divvup-01", totalPoints: 999 }));
+    await assertFails(updateDoc(doc(db, "users/uid-2"), { displayName: "Hack", avatarId: "avataaars:divvup-01" }));
   });
 
   it("o cliente não grava o próprio perfil (pontos são do backend)", async () => {

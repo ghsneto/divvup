@@ -1,0 +1,945 @@
+{
+  "estilo": "avataaars",
+  "versao": "@dicebear/avataaars 9.4.3",
+  "avatares": [
+    {
+      "avatarId": "avataaars:divvup-01",
+      "arquivo": "avatar_01",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-01",
+        "top": [
+          "straight01"
+        ],
+        "hairColor": [
+          "724133"
+        ],
+        "skinColor": [
+          "edb98a"
+        ],
+        "clothesColor": [
+          "0c0f18"
+        ],
+        "backgroundColor": [
+          "ebebe6"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-02",
+      "arquivo": "avatar_02",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-02",
+        "top": [
+          "shortFlat"
+        ],
+        "hairColor": [
+          "2c1b18"
+        ],
+        "skinColor": [
+          "ffdbb4"
+        ],
+        "clothesColor": [
+          "c9f24d"
+        ],
+        "backgroundColor": [
+          "2f2bd9"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-03",
+      "arquivo": "avatar_03",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-03",
+        "top": [
+          "fro"
+        ],
+        "hairColor": [
+          "2c1b18"
+        ],
+        "skinColor": [
+          "ae5d29"
+        ],
+        "clothesColor": [
+          "2f2bd9"
+        ],
+        "backgroundColor": [
+          "c9f24d"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-04",
+      "arquivo": "avatar_04",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-04",
+        "top": [
+          "bun"
+        ],
+        "hairColor": [
+          "c9f24d"
+        ],
+        "skinColor": [
+          "614335"
+        ],
+        "clothesColor": [
+          "2f2bd9"
+        ],
+        "backgroundColor": [
+          "0c0f18"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-05",
+      "arquivo": "avatar_05",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-05",
+        "top": [
+          "hat"
+        ],
+        "hairColor": [
+          "2c1b18"
+        ],
+        "skinColor": [
+          "ffdbb4"
+        ],
+        "clothesColor": [
+          "2f2bd9"
+        ],
+        "backgroundColor": [
+          "e9eeff"
+        ],
+        "hatColor": [
+          "c9f24d"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-06",
+      "arquivo": "avatar_06",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 100,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-06",
+        "top": [
+          "shortRound"
+        ],
+        "hairColor": [
+          "2c1b18"
+        ],
+        "skinColor": [
+          "d08b5b"
+        ],
+        "clothesColor": [
+          "f5f5f0"
+        ],
+        "backgroundColor": [
+          "2f2bd9"
+        ],
+        "facialHair": [
+          "beardMedium"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-07",
+      "arquivo": "avatar_07",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-07",
+        "top": [
+          "straight02"
+        ],
+        "hairColor": [
+          "2f2bd9"
+        ],
+        "skinColor": [
+          "ffdbb4"
+        ],
+        "clothesColor": [
+          "0c0f18"
+        ],
+        "backgroundColor": [
+          "c9f24d"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-08",
+      "arquivo": "avatar_08",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-08",
+        "top": [
+          "curly"
+        ],
+        "hairColor": [
+          "2c1b18"
+        ],
+        "skinColor": [
+          "614335"
+        ],
+        "clothesColor": [
+          "c9f24d"
+        ],
+        "backgroundColor": [
+          "ebebe6"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-09",
+      "arquivo": "avatar_09",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-09",
+        "top": [
+          "longButNotTooLong"
+        ],
+        "hairColor": [
+          "724133"
+        ],
+        "skinColor": [
+          "edb98a"
+        ],
+        "clothesColor": [
+          "f5f5f0"
+        ],
+        "backgroundColor": [
+          "2f2bd9"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-10",
+      "arquivo": "avatar_10",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-10",
+        "top": [
+          "bun"
+        ],
+        "hairColor": [
+          "2f2bd9"
+        ],
+        "skinColor": [
+          "ffdbb4"
+        ],
+        "clothesColor": [
+          "f5f5f0"
+        ],
+        "backgroundColor": [
+          "c9f24d"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-11",
+      "arquivo": "avatar_11",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-11",
+        "top": [
+          "shortCurly"
+        ],
+        "hairColor": [
+          "2c1b18"
+        ],
+        "skinColor": [
+          "614335"
+        ],
+        "clothesColor": [
+          "2f2bd9"
+        ],
+        "backgroundColor": [
+          "ebebe6"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-12",
+      "arquivo": "avatar_12",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-12",
+        "top": [
+          "hijab"
+        ],
+        "hairColor": [
+          "2c1b18"
+        ],
+        "skinColor": [
+          "d08b5b"
+        ],
+        "clothesColor": [
+          "f5f5f0"
+        ],
+        "backgroundColor": [
+          "0c0f18"
+        ],
+        "hatColor": [
+          "c9f24d"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-13",
+      "arquivo": "avatar_13",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-13",
+        "top": [
+          "winterHat1"
+        ],
+        "hairColor": [
+          "2c1b18"
+        ],
+        "skinColor": [
+          "edb98a"
+        ],
+        "clothesColor": [
+          "f5f5f0"
+        ],
+        "backgroundColor": [
+          "e9eeff"
+        ],
+        "hatColor": [
+          "f5f5f0"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-14",
+      "arquivo": "avatar_14",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-14",
+        "top": [
+          "frizzle"
+        ],
+        "hairColor": [
+          "724133"
+        ],
+        "skinColor": [
+          "ffdbb4"
+        ],
+        "clothesColor": [
+          "c9f24d"
+        ],
+        "backgroundColor": [
+          "d3defe"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-15",
+      "arquivo": "avatar_15",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-15",
+        "top": [
+          "straightAndStrand"
+        ],
+        "hairColor": [
+          "2c1b18"
+        ],
+        "skinColor": [
+          "614335"
+        ],
+        "clothesColor": [
+          "f5f5f0"
+        ],
+        "backgroundColor": [
+          "2f2bd9"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-16",
+      "arquivo": "avatar_16",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-16",
+        "top": [
+          "bun"
+        ],
+        "hairColor": [
+          "2c1b18"
+        ],
+        "skinColor": [
+          "d08b5b"
+        ],
+        "clothesColor": [
+          "0c0f18"
+        ],
+        "backgroundColor": [
+          "c9f24d"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-17",
+      "arquivo": "avatar_17",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-17",
+        "top": [
+          "shortWaved"
+        ],
+        "hairColor": [
+          "c9f24d"
+        ],
+        "skinColor": [
+          "edb98a"
+        ],
+        "clothesColor": [
+          "f5f5f0"
+        ],
+        "backgroundColor": [
+          "ebebe6"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-18",
+      "arquivo": "avatar_18",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 100,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-18",
+        "top": [
+          "theCaesar"
+        ],
+        "hairColor": [
+          "e8e1e1"
+        ],
+        "skinColor": [
+          "ffdbb4"
+        ],
+        "clothesColor": [
+          "c9f24d"
+        ],
+        "backgroundColor": [
+          "0c0f18"
+        ],
+        "facialHair": [
+          "beardMajestic"
+        ],
+        "facialHairColor": [
+          "e8e1e1"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-19",
+      "arquivo": "avatar_19",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-19",
+        "top": [
+          "winterHat02"
+        ],
+        "hairColor": [
+          "2c1b18"
+        ],
+        "skinColor": [
+          "614335"
+        ],
+        "clothesColor": [
+          "2f2bd9"
+        ],
+        "backgroundColor": [
+          "e9eeff"
+        ],
+        "hatColor": [
+          "0c0f18"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-20",
+      "arquivo": "avatar_20",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-20",
+        "top": [
+          "curvy"
+        ],
+        "hairColor": [
+          "2f2bd9"
+        ],
+        "skinColor": [
+          "d08b5b"
+        ],
+        "clothesColor": [
+          "0c0f18"
+        ],
+        "backgroundColor": [
+          "d3defe"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-21",
+      "arquivo": "avatar_21",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-21",
+        "top": [
+          "straight01"
+        ],
+        "hairColor": [
+          "2c1b18"
+        ],
+        "skinColor": [
+          "edb98a"
+        ],
+        "clothesColor": [
+          "f5f5f0"
+        ],
+        "backgroundColor": [
+          "2f2bd9"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-22",
+      "arquivo": "avatar_22",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-22",
+        "top": [
+          "bob"
+        ],
+        "hairColor": [
+          "2c1b18"
+        ],
+        "skinColor": [
+          "ffdbb4"
+        ],
+        "clothesColor": [
+          "f5f5f0"
+        ],
+        "backgroundColor": [
+          "c9f24d"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-23",
+      "arquivo": "avatar_23",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 0,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-23",
+        "top": [
+          "sides"
+        ],
+        "hairColor": [
+          "e8e1e1"
+        ],
+        "skinColor": [
+          "614335"
+        ],
+        "clothesColor": [
+          "2f2bd9"
+        ],
+        "backgroundColor": [
+          "ebebe6"
+        ]
+      }
+    },
+    {
+      "avatarId": "avataaars:divvup-24",
+      "arquivo": "avatar_24",
+      "opcoes": {
+        "clothing": [
+          "shirtCrewNeck"
+        ],
+        "eyes": [
+          "default"
+        ],
+        "eyebrows": [
+          "defaultNatural"
+        ],
+        "mouth": [
+          "smile"
+        ],
+        "accessoriesProbability": 0,
+        "facialHairProbability": 100,
+        "topProbability": 100,
+        "radius": 50,
+        "seed": "divvup-24",
+        "top": [
+          "shortFlat"
+        ],
+        "hairColor": [
+          "724133"
+        ],
+        "skinColor": [
+          "ae5d29"
+        ],
+        "clothesColor": [
+          "f5f5f0"
+        ],
+        "backgroundColor": [
+          "0c0f18"
+        ],
+        "facialHair": [
+          "beardLight"
+        ],
+        "facialHairColor": [
+          "724133"
+        ]
+      }
+    }
+  ]
+}
