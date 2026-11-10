@@ -44,8 +44,8 @@ import br.app.divvup.feature.onboarding.R
 import br.app.divvup.feature.onboarding.comum.ProgressoOnboarding
 
 /**
- * B1 Como te chamam (docs/design/fonte/OnbNome.dc.html). O link "Usar foto" fica de fora até o
- * armazenamento da foto ser decidido (custo zero, ADR 0001).
+ * B1 Como te chamam (docs/design/fonte/OnbNome.dc.html). O link "Usar foto" fica de fora na v1.0
+ * (sem foto de perfil, ADR 0003).
  */
 @Composable
 fun NomeScreen(

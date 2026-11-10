@@ -79,7 +79,7 @@
 ### 3.7 Gamificação
 - R-30 · **Medalhas v1.0:** primeira tarefa · sequência de 7 dias · campeão do mês · 100 tarefas concluídas · salva-vidas (assumiu ocorrência a menos de 48 h do prazo).
 - R-31 · **Sequência diária:** dias consecutivos com ao menos uma conclusão.
-- R-32 · **Avatares:** DiceBear estilo **avataaars**. v1.0: galeria de ~24 avatares com seeds pré-escolhidas, **empacotados como SVG no app** (sem rede), livres para todos. Foto pessoal opcional sobrepõe o avatar. `avatarId` guarda `estilo + seed + opções` para um **editor de avatar** futuro (geração no backend com `@dicebear/core`, nunca pela API pública).
+- R-32 · **Avatares:** DiceBear estilo **avataaars**. v1.0: galeria de ~24 avatares com seeds pré-escolhidas, **empacotados como SVG no app** (sem rede), livres para todos. Foto pessoal **fica fora da v1.0** (ADR 0003): armazenar imagens sem custo não cabe no plano atual; o campo `photoUrl` continua no modelo (guarda a foto do Google) para quando entrar. `avatarId` guarda `estilo + seed + opções` para um **editor de avatar** futuro (geração no backend com `@dicebear/core`, nunca pela API pública).
 
 ### 3.8 Notificações
 - R-33 · Eventos e destinatários:
@@ -267,4 +267,4 @@ Login → nome + avatar → criar casa / tenho um código (v1.1: procurar casas)
 ---
 
 ## 9. Fora de escopo (v1.0)
-Recorrência · verificação de conclusão por foto · múltiplas casas por usuário · categorias personalizadas · rankings entre casas · monetização · iOS/web · outros idiomas.
+Recorrência · foto de perfil própria (ADR 0003) · verificação de conclusão por foto · múltiplas casas por usuário · categorias personalizadas · rankings entre casas · monetização · iOS/web · outros idiomas.

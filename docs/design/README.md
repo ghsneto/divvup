@@ -158,6 +158,7 @@ Animações em `@keyframes` no fim do estilo das telas: entrada lateral (`dv-in-
 
 - **Escala tipográfica:** o README do design system cita `h1` 64, `h2` 40, `body` 18. As telas usam a escala acima (57/45/16), igual ao `Type.kt`. **Vale a das telas.**
 - **Avatares (decidido em 2026-11-10: vale a R-32):** o desenho usa 24 avatares próprios, chapados (`avatares/`), mas a SPEC exige DiceBear estilo avataaars com `avatarId` = estilo + seed. **No app vão 24 avatares DiceBear avataaars**; o layout da E3 (grade, tamanhos, seleção) segue o desenho. Os arquivos de `avatares/` ficam só como referência visual e não entram no app.
+- **Foto de perfil (decidido em 2026-11-10, ADR 0003):** "Usar foto" (B1), "Usar uma foto" e "Remover foto" (E2/E3) ficam **escondidos na v1.0**; o perfil usa só os avatares.
 - **Componentes:** a issue #2 pedia `TaskCard`, `PointsBadge`, `Chip`, `Button`, `Logo`, `Avatar`; o design system tinha `Ranking` e `SiteHeader`. **Vale o inventário acima**: `SiteHeader` fica de fora (é web); o pódio/lista de ranking é construído na issue do ranking (#17).
 - **Falha no desenho:** em `NovaTarefa` o campo descrição mostra `[object Object]`. É erro do mockup: o campo deve aparecer vazio com o placeholder.
 

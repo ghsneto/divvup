@@ -50,7 +50,7 @@ data class GaleriaEstado(
 
 /**
  * E3 Galeria de avatar (docs/design/fonte/Avatar.dc.html, R-32). "Usar uma foto" e "Remover foto"
- * ficam de fora até o armazenamento da foto ser decidido (custo zero, ADR 0001).
+ * ficam de fora na v1.0 (sem foto de perfil, ADR 0003).
  */
 @Composable
 fun GaleriaDeAvataresScreen(
