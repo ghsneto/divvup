@@ -18,6 +18,7 @@ internal fun Project.configureAndroidApplication(ext: ApplicationExtension) {
     ext.lint.checkDependencies = true
     configureKotlinJvmTarget()
     configureRobolectricJvm()
+    configurarGuardaDeLiterais()
 }
 
 internal fun Project.configureAndroidLibrary(ext: LibraryExtension) {
@@ -29,6 +30,7 @@ internal fun Project.configureAndroidLibrary(ext: LibraryExtension) {
     ext.lint.configureLint()
     configureKotlinJvmTarget()
     configureRobolectricJvm()
+    configurarGuardaDeLiterais()
 }
 
 /** Robolectric (SDK 36) em JDK 21 precisa acessar internos do java.base. */

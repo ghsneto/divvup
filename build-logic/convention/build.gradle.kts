@@ -21,6 +21,7 @@ dependencies {
     compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.hilt.gradlePlugin)
+    compileOnly(libs.roborazzi.gradlePlugin)
 }
 
 gradlePlugin {
@@ -44,6 +45,10 @@ gradlePlugin {
         register("hilt") {
             id = libs.plugins.divvup.hilt.get().pluginId
             implementationClass = "HiltConventionPlugin"
+        }
+        register("screenshot") {
+            id = libs.plugins.divvup.screenshot.get().pluginId
+            implementationClass = "ScreenshotConventionPlugin"
         }
         register("jvmLibrary") {
             id = libs.plugins.divvup.jvm.library.get().pluginId

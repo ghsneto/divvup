@@ -2,7 +2,7 @@ package br.app.divvup
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,6 +18,6 @@ class MainActivityTest {
     @Test
     fun abreATelaProvisoria() {
         val titulo = compose.activity.getString(R.string.placeholder_titulo)
-        compose.onNodeWithText(titulo).assertIsDisplayed()
+        compose.onNodeWithContentDescription(titulo).assertIsDisplayed()
     }
 }

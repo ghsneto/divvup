@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Símbolo isolado, gerado de docs/brand/logo/symbol-only.svg (área útil data-ink). Cor aplicada pelo DivvupLogo. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="17.18dp"
+    android:height="24dp"
+    android:viewportWidth="63.000"
+    android:viewportHeight="88.000">
+    <group android:translateX="-20.000" android:translateY="-5.000">
+        <path android:fillColor="#FFFFFF" android:pathData="M76 43.2L76 81C76 87.627 70.627 93 64 93L32 93C25.373 93 20 87.627 20 81L20 62.8ZM39 5L71 5C77.627 5 83 10.373 83 17L83 35.2L27 54.8L27 17C27 10.373 32.373 5 39 5Z" />
+    </group>
+</vector>

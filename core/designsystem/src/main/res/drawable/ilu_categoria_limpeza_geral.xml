@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado de docs/design/ilustracoes/categoria-limpeza-geral.svg por docs/design/ferramentas/svg_para_vector.py. Não edite à mão. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="160dp"
+    android:height="100dp"
+    android:viewportWidth="320"
+    android:viewportHeight="200">
+    <path
+        android:pathData="M0,0h320v200h-320Z"
+        android:fillColor="#2F2BD9" />
+    <path
+        android:pathData="M238 14L156 140"
+        android:fillColor="#000000"
+        android:strokeColor="#F5F5F0"
+        android:strokeWidth="12"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+    <group android:rotation="33" android:pivotX="156" android:pivotY="150">
+        <path
+            android:pathData="M122,134h68v16h-68Z"
+            android:fillColor="#0C0F18"
+            android:strokeColor="#F5F5F0"
+            android:strokeWidth="4"
+            android:strokeLineCap="butt"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M116 150h80l16 44H100z"
+            android:fillColor="#C9F24D"
+            android:strokeColor="#0C0F18"
+            android:strokeWidth="4"
+            android:strokeLineCap="butt"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M134 156l-6 34M156 156v34M178 156l6 34"
+            android:strokeColor="#0C0F18"
+            android:strokeWidth="4"
+            android:strokeLineCap="butt"
+            android:strokeLineJoin="round" />
+    </group>
+    <path
+        android:pathData="M60,172a6,6 0 1,0 12,0a6,6 0 1,0 -12,0Z"
+        android:fillColor="#F5F5F0" />
+    <path
+        android:pathData="M80,180a4,4 0 1,0 8,0a4,4 0 1,0 -8,0Z"
+        android:fillColor="#F5F5F0" />
+    <path
+        android:pathData="M50,184a4,4 0 1,0 8,0a4,4 0 1,0 -8,0Z"
+        android:fillColor="#F5F5F0" />
+    <path
+        android:pathData="M93,166a3,3 0 1,0 6,0a3,3 0 1,0 -6,0Z"
+        android:fillColor="#F5F5F0" />
+    <path
+        android:pathData="M30 146h44M42 128h30"
+        android:fillColor="#000000"
+        android:strokeColor="#F5F5F0"
+        android:strokeWidth="5"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+</vector>

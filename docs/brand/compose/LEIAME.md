@@ -1,5 +1,7 @@
 # Tema Jetpack Compose do Divvup
 
+> **Histórico.** O tema em uso está em `core/designsystem` (issue #2), feito a partir do estilo das telas em `docs/design`. Estes arquivos ficam só como referência do manual da marca; não copie de novo para o app.
+
 Direção **Meio a Meio**. As cores vêm de `../tokens/tokens.css`.
 
 Estes arquivos são a referência do tema. O lugar deles no app é o módulo `:core:designsystem`

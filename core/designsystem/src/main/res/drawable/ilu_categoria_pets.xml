@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado de docs/design/ilustracoes/categoria-pets.svg por docs/design/ferramentas/svg_para_vector.py. Não edite à mão. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="160dp"
+    android:height="100dp"
+    android:viewportWidth="320"
+    android:viewportHeight="200">
+    <path
+        android:pathData="M0,0h320v200h-320Z"
+        android:fillColor="#F5F5F0" />
+    <path
+        android:pathData="M196 160c44 0 56-60 92-92"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="6"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+    <path
+        android:pathData="M278,56a14,10 0 1,0 28,0a14,10 0 1,0 -28,0Z"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="6"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+    <path
+        android:pathData="M108 70L86 124l36-16z"
+        android:fillColor="#0C0F18"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M204 70l22 54-36-16z"
+        android:fillColor="#0C0F18"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M150,52h12a48,48 0 0,1 48,48v8a48,48 0 0,1 -48,48h-12a48,48 0 0,1 -48,-48v-8a48,48 0 0,1 48,-48Z"
+        android:fillColor="#2F2BD9"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M124,128a32,22 0 1,0 64,0a32,22 0 1,0 -64,0Z"
+        android:fillColor="#F5F5F0"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M145,116a11,8 0 1,0 22,0a11,8 0 1,0 -22,0Z"
+        android:fillColor="#0C0F18"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M156 124v12"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M127,96a7,7 0 1,0 14,0a7,7 0 1,0 -14,0Z"
+        android:fillColor="#F5F5F0"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M171,96a7,7 0 1,0 14,0a7,7 0 1,0 -14,0Z"
+        android:fillColor="#F5F5F0"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M116,150h80a4,4 0 0,1 4,4v8a4,4 0 0,1 -4,4h-80a4,4 0 0,1 -4,-4v-8a4,4 0 0,1 4,-4Z"
+        android:fillColor="#C9F24D"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M147,176a9,9 0 1,0 18,0a9,9 0 1,0 -18,0Z"
+        android:fillColor="#C9F24D"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M132,97a3,3 0 1,0 6,0a3,3 0 1,0 -6,0Z"
+        android:fillColor="#0C0F18" />
+    <path
+        android:pathData="M176,97a3,3 0 1,0 6,0a3,3 0 1,0 -6,0Z"
+        android:fillColor="#0C0F18" />
+</vector>

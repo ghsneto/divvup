@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gerado de docs/design/ilustracoes/categoria-compras.svg por docs/design/ferramentas/svg_para_vector.py. Não edite à mão. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="160dp"
+    android:height="100dp"
+    android:viewportWidth="320"
+    android:viewportHeight="200">
+    <path
+        android:pathData="M0,0h320v200h-320Z"
+        android:fillColor="#C9F24D" />
+    <group android:rotation="-24" android:pivotX="120" android:pivotY="92">
+        <path
+            android:pathData="M120,34h0a20,20 0 0,1 20,20v70a20,20 0 0,1 -20,20h0a20,20 0 0,1 -20,-20v-70a20,20 0 0,1 20,-20Z"
+            android:fillColor="#F5F5F0"
+            android:strokeColor="#0C0F18"
+            android:strokeWidth="4"
+            android:strokeLineCap="butt"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M110 60l20-8M110 82l20-8M110 104l20-8"
+            android:strokeColor="#0C0F18"
+            android:strokeWidth="4"
+            android:strokeLineCap="butt"
+            android:strokeLineJoin="round" />
+    </group>
+    <path
+        android:pathData="M190 30h16v18c10 6 14 14 14 24v24h-44V72c0-10 4-18 14-24z"
+        android:fillColor="#0C0F18"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M156 90c-20 0-30-14-30-30 18 0 30 12 30 30z"
+        android:fillColor="#0C0F18"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M162 88c4-18 18-26 34-24-2 16-16 26-34 24z"
+        android:fillColor="#0C0F18"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M110,88h120a6,6 0 0,1 6,6v82a6,6 0 0,1 -6,6h-120a6,6 0 0,1 -6,-6v-82a6,6 0 0,1 6,-6Z"
+        android:fillColor="#2F2BD9"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M104,118h132v18h-132Z"
+        android:fillColor="#F5F5F0"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="4"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M262 120h36M270 142h28"
+        android:fillColor="#000000"
+        android:strokeColor="#0C0F18"
+        android:strokeWidth="6"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter" />
+</vector>
