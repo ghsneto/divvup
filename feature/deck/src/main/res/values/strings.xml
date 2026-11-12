@@ -27,4 +27,25 @@
     <string name="deck_vazio_titulo">nada pendente por aqui</string>
     <string name="deck_vazio_texto">A casa tá em dia. Lembrou de algo? Coloca no deck.</string>
     <string name="deck_criar">Criar tarefa</string>
+    <string name="deck_e_minha">É MINHA</string>
+    <string name="deck_passo">PASSO</string>
+    <string name="deck_aviso_assumida">Tarefa assumida</string>
+    <string name="deck_aviso_assumida_pts">+%1$s pts ao concluir</string>
+    <string name="deck_aviso_passada">Você passou</string>
+    <string name="deck_aviso_passada_volta">volta em 12 h</string>
+    <string name="deck_aviso_ja_pegaram">Alguém já pegou essa</string>
+    <string name="deck_aviso_saiu">saiu do deck</string>
+    <string name="deck_aviso_quem">%1$s assumiu antes</string>
+    <string name="deck_aviso_falhou">Não deu certo. Confere a conexão.</string>
+    <string name="deck_desfazer">Desfazer</string>
+    <string name="deck_limite">Você já tem %1$s tarefas abertas. Conclua uma para pegar outra.</string>
+    <string name="deck_ver_minhas">Ver minhas tarefas</string>
+    <string name="deck_limite_botao">Limite %1$d/%2$d</string>
+    <string name="deck_passadas_rotulo">fim do deck</string>
+    <plurals name="deck_passadas_titulo">
+        <item quantity="one">você passou %1$d tarefa</item>
+        <item quantity="other">você passou %1$d tarefas</item>
+    </plurals>
+    <string name="deck_passadas_texto">Elas voltam sozinhas em 12 h. Quer dar mais uma olhada agora?</string>
+    <string name="deck_rever">Rever</string>
 </resources>

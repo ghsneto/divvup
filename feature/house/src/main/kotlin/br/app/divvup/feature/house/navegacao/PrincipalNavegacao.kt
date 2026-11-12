@@ -14,12 +14,12 @@ import kotlinx.serialization.Serializable
 /** C1 e as outras abas da estrutura principal. */
 @Serializable data object RotaPrincipal
 
-fun NavGraphBuilder.telaPrincipal(aoAbrirNotificacoes: () -> Unit, conteudo: @Composable (Aba) -> Unit) {
+fun NavGraphBuilder.telaPrincipal(aoAbrirNotificacoes: () -> Unit, conteudo: @Composable (Aba, (Aba) -> Unit) -> Unit) {
     composable<RotaPrincipal> { PrincipalRota(aoAbrirNotificacoes, conteudo) }
 }
 
 @Composable
-private fun PrincipalRota(aoAbrirNotificacoes: () -> Unit, conteudo: @Composable (Aba) -> Unit, viewModel: PrincipalViewModel = hiltViewModel()) {
+private fun PrincipalRota(aoAbrirNotificacoes: () -> Unit, conteudo: @Composable (Aba, (Aba) -> Unit) -> Unit, viewModel: PrincipalViewModel = hiltViewModel()) {
     val casa by viewModel.casa.collectAsStateWithLifecycle()
     val aba by viewModel.aba.collectAsStateWithLifecycle()
     EstruturaPrincipal(
@@ -30,6 +30,6 @@ private fun PrincipalRota(aoAbrirNotificacoes: () -> Unit, conteudo: @Composable
         aba = aba,
         aoTrocarAba = viewModel::aoTrocarAba,
         aoAbrirNotificacoes = aoAbrirNotificacoes,
-        conteudo = conteudo,
+        conteudo = { aba -> conteudo(aba, viewModel::aoTrocarAba) },
     )
 }

@@ -56,4 +56,16 @@ internal object DeckMedidas {
     val carregandoSeloLargura = 96.dp
     val barraCarregandoTopo = 20.dp
     val barraCarregandoLargura = 48.dp
+
+    // Swipe (Main.dc.html: 110 de arraste, overlay cheio a 120, peteleco a partir de 32).
+    val limiteDoSwipe = 110.dp
+    val inicioDoOverlay = 120.dp
+    val petelecoMinimo = 32.dp
+    val carimboTopo = 28.dp
+    val carimboFonte = 36.sp
+
+    // Passadas.
+    val miniaturaLargura = 64.dp
+    val miniaturaAltura = 84.dp
+    val textoMaximoPassadas = 270.dp
 }

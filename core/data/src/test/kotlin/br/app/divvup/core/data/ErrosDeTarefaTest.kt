@@ -13,5 +13,8 @@ class ErrosDeTarefaTest {
         assertEquals(ErroDeTarefa.PrazoNoPassado, erroDeTarefa(ErroDoBackend(400, "prazo-no-passado")))
         assertEquals(ErroDeTarefa.Desconhecido, erroDeTarefa(ErroDoBackend(400, "titulo-invalido")))
         assertEquals(ErroDeTarefa.SemConexao, erroDeTarefa(IOException("x")))
+        assertEquals(ErroDeTarefa.JaAssumida("Davi"), erroDeTarefa(ErroDoBackend(409, "ja-assumida", "Davi")))
+        assertEquals(ErroDeTarefa.Limite, erroDeTarefa(ErroDoBackend(409, "limite")))
+        assertEquals(ErroDeTarefa.NaoDaParaDesfazer, erroDeTarefa(ErroDoBackend(409, "nao-da-para-desfazer")))
     }
 }
