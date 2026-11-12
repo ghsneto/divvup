@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textos de C2 (docs/design/fonte/NovaTarefa.dc.html). -->
+<resources>
+    <string name="nova_fechar">Fechar</string>
+    <string name="nova_contexto">vai pro deck de todo mundo</string>
+    <string name="nova_titulo">nova tarefa</string>
+    <string name="nova_previa">prévia do cartão</string>
+    <string name="nova_previa_vazia">Dá um nome pra tarefa</string>
+    <string name="nova_campo_titulo">título</string>
+    <string name="nova_campo_titulo_exemplo">Ex.: Lavar a louça do jantar</string>
+    <string name="nova_campo_descricao">descrição</string>
+    <string name="nova_opcional">"· opcional"</string>
+    <string name="nova_campo_descricao_exemplo">Algum detalhe que ajude quem pegar</string>
+    <string name="nova_contador">%1$d/%2$d</string>
+    <string name="nova_categoria">categoria</string>
+    <string name="nova_peso">peso</string>
+    <string name="nova_prazo">prazo</string>
+    <string name="nova_data">Data</string>
+    <string name="nova_hora">Hora</string>
+    <string name="nova_aviso_24h">Com menos de 24 h, a tarefa pode ser atribuída automaticamente a quem tem menos pontos.</string>
+    <string name="nova_criar">Criar tarefa</string>
+    <string name="nova_descartar_titulo">Descartar alterações?</string>
+    <string name="nova_descartar_texto">O que você escreveu aqui vai se perder.</string>
+    <string name="nova_continuar">Continuar editando</string>
+    <string name="nova_descartar">Descartar</string>
+    <string name="nova_erro_passado">Esse horário já passou. Escolhe um prazo no futuro.</string>
+    <string name="nova_erro_conexao">Não deu para criar a tarefa. Confere a conexão e tenta de novo.</string>
+    <string name="nova_ok">OK</string>
+    <string name="nova_cancelar">Cancelar</string>
+</resources>

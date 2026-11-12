@@ -9,6 +9,10 @@ import br.app.divvup.core.domain.casa.ResultadoConvite
 import br.app.divvup.core.domain.casa.VALIDADE_CONVITE
 import br.app.divvup.core.domain.casa.ResultadoCasa
 import br.app.divvup.core.domain.conta.RepositorioDeConta
+import br.app.divvup.core.domain.tarefa.EstadoDasTarefas
+import br.app.divvup.core.domain.tarefa.FormularioTarefa
+import br.app.divvup.core.domain.tarefa.RepositorioDeTarefas
+import br.app.divvup.core.domain.tarefa.ResultadoTarefa
 import br.app.divvup.core.domain.conta.ResultadoConta
 import br.app.divvup.core.domain.conta.Sessao
 import br.app.divvup.core.model.Casa
@@ -154,5 +158,19 @@ class FakeRepositorioDeConvites(
     override suspend fun entrar(codigo: String): ResultadoConvite<String> {
         chamadas += "entrar:$codigo"
         return resultadoEntrar
+    }
+}
+
+/** Tarefas em memória. */
+class FakeRepositorioDeTarefas(inicial: EstadoDasTarefas = EstadoDasTarefas.Carregadas(emptyList())) : RepositorioDeTarefas {
+    val estado = MutableStateFlow(inicial)
+    override val tarefas: StateFlow<EstadoDasTarefas> = estado
+
+    var resultadoCriar: ResultadoTarefa<String> = ResultadoTarefa.Ok("tarefa-teste")
+    val criadas = mutableListOf<FormularioTarefa>()
+
+    override suspend fun criar(formulario: FormularioTarefa): ResultadoTarefa<String> {
+        criadas += formulario
+        return resultadoCriar
     }
 }

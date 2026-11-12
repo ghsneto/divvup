@@ -87,6 +87,7 @@ class RepositorioDeContaFirebase @Inject constructor(
                 email = doc.getString("email"),
                 avatarId = doc.getString("avatarId"),
                 casaAtualId = doc.getString("currentHouseId"),
+                sequencia = doc.getLong("streak.current")?.toInt() ?: 0,
             )
         }
     }
