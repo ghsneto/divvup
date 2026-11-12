@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import br.app.divvup.core.designsystem.icon.DivvupIcone
 import br.app.divvup.core.designsystem.theme.DivvupColors
@@ -87,6 +88,8 @@ fun DivvupButton(
     carregando: Boolean = false,
     /** `justify-content: flex-start` (ações de admin em G3). */
     alinharInicio: Boolean = false,
+    /** Estilo do texto (padrão `.btn` 14/600; "Assumir" de C1 usa 16). */
+    estiloTexto: TextStyle? = null,
 ) {
     val c = cores(variante, DivvupTheme.colors)
     val conteudo = corConteudo ?: c.conteudo
@@ -114,7 +117,7 @@ fun DivvupButton(
             }
             inicio?.invoke()
             icone?.let { DivvupIcon(it) }
-            Text(text = texto, style = DivvupTheme.typography.botao, color = conteudo)
+            Text(text = texto, style = estiloTexto ?: DivvupTheme.typography.botao, color = conteudo)
             iconeDepois?.let { DivvupIcon(it) }
         }
     }

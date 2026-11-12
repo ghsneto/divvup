@@ -19,4 +19,6 @@ data class DivvupSpacing(
     val borda: Dp = 1.dp,
     /** Área mínima de toque (TELAS.md). */
     val toqueMinimo: Dp = 48.dp,
+    /** Altura do campo de texto `.in`. */
+    val campo: Dp = 52.dp,
 )

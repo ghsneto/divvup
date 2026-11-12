@@ -34,7 +34,10 @@ import br.app.divvup.feature.auth.navegacao.limparPilha
 import br.app.divvup.feature.onboarding.navegacao.OnboardingAcoes
 import br.app.divvup.feature.onboarding.navegacao.RotaNome
 import br.app.divvup.feature.onboarding.navegacao.RotaSuaCasa
+import br.app.divvup.feature.deck.AbaDeck
 import br.app.divvup.feature.house.navegacao.RotaConvide
+import br.app.divvup.feature.tasks.navegacao.RotaNovaTarefa
+import br.app.divvup.feature.tasks.navegacao.telaNovaTarefa
 import br.app.divvup.feature.house.navegacao.RotaMinhaCasa
 import br.app.divvup.feature.house.navegacao.RotaPrincipal
 import br.app.divvup.feature.house.navegacao.telasDeConvite
@@ -97,7 +100,13 @@ fun DivvupNavHost() {
         telasDeConvite(nav, aoConcluirConvide = { nav.navigate(RotaPrincipal) { limparPilha(nav) } })
         telasDeMembros(nav, aoSairDaCasa = { nav.navigate(RotaSuaCasa) { limparPilha(nav) } })
         telaGaleria(nav)
+        telaNovaTarefa(nav)
         telaPrincipal(aoAbrirNotificacoes = { nav.navigate(RotaNotificacoesProvisoria) }) { aba ->
+            if (aba == Aba.Deck) {
+                // Detalhe da tarefa (C3) chega na #14.
+                AbaDeck(aoNovaTarefa = { nav.navigate(RotaNovaTarefa) }, aoDetalhes = {})
+                return@telaPrincipal
+            }
             val titulo = when (aba) {
                 Aba.Deck -> R.string.provisorio_deck
                 Aba.MinhasTarefas -> R.string.provisorio_minhas_tarefas

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nomes das categorias (R-11), como em docs/design/fonte/NovaTarefa.dc.html. -->
+<resources>
+    <string name="categoria_cozinha">Cozinha</string>
+    <string name="categoria_limpeza_geral">Limpeza geral</string>
+    <string name="categoria_banheiro">Banheiro</string>
+    <string name="categoria_lavanderia">Lavanderia</string>
+    <string name="categoria_lixo">Lixo</string>
+    <string name="categoria_compras">Compras</string>
+    <string name="categoria_pets">Pets</string>
+    <string name="categoria_plantas">Plantas</string>
+    <string name="categoria_manutencao">Manutenção</string>
+    <string name="categoria_outros">Outros</string>
+    <string name="peso_leve">leve</string>
+    <string name="peso_media">média</string>
+    <string name="peso_pesada">pesada</string>
+    <string name="pts">pts</string>
+    <!-- Prazo: "amanhã, 20h", "vence hoje às 22h", "sáb., 8 nov", "20:00". -->
+    <string name="prazo_hoje">hoje</string>
+    <string name="prazo_amanha">amanhã</string>
+    <string name="prazo_atalho">%1$s, %2$s</string>
+    <string name="prazo_hora">%1$dh</string>
+    <string name="prazo_hora_min">%1$dh%2$02d</string>
+    <string name="prazo_data">%1$d %2$s</string>
+    <string name="prazo_relogio">%1$02d:%2$02d</string>
+    <string-array name="prazo_dias_semana">
+        <item>segunda</item>
+        <item>terça</item>
+        <item>quarta</item>
+        <item>quinta</item>
+        <item>sexta</item>
+        <item>sábado</item>
+        <item>domingo</item>
+    </string-array>
+    <string-array name="prazo_dias_curtos">
+        <item>seg.</item>
+        <item>ter.</item>
+        <item>qua.</item>
+        <item>qui.</item>
+        <item>sex.</item>
+        <item>sáb.</item>
+        <item>dom.</item>
+    </string-array>
+    <string-array name="prazo_meses">
+        <item>jan</item>
+        <item>fev</item>
+        <item>mar</item>
+        <item>abr</item>
+        <item>mai</item>
+        <item>jun</item>
+        <item>jul</item>
+        <item>ago</item>
+        <item>set</item>
+        <item>out</item>
+        <item>nov</item>
+        <item>dez</item>
+    </string-array>
+    <string name="prazo_vence">vence %1$s às %2$s</string>
+</resources>

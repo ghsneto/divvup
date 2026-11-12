@@ -5,10 +5,12 @@ import br.app.divvup.core.data.di.RepositoriosModule
 import br.app.divvup.core.domain.casa.RepositorioDeCasa
 import br.app.divvup.core.domain.casa.RepositorioDeConvites
 import br.app.divvup.core.domain.conta.RepositorioDeConta
+import br.app.divvup.core.domain.tarefa.RepositorioDeTarefas
 import br.app.divvup.core.testing.fakes.FakeMonitorDeConexao
 import br.app.divvup.core.testing.fakes.FakeRepositorioDeCasa
 import br.app.divvup.core.testing.fakes.FakeRepositorioDeConvites
 import br.app.divvup.core.testing.fakes.FakeRepositorioDeConta
+import br.app.divvup.core.testing.fakes.FakeRepositorioDeTarefas
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -27,6 +29,9 @@ object RepositoriosDeTesteModule {
 
     @Provides @Singleton
     fun convites(): RepositorioDeConvites = FakeRepositorioDeConvites()
+
+    @Provides @Singleton
+    fun tarefas(): RepositorioDeTarefas = FakeRepositorioDeTarefas()
 
     @Provides @Singleton
     fun conexao(): MonitorDeConexao = FakeMonitorDeConexao()

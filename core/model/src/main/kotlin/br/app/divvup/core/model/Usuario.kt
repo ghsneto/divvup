@@ -7,4 +7,6 @@ data class Usuario(
     val email: String?,
     val avatarId: String?,
     val casaAtualId: String?,
+    /** Sequência diária atual (`streak.current`, R-31). */
+    val sequencia: Int = 0,
 )

@@ -91,7 +91,7 @@ function lerPedido(corpo: unknown): PedidoCriarCasa {
 }
 
 /** Id de documento como o do Firestore: 20 caracteres alfanuméricos. */
-function gerarId(): string {
+export function gerarId(): string {
   const alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   const bytes = crypto.getRandomValues(new Uint8Array(20));
   return Array.from(bytes, (b) => alfabeto[b % alfabeto.length]).join("");

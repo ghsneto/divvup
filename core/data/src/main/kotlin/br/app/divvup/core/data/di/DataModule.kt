@@ -5,12 +5,14 @@ import br.app.divvup.core.data.ConfiguracaoFirebase
 import br.app.divvup.core.data.backend.FonteDeToken
 import br.app.divvup.core.data.casa.RepositorioDeCasaFirebase
 import br.app.divvup.core.data.casa.RepositorioDeConvitesFirebase
+import br.app.divvup.core.data.tarefa.RepositorioDeTarefasFirebase
 import br.app.divvup.core.data.conexao.MonitorDeConexao
 import br.app.divvup.core.data.conexao.MonitorDeConexaoAndroid
 import br.app.divvup.core.data.conta.RepositorioDeContaFirebase
 import br.app.divvup.core.domain.casa.RepositorioDeCasa
 import br.app.divvup.core.domain.casa.RepositorioDeConvites
 import br.app.divvup.core.domain.conta.RepositorioDeConta
+import br.app.divvup.core.domain.tarefa.RepositorioDeTarefas
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -90,6 +92,9 @@ abstract class RepositoriosModule {
 
     @Binds
     abstract fun repositorioDeConvites(impl: RepositorioDeConvitesFirebase): RepositorioDeConvites
+
+    @Binds
+    abstract fun repositorioDeTarefas(impl: RepositorioDeTarefasFirebase): RepositorioDeTarefas
 
     @Binds
     abstract fun monitorDeConexao(impl: MonitorDeConexaoAndroid): MonitorDeConexao

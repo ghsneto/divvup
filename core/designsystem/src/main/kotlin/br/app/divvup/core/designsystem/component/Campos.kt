@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import br.app.divvup.core.designsystem.icon.DivvupIcone
+import br.app.divvup.core.designsystem.theme.DivvupSpacing
 import br.app.divvup.core.designsystem.theme.DivvupTheme
 
 /**
@@ -62,6 +63,8 @@ fun DivvupTextField(
     altura: Dp = AlturaCampo,
     /** Rótulo `small muted` em vez de `label` (campos de endereço em G4). */
     rotuloDiscreto: Boolean = false,
+    /** Texto no topo da caixa (`textarea`, padding 12 16), em vez de centralizado. */
+    alinharTopo: Boolean = false,
 ) {
     val c = DivvupTheme.colors
     val t = DivvupTheme.typography
@@ -89,12 +92,17 @@ fun DivvupTextField(
                         .clip(shape)
                         .background(c.surface, shape)
                         .border(DivvupTheme.spacing.borda, if (erro != null || erroComLinks != null) c.danger else c.border, shape)
-                        .padding(start = 16.dp, end = if (final != null) 4.dp else 16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
+                        .padding(
+                            start = 16.dp,
+                            end = if (final != null) 4.dp else 16.dp,
+                            top = if (alinharTopo) 12.dp else 0.dp,
+                            bottom = if (alinharTopo) 12.dp else 0.dp,
+                        ),
+                    verticalAlignment = if (alinharTopo) Alignment.Top else Alignment.CenterVertically,
                 ) {
                     Box(Modifier.weight(1f)) {
                         if (valor.isEmpty() && placeholder != null) {
-                            Text(placeholder, style = estilo, color = c.textMuted, maxLines = 1)
+                            Text(placeholder, style = estilo, color = c.textMuted, maxLines = if (alinharTopo) Int.MAX_VALUE else 1)
                         }
                         campo()
                     }
@@ -163,4 +171,4 @@ fun DivvupToggle(
 }
 
 /** Altura padrão do campo (`.in`). */
-private val AlturaCampo = 52.dp
+private val AlturaCampo = DivvupSpacing().campo

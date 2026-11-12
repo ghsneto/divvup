@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -97,6 +99,13 @@ private val FormatoPtBr: NumberFormat = NumberFormat.getIntegerInstance(Locale.f
 /** Número no formato brasileiro ("1.240"). */
 fun formatarNumero(valor: Int): String = FormatoPtBr.format(valor)
 
+/** Tamanhos do `.pb` usados nas telas: padrão, no cartão do deck (28) e na prévia de C2 (16). */
+enum class TamanhoSelo(val fonte: TextUnit, val horizontal: Dp, val vertical: Dp) {
+    Padrao(20.sp, 12.dp, 4.dp),
+    Grande(28.sp, 16.dp, 8.dp),
+    Pequeno(16.sp, 12.dp, 4.dp),
+}
+
 /** Selo de pontos `.pb`: lima, 20sp/600 com números tabulares e o sufixo ("pts") em 12sp. */
 @Composable
 fun DivvupPointsBadge(
@@ -104,6 +113,7 @@ fun DivvupPointsBadge(
     sufixo: String,
     modifier: Modifier = Modifier,
     sinal: Boolean = false,
+    tamanho: TamanhoSelo = TamanhoSelo.Padrao,
 ) {
     val c = DivvupTheme.colors
     val texto = (if (sinal && pontos > 0) "+" else "") + formatarNumero(pontos)
@@ -111,12 +121,12 @@ fun DivvupPointsBadge(
         modifier = modifier
             .clip(DivvupTheme.shapes.pill)
             .background(c.accent)
-            .padding(horizontal = 12.dp, vertical = 4.dp),
+            .padding(horizontal = tamanho.horizontal, vertical = tamanho.vertical),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         Text(
             texto,
-            style = DivvupTheme.typography.pts.copy(lineHeight = 1.1.em),
+            style = DivvupTheme.typography.pts.copy(fontSize = tamanho.fonte, lineHeight = 1.1.em),
             color = c.onAccent,
             modifier = Modifier.alignByBaseline(),
         )

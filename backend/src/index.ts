@@ -5,6 +5,7 @@ import { Firestore } from "./firestore.js";
 import { criarCasa } from "./operacoes/casa.js";
 import { criarConvite, entrarComCodigo, revogarConvite } from "./operacoes/convites.js";
 import { alterarPapel, editarCasa, removerMembro, sairDaCasa } from "./operacoes/membros.js";
+import { criarTarefa } from "./operacoes/tarefas.js";
 import { criarPerfil } from "./operacoes/perfil.js";
 
 /**
@@ -16,6 +17,7 @@ import { criarPerfil } from "./operacoes/perfil.js";
  * - `POST /v1/criarConvite`, `/v1/revogarConvite` `{codigo}`, `/v1/entrarComCodigo` `{codigo}` (R-06).
  * - `POST /v1/alterarPapel` `{uid, papel}`, `/v1/removerMembro` `{uid}`, `/v1/sairDaCasa`,
  *   `/v1/editarCasa` `{nome, tipo, cidade?, bairro?, rua?}` (R-03, R-04).
+ * - `POST /v1/criarTarefa` `{titulo, descricao?, categoria, peso, prazo}` (R-09 a R-13).
  * As operações protegidas da SPEC §4.2 entram aqui, uma rota por operação.
  */
 export default {
@@ -60,6 +62,7 @@ export default {
         "/v1/removerMembro": (db, u, corpo) => removerMembro(db, u, corpo),
         "/v1/sairDaCasa": (db, u) => sairDaCasa(db, u),
         "/v1/editarCasa": editarCasa,
+        "/v1/criarTarefa": (db, u, corpo) => criarTarefa(db, u, corpo),
       };
       const operacao = operacoes[url.pathname];
       if (req.method === "POST" && operacao) {
