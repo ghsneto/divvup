@@ -13,6 +13,7 @@ import br.app.divvup.core.domain.tarefa.EstadoDasTarefas
 import br.app.divvup.core.domain.tarefa.FormularioTarefa
 import br.app.divvup.core.domain.tarefa.RepositorioDeTarefas
 import br.app.divvup.core.domain.tarefa.ResultadoTarefa
+import br.app.divvup.core.domain.tarefa.Swipe
 import br.app.divvup.core.domain.conta.ResultadoConta
 import br.app.divvup.core.domain.conta.Sessao
 import br.app.divvup.core.model.Casa
@@ -172,5 +173,25 @@ class FakeRepositorioDeTarefas(inicial: EstadoDasTarefas = EstadoDasTarefas.Carr
     override suspend fun criar(formulario: FormularioTarefa): ResultadoTarefa<String> {
         criadas += formulario
         return resultadoCriar
+    }
+
+    val listaDePasses = MutableStateFlow<Map<String, Instant>>(emptyMap())
+    override val passes: StateFlow<Map<String, Instant>> = listaDePasses
+
+    /** Resultado da próxima operação de swipe (assumir/passar/desfazer/rever). */
+    var resultadoSwipe: ResultadoTarefa<Unit> = ResultadoTarefa.Ok(Unit)
+    val swipes = mutableListOf<String>()
+
+    override suspend fun assumir(tarefaId: String): ResultadoTarefa<Unit> = registrar("assumir:$tarefaId")
+
+    override suspend fun passar(tarefaId: String): ResultadoTarefa<Unit> = registrar("passar:$tarefaId")
+
+    override suspend fun desfazer(tarefaId: String, acao: Swipe): ResultadoTarefa<Unit> = registrar("desfazer:$tarefaId:$acao")
+
+    override suspend fun reverPassadas(): ResultadoTarefa<Unit> = registrar("rever")
+
+    private fun registrar(chamada: String): ResultadoTarefa<Unit> {
+        swipes += chamada
+        return resultadoSwipe
     }
 }

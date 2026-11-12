@@ -61,4 +61,12 @@ class TarefasTest {
         assertFalse(prazoValido(LocalDate.of(2026, 11, 10), LocalTime.of(11, 0), agora))
         assertTrue(prazoValido(LocalDate.of(2026, 11, 10), LocalTime.of(13, 0), agora))
     }
+
+    @Test
+    fun `deck tira as passadas ainda validas (R-14, R-17)`() {
+        val lista = listOf(t("a", "2026-11-11T12:00:00Z", 50), t("b", "2026-11-12T12:00:00Z", 50), t("c", "2026-11-13T12:00:00Z", 50))
+        val passes = mapOf("a" to agora.plusSeconds(3600), "b" to agora.minusSeconds(1))
+        assertEquals(listOf("b", "c"), deckSemPassadas(lista, passes, agora).map { it.id })
+        assertEquals(listOf("a"), passadasAbertas(lista, passes, agora).map { it.id })
+    }
 }

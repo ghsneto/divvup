@@ -8,6 +8,8 @@ import br.app.divvup.core.domain.tarefa.EstadoDasTarefas
 import br.app.divvup.core.domain.tarefa.FormularioTarefa
 import br.app.divvup.core.domain.tarefa.RepositorioDeTarefas
 import br.app.divvup.core.domain.tarefa.ResultadoTarefa
+import br.app.divvup.core.domain.tarefa.Swipe
+import br.app.divvup.core.data.casa.observar
 import br.app.divvup.core.model.Categoria
 import br.app.divvup.core.model.SituacaoDaTarefa
 import br.app.divvup.core.model.Tarefa
@@ -19,11 +21,14 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import java.io.IOException
+import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -67,6 +72,40 @@ class RepositorioDeTarefasFirebase @Inject constructor(
         ResultadoTarefa.Falha(erroDeTarefa(e))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val passes: Flow<Map<String, Instant>> = combine(atual.uid, atual.casaId) { uid, casa -> uid to casa }
+        .flatMapLatest { (uid, casa) ->
+            if (uid == null || casa == null) {
+                flowOf(emptyMap())
+            } else {
+                observar(atual.firestore.collection("houses").document(casa).collection("members").document(uid).collection("passes"))
+                    .map { q -> q?.documents.orEmpty().mapNotNull { d -> d.getTimestamp("expiresAt")?.toInstant()?.let { d.id to it } }.toMap() }
+            }
+        }
+
+    override suspend fun assumir(tarefaId: String): ResultadoTarefa<Unit> = operacao("assumirTarefa", tarefaId)
+
+    override suspend fun passar(tarefaId: String): ResultadoTarefa<Unit> = operacao("passarTarefa", tarefaId)
+
+    override suspend fun desfazer(tarefaId: String, acao: Swipe): ResultadoTarefa<Unit> = operacao("desfazer", tarefaId) {
+        put("acao", JsonPrimitive(acao.name))
+    }
+
+    override suspend fun reverPassadas(): ResultadoTarefa<Unit> = operacao("reverPassadas", null)
+
+    private suspend fun operacao(
+        nome: String,
+        tarefaId: String?,
+        extra: kotlinx.serialization.json.JsonObjectBuilder.() -> Unit = {},
+    ): ResultadoTarefa<Unit> = try {
+        backend.chamar(nome, buildJsonObject { tarefaId?.let { put("tarefaId", JsonPrimitive(it)) }; extra() })
+        ResultadoTarefa.Ok(Unit)
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        ResultadoTarefa.Falha(erroDeTarefa(e))
+    }
+
     private companion object {
         val EM_JOGO = listOf(SituacaoDaTarefa.OPEN.name, SituacaoDaTarefa.ASSIGNED.name, SituacaoDaTarefa.LATE.name)
     }
@@ -74,6 +113,9 @@ class RepositorioDeTarefasFirebase @Inject constructor(
 
 internal fun erroDeTarefa(e: Exception): ErroDeTarefa = when {
     e is ErroDoBackend && e.codigo == "prazo-no-passado" -> ErroDeTarefa.PrazoNoPassado
+    e is ErroDoBackend && e.codigo == "ja-assumida" -> ErroDeTarefa.JaAssumida(e.detalhe.orEmpty())
+    e is ErroDoBackend && e.codigo == "limite" -> ErroDeTarefa.Limite
+    e is ErroDoBackend && e.codigo == "nao-da-para-desfazer" -> ErroDeTarefa.NaoDaParaDesfazer
     e is ErroDoBackend -> ErroDeTarefa.Desconhecido
     e is IOException -> ErroDeTarefa.SemConexao
     else -> ErroDeTarefa.Desconhecido

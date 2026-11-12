@@ -17,7 +17,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /** Falha de uma operação do backend: `codigo` é o campo `erro` da resposta (ou rede/interno). */
-class ErroDoBackend(val status: Int, val codigo: String) : IOException("backend: $status $codigo")
+class ErroDoBackend(val status: Int, val codigo: String, val detalhe: String? = null) : IOException("backend: $status $codigo")
 
 /** Fornece o ID token do usuário conectado (Firebase Auth). */
 fun interface FonteDeToken {
@@ -49,7 +49,7 @@ class ClienteBackend @Inject constructor(
                 val conteudo = runCatching { json.parseToJsonElement(texto).jsonObject }.getOrNull()
                 if (!resposta.isSuccessful) {
                     val codigo = conteudo?.get("erro")?.textoOuNull() ?: "http-${resposta.code}"
-                    throw ErroDoBackend(resposta.code, codigo)
+                    throw ErroDoBackend(resposta.code, codigo, conteudo?.get("detalhe")?.textoOuNull())
                 }
                 conteudo ?: JsonObject(emptyMap())
             }

@@ -98,6 +98,15 @@ data class FormularioTarefa(
 /** Falhas das operações de tarefa. */
 sealed interface ErroDeTarefa {
     data object PrazoNoPassado : ErroDeTarefa
+
+    /** R-15: outra pessoa assumiu antes ("alguém já pegou essa"). */
+    data class JaAssumida(val porQuem: String) : ErroDeTarefa
+
+    /** R-20: já tem 5 assumidas abertas. */
+    data object Limite : ErroDeTarefa
+
+    /** R-18: passou da janela de desfazer. */
+    data object NaoDaParaDesfazer : ErroDeTarefa
     data object SemConexao : ErroDeTarefa
     data object Desconhecido : ErroDeTarefa
 }
@@ -121,7 +130,33 @@ interface RepositorioDeTarefas {
 
     /** C2 (R-09): devolve o id da ocorrência. */
     suspend fun criar(formulario: FormularioTarefa): ResultadoTarefa<String>
+
+    /** Passes do usuário na casa atual: id da tarefa → quando expira (R-16). */
+    val passes: Flow<Map<String, Instant>>
+
+    /** Swipe à direita (R-15, R-20). */
+    suspend fun assumir(tarefaId: String): ResultadoTarefa<Unit>
+
+    /** Swipe à esquerda (R-16). */
+    suspend fun passar(tarefaId: String): ResultadoTarefa<Unit>
+
+    /** "Desfazer" do último swipe (R-18). */
+    suspend fun desfazer(tarefaId: String, acao: Swipe): ResultadoTarefa<Unit>
+
+    /** "Rever" as passadas (R-17). */
+    suspend fun reverPassadas(): ResultadoTarefa<Unit>
 }
+
+/** Direção do swipe. */
+enum class Swipe { ASSUMIR, PASSAR }
+
+/** R-14: o deck tira as tarefas que a pessoa passou e cujo passe ainda vale. */
+fun deckSemPassadas(tarefas: List<Tarefa>, passes: Map<String, Instant>, agora: Instant): List<Tarefa> =
+    ordenarDeck(tarefas).filterNot { t -> passes[t.id]?.isAfter(agora) == true }
+
+/** R-17: as que a pessoa passou e ainda estão abertas ("você passou X tarefas"). */
+fun passadasAbertas(tarefas: List<Tarefa>, passes: Map<String, Instant>, agora: Instant): List<Tarefa> =
+    ordenarDeck(tarefas).filter { t -> passes[t.id]?.isAfter(agora) == true }
 
 private const val SEMANA = 7L
 private const val HORA_HOJE = 22

@@ -35,6 +35,12 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.app.divvup.core.designsystem.icon.DivvupIcone
@@ -56,6 +62,12 @@ fun DivvupSnackbar(
     acao: String? = null,
     onAcao: () -> Unit = {},
     contagem: Boolean = false,
+    /** Texto depois do "·" em cinza ("Tarefa assumida · +50 pts ao concluir"). */
+    complemento: String? = null,
+    /** Ícone da ação ("Desfazer" em C1). */
+    iconeAcao: DivvupIcone? = null,
+    /** Altura mínima (52; na faixa de C1, 44). */
+    alturaMinima: Dp = 52.dp,
 ) {
     val c = DivvupTheme.colors
     val shape = DivvupTheme.shapes.sm
@@ -69,18 +81,30 @@ fun DivvupSnackbar(
     Box(
         modifier
             .fillMaxWidth()
-            .heightIn(min = 52.dp)
+            .heightIn(min = alturaMinima)
             .clip(shape)
             .background(c.snack, shape)
             .semantics { liveRegion = LiveRegionMode.Polite },
     ) {
         Row(
-            Modifier.heightIn(min = 52.dp).padding(start = 16.dp, end = 8.dp),
+            Modifier.heightIn(min = alturaMinima).padding(start = 16.dp, end = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             icone?.let { DivvupIcon(it, tamanho = TamanhoIcone.Pequeno.dp, tint = c.lima) }
-            Text(mensagem, style = DivvupTheme.typography.botao, color = c.snackText, modifier = Modifier.weight(1f))
+            Text(
+                buildAnnotatedString {
+                    append(mensagem)
+                    complemento?.let {
+                        withStyle(SpanStyle(fontWeight = FontWeight.Normal, color = c.sobreTinta.textoMudo)) { append(" · $it") }
+                    }
+                },
+                style = DivvupTheme.typography.botao,
+                color = c.snackText,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f),
+            )
             acao?.let {
                 Box(
                     Modifier
@@ -90,7 +114,10 @@ fun DivvupSnackbar(
                         .padding(horizontal = 12.dp),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(it, style = DivvupTheme.typography.botao, color = c.lima)
+                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                        iconeAcao?.let { i -> DivvupIcon(i, tamanho = TamanhoIcone.Pequeno.dp, tint = c.lima) }
+                        Text(it, style = DivvupTheme.typography.botao, color = c.lima)
+                    }
                 }
             }
         }

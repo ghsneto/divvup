@@ -4,6 +4,8 @@ export class ErroHttp extends Error {
     readonly status: number,
     readonly codigo: string,
     mensagem?: string,
+    /** Dado público para a mensagem do app (ex.: quem assumiu antes); vai no campo `detalhe`. */
+    readonly detalhe?: string,
   ) {
     super(mensagem ?? codigo);
   }
@@ -19,7 +21,11 @@ export function json(corpo: unknown, status = 200): Response {
 }
 
 export function respostaDeErro(erro: unknown): Response {
-  if (erro instanceof ErroHttp) return json({ erro: erro.codigo }, erro.status);
+  if (erro instanceof ErroHttp) {
+    const corpo: Record<string, string> = { erro: erro.codigo };
+    if (erro.detalhe !== undefined) corpo["detalhe"] = erro.detalhe;
+    return json(corpo, erro.status);
+  }
   console.error(erro);
   return json({ erro: "interno" }, 500);
 }

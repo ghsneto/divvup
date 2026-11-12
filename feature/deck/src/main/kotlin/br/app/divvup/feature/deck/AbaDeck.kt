@@ -8,14 +8,16 @@ import br.app.divvup.core.model.Tarefa
 
 /** Conteúdo da aba Deck dentro da estrutura principal. */
 @Composable
-fun AbaDeck(aoNovaTarefa: () -> Unit, aoDetalhes: (Tarefa) -> Unit, vm: DeckViewModel = hiltViewModel()) {
+fun AbaDeck(aoNovaTarefa: () -> Unit, aoMinhasTarefas: () -> Unit, aoDetalhes: (Tarefa) -> Unit, vm: DeckViewModel = hiltViewModel()) {
     val estado by vm.estado.collectAsStateWithLifecycle()
     DeckScreen(
         estado = estado,
-        // Passar (#13) e Assumir (#12) ganham ação nas próximas issues.
-        aoPassar = {},
-        aoAssumir = {},
+        aoPassar = vm::passar,
+        aoAssumir = vm::assumir,
+        aoDesfazer = vm::desfazer,
+        aoRever = vm::rever,
         aoNovaTarefa = aoNovaTarefa,
+        aoMinhasTarefas = aoMinhasTarefas,
         aoDetalhes = aoDetalhes,
         aoTentarDeNovo = vm::tentarDeNovo,
     )

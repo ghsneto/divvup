@@ -15,7 +15,9 @@ import br.app.divvup.core.designsystem.component.DivvupTopBar
 import br.app.divvup.core.designsystem.icon.DivvupIcone
 import br.app.divvup.core.designsystem.theme.DivvupTheme
 import br.app.divvup.core.domain.conta.Sessao
+import br.app.divvup.core.domain.tarefa.ErroDeTarefa
 import br.app.divvup.core.domain.tarefa.EstadoDasTarefas
+import br.app.divvup.core.domain.tarefa.ResultadoTarefa
 import br.app.divvup.core.model.Categoria
 import br.app.divvup.core.model.Membro
 import br.app.divvup.core.model.Papel
@@ -36,6 +38,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import java.time.Instant
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @RunWith(RobolectricTestRunner::class)
 class DeckTest {
@@ -67,6 +70,61 @@ class DeckTest {
         assertEquals(3, e.abertas)
     }
 
+    private fun vm(tarefas: FakeRepositorioDeTarefas, abertas: Int = 0): DeckViewModel {
+        val minhas = (1..abertas).map { t("m$it", "Minha $it", Categoria.OUTROS, 25, "2026-12-08T12:00:00Z", "Iane", "", "", SituacaoDaTarefa.ASSIGNED, "eu") }
+        tarefas.estado.value = EstadoDasTarefas.Carregadas(doDesenho.map { it.copy(prazo = Instant.now().plusSeconds(86_400L * it.id.toLong())) } + minhas)
+        return DeckViewModel(tarefas, FakeRepositorioDeConvites(), FakeRepositorioDeConta(Sessao.Conectado("eu")), FakeMonitorDeConexao())
+    }
+
+    @Test
+    fun `assumir tira o cartao, avisa por 3 s e desfazer devolve (R-15, R-18)`() = runTest {
+        val repo = FakeRepositorioDeTarefas()
+        val v = vm(repo)
+        val topo = v.estado.first { it.situacao == SituacaoDoDeck.Cartoes }.cartoes.first()
+        v.assumir(topo)
+        val depois = v.estado.first { it.aviso != null }
+        assertEquals(AvisoDoDeck.Assumida(50), depois.aviso)
+        assertEquals(listOf("2", "3"), depois.cartoes.map { it.id })
+        assertEquals(1, depois.abertas)
+        v.desfazer()
+        assertEquals(listOf("1", "2", "3"), v.estado.first { it.aviso == null }.cartoes.map { it.id })
+        assertEquals(listOf("assumir:1", "desfazer:1:ASSUMIR"), repo.swipes)
+    }
+
+    @Test
+    fun `quem perde a corrida ve quem pegou (R-15)`() = runTest {
+        val repo = FakeRepositorioDeTarefas().apply { resultadoSwipe = ResultadoTarefa.Falha(ErroDeTarefa.JaAssumida("Davi Lima")) }
+        val v = vm(repo)
+        v.assumir(v.estado.first { it.situacao == SituacaoDoDeck.Cartoes }.cartoes.first())
+        val e = v.estado.first { it.aviso is AvisoDoDeck.JaPegaram }
+        assertEquals(AvisoDoDeck.JaPegaram("Davi Lima"), e.aviso)
+        assertEquals(false, e.podeDesfazer)
+    }
+
+    @Test
+    fun `no limite nao assume e passar some com o cartao (R-16, R-20)`() = runTest {
+        val repo = FakeRepositorioDeTarefas()
+        val v = vm(repo, abertas = 5)
+        val e = v.estado.first { it.situacao == SituacaoDoDeck.Cartoes }
+        assertTrue(e.noLimite)
+        v.assumir(e.cartoes.first())
+        assertTrue(repo.swipes.isEmpty())
+        v.passar(e.cartoes.first())
+        assertEquals(AvisoDoDeck.Passada, v.estado.first { it.aviso != null }.aviso)
+        assertEquals(listOf("passar:1"), repo.swipes)
+    }
+
+    @Test
+    fun `passadas ainda validas vao para o fim do deck e rever chama o backend (R-17)`() = runTest {
+        val repo = FakeRepositorioDeTarefas()
+        val v = vm(repo)
+        repo.listaDePasses.value = listOf("1", "2", "3").associateWith { Instant.now().plusSeconds(3600) }
+        val e = v.estado.first { it.situacao == SituacaoDoDeck.Passadas }
+        assertEquals(3, e.passadas.size)
+        v.rever()
+        assertEquals(listOf("rever"), repo.swipes)
+    }
+
     @Test
     fun `carregando, erro e vazio`() = runTest {
         val tarefas = FakeRepositorioDeTarefas(EstadoDasTarefas.Carregando)
@@ -79,7 +137,32 @@ class DeckTest {
     }
 
     private fun estado(situacao: SituacaoDoDeck, offline: Boolean = false) =
-        DeckEstado(situacao, if (situacao == SituacaoDoDeck.Cartoes) doDesenho else emptyList(), offline, pontosDoMes = 325, sequencia = 4, abertas = 3, agora = agora)
+        DeckEstado(
+            situacao = situacao,
+            cartoes = if (situacao == SituacaoDoDeck.Cartoes) doDesenho else emptyList(),
+            offline = offline,
+            pontosDoMes = 325,
+            sequencia = 4,
+            abertas = 3,
+            agora = agora,
+        )
+
+    @Composable
+    private fun Deck(e: DeckEstado) = DeckScreen(e, {}, {}, {}, {}, {}, {}, {}, {})
+
+    @Test
+    fun screenshotC1Limite() = capturarTela("C1_deck_limite") { NaEstrutura { Deck(estado(SituacaoDoDeck.Cartoes).copy(abertas = 5)) } }
+
+    @Test
+    fun screenshotC1Passadas() = capturarTela("C1_deck_passadas") {
+        val passadas = doDesenho + t("4", "Fazer a feira da semana", Categoria.COMPRAS, 100, "2026-11-07T15:00:00Z", "Davi", "avataaars:divvup-03", "")
+        NaEstrutura { Deck(estado(SituacaoDoDeck.Passadas).copy(passadas = passadas)) }
+    }
+
+    @Test
+    fun screenshotC1Assumida() = capturarTela("C1_deck_assumida") {
+        NaEstrutura { Deck(estado(SituacaoDoDeck.Cartoes).copy(cartoes = doDesenho.drop(1), aviso = AvisoDoDeck.Assumida(50), podeDesfazer = true)) }
+    }
 
     /** Barras da estrutura principal em volta do deck, como no artboard `Main`. */
     @Composable
@@ -108,17 +191,17 @@ class DeckTest {
     }
 
     @Test
-    fun screenshotC1() = capturarTela("C1_deck") { NaEstrutura { DeckScreen(estado(SituacaoDoDeck.Cartoes), {}, {}, {}, {}, {}) } }
+    fun screenshotC1() = capturarTela("C1_deck") { NaEstrutura { Deck(estado(SituacaoDoDeck.Cartoes)) } }
 
     @Test
-    fun screenshotC1Vazio() = capturarTela("C1_deck_vazio") { NaEstrutura { DeckScreen(estado(SituacaoDoDeck.Vazio), {}, {}, {}, {}, {}) } }
+    fun screenshotC1Vazio() = capturarTela("C1_deck_vazio") { NaEstrutura { Deck(estado(SituacaoDoDeck.Vazio)) } }
 
     @Test
-    fun screenshotC1Carregando() = capturarTela("C1_deck_carregando") { NaEstrutura { DeckScreen(estado(SituacaoDoDeck.Carregando), {}, {}, {}, {}, {}) } }
+    fun screenshotC1Carregando() = capturarTela("C1_deck_carregando") { NaEstrutura { Deck(estado(SituacaoDoDeck.Carregando)) } }
 
     @Test
-    fun screenshotC1Erro() = capturarTela("C1_deck_erro") { NaEstrutura { DeckScreen(estado(SituacaoDoDeck.Erro), {}, {}, {}, {}, {}) } }
+    fun screenshotC1Erro() = capturarTela("C1_deck_erro") { NaEstrutura { Deck(estado(SituacaoDoDeck.Erro)) } }
 
     @Test
-    fun screenshotC1Offline() = capturarTela("C1_deck_offline") { NaEstrutura { DeckScreen(estado(SituacaoDoDeck.Cartoes, offline = true), {}, {}, {}, {}, {}) } }
+    fun screenshotC1Offline() = capturarTela("C1_deck_offline") { NaEstrutura { Deck(estado(SituacaoDoDeck.Cartoes, offline = true)) } }
 }

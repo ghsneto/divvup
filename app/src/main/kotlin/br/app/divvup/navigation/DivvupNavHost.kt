@@ -101,10 +101,14 @@ fun DivvupNavHost() {
         telasDeMembros(nav, aoSairDaCasa = { nav.navigate(RotaSuaCasa) { limparPilha(nav) } })
         telaGaleria(nav)
         telaNovaTarefa(nav)
-        telaPrincipal(aoAbrirNotificacoes = { nav.navigate(RotaNotificacoesProvisoria) }) { aba ->
+        telaPrincipal(aoAbrirNotificacoes = { nav.navigate(RotaNotificacoesProvisoria) }) { aba, trocarAba ->
             if (aba == Aba.Deck) {
                 // Detalhe da tarefa (C3) chega na #14.
-                AbaDeck(aoNovaTarefa = { nav.navigate(RotaNovaTarefa) }, aoDetalhes = {})
+                AbaDeck(
+                    aoNovaTarefa = { nav.navigate(RotaNovaTarefa) },
+                    aoMinhasTarefas = { trocarAba(Aba.MinhasTarefas) },
+                    aoDetalhes = {},
+                )
                 return@telaPrincipal
             }
             val titulo = when (aba) {
