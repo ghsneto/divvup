@@ -8,6 +8,9 @@ enum class Categoria { COZINHA, LIMPEZA_GERAL, BANHEIRO, LAVANDERIA, LIXO, COMPR
 /** R-10: peso → pontos. */
 enum class Peso(val pontos: Int) { LEVE(25), MEDIA(50), PESADA(100) }
 
+/** Como a tarefa chegou ao dono (`assignedVia`). */
+enum class ViaDeAtribuicao { SWIPE, AUTO }
+
 /** Situação da ocorrência (`tasks/{id}.status`). */
 enum class SituacaoDaTarefa { OPEN, ASSIGNED, DONE, LATE, CANCELLED }
 
@@ -24,4 +27,8 @@ data class Tarefa(
     val criadaPor: String,
     val criadaPorNome: String,
     val criadaPorAvatar: String?,
+    val criadaEm: Instant? = null,
+    val via: ViaDeAtribuicao? = null,
+    val concluidaEm: Instant? = null,
+    val pontosGanhos: Int? = null,
 )

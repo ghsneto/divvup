@@ -6,7 +6,7 @@ import { criarCasa } from "./operacoes/casa.js";
 import { criarConvite, entrarComCodigo, revogarConvite } from "./operacoes/convites.js";
 import { alterarPapel, editarCasa, removerMembro, sairDaCasa } from "./operacoes/membros.js";
 import { assumirTarefa, desfazer, passarTarefa, reverPassadas } from "./operacoes/match.js";
-import { criarTarefa } from "./operacoes/tarefas.js";
+import { cancelarTarefa, concluirTarefa, criarTarefa, devolverTarefa, editarTarefa, excluirTarefa } from "./operacoes/tarefas.js";
 import { criarPerfil } from "./operacoes/perfil.js";
 
 /**
@@ -21,6 +21,8 @@ import { criarPerfil } from "./operacoes/perfil.js";
  * - `POST /v1/criarTarefa` `{titulo, descricao?, categoria, peso, prazo}` (R-09 a R-13).
  * - `POST /v1/assumirTarefa` / `/v1/passarTarefa` `{tarefaId}`, `/v1/desfazer` `{tarefaId, acao}`,
  *   `/v1/reverPassadas` (R-15 a R-20).
+ * - `POST /v1/concluirTarefa`, `/v1/devolverTarefa`, `/v1/cancelarTarefa`, `/v1/excluirTarefa`
+ *   `{tarefaId}` e `/v1/editarTarefa` `{tarefaId, titulo, …}` (R-12, R-19, R-21, R-22).
  * As operações protegidas da SPEC §4.2 entram aqui, uma rota por operação.
  */
 export default {
@@ -70,6 +72,11 @@ export default {
         "/v1/passarTarefa": (db, u, corpo) => passarTarefa(db, u, corpo),
         "/v1/desfazer": (db, u, corpo) => desfazer(db, u, corpo),
         "/v1/reverPassadas": (db, u) => reverPassadas(db, u),
+        "/v1/concluirTarefa": (db, u, corpo) => concluirTarefa(db, u, corpo),
+        "/v1/devolverTarefa": (db, u, corpo) => devolverTarefa(db, u, corpo),
+        "/v1/cancelarTarefa": (db, u, corpo) => cancelarTarefa(db, u, corpo),
+        "/v1/editarTarefa": (db, u, corpo) => editarTarefa(db, u, corpo),
+        "/v1/excluirTarefa": excluirTarefa,
       };
       const operacao = operacoes[url.pathname];
       if (req.method === "POST" && operacao) {

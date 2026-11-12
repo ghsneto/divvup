@@ -27,4 +27,118 @@
     <string name="nova_erro_conexao">Não deu para criar a tarefa. Confere a conexão e tenta de novo.</string>
     <string name="nova_ok">OK</string>
     <string name="nova_cancelar">Cancelar</string>
+
+    <!-- C2 em modo edição -->
+    <string name="editar_contexto">só sem dono</string>
+    <string name="editar_titulo">editar tarefa</string>
+    <string name="editar_salvar">Salvar</string>
+    <string name="editar_excluir">Excluir tarefa</string>
+    <string name="excluir_titulo">Excluir esta tarefa?</string>
+    <string name="excluir_texto">Ela some do deck de todo mundo. Não dá pra desfazer.</string>
+
+    <!-- C5 (docs/design/fonte/MinhasTarefas.dc.html) -->
+    <string name="minhas_titulo">minhas tarefas</string>
+    <string name="minhas_de">" de %1$s"</string>
+    <string name="minhas_contador_descricao">%1$d de %2$s tarefas abertas</string>
+    <string name="minhas_atrasadas">atrasadas</string>
+    <string name="minhas_hoje">para hoje</string>
+    <string name="minhas_proximas">próximas</string>
+    <string name="minhas_concluidas">concluídas · 7 dias</string>
+    <string name="minhas_contagem">· %1$d</string>
+    <string name="minhas_soma">+%1$s pts</string>
+    <string name="minhas_venceu">venceu %1$s · vale metade</string>
+    <string name="minhas_prazo">%1$s às %2$s</string>
+    <string name="minhas_atribuida">atribuída a você</string>
+    <string name="minhas_concluir">Concluir %1$s</string>
+    <string name="minhas_vazio_rotulo">mãos livres</string>
+    <string name="minhas_vazio_titulo">você não tem tarefas</string>
+    <string name="minhas_vazio_texto">Passa no deck e pega uma. Quem pega cedo escolhe a melhor.</string>
+    <string name="minhas_ir_deck">Ir para o deck</string>
+    <string name="minhas_mais">+%1$s</string>
+    <string name="minhas_nova">Nova tarefa</string>
+    <string name="minhas_mostrar">Mostrar concluídas</string>
+    <string name="minhas_esconder">Esconder concluídas</string>
+
+    <!-- C3 (docs/design/fonte/DetalheTarefa.dc.html) -->
+    <string name="detalhe_voltar">Voltar</string>
+    <string name="detalhe_editar">Editar tarefa</string>
+    <string name="detalhe_aberta">aberta</string>
+    <string name="detalhe_sua">sua</string>
+    <string name="detalhe_atrasada">atrasada</string>
+    <string name="detalhe_de">de %1$s</string>
+    <string name="detalhe_concluida">concluída</string>
+    <string name="detalhe_cancelada">cancelada</string>
+    <string name="detalhe_pontos">pontos</string>
+    <string name="detalhe_prazo">prazo</string>
+    <string name="detalhe_dono">dono</string>
+    <string name="detalhe_como">como</string>
+    <string name="detalhe_ninguem">ninguém ainda</string>
+    <string name="detalhe_voce">você</string>
+    <string name="detalhe_no_deck">no deck</string>
+    <string name="detalhe_pelo_swipe">pelo swipe</string>
+    <string name="detalhe_automatica">automaticamente</string>
+    <string name="detalhe_criada">criada por %1$s · %2$s</string>
+    <string name="detalhe_prazo_absoluto">%1$s · %2$s</string>
+    <string name="detalhe_vence">vence %1$s</string>
+    <string name="detalhe_no_prazo">no prazo</string>
+    <string name="detalhe_depois_do_prazo">depois do prazo</string>
+    <string name="detalhe_concluida_em">concluída %1$s · %2$s</string>
+    <plurals name="detalhe_em_dias">
+        <item quantity="one">em %1$d dia</item>
+        <item quantity="other">em %1$d dias</item>
+    </plurals>
+    <string name="detalhe_em_horas">em %1$d h</string>
+    <string name="detalhe_em_minutos">em %1$d min</string>
+    <plurals name="detalhe_venceu_dias">
+        <item quantity="one">venceu há %1$d dia</item>
+        <item quantity="other">venceu há %1$d dias</item>
+    </plurals>
+    <string name="detalhe_venceu_horas">venceu há %1$d h</string>
+    <string name="detalhe_nota_perto">Falta menos de 24 h: não dá mais para devolver.</string>
+    <string name="detalhe_nota_automatica">Falta menos de 24 h: não dá mais para devolver. Ela veio pra você por ter menos pontos no mês.</string>
+    <string name="detalhe_nota_atrasada">Concluindo agora você ganha %1$s pts, metade do valor.</string>
+    <string name="detalhe_nota_outra">Só leitura. Como admin, você pode cancelar a tarefa.</string>
+    <string name="detalhe_nota_concluida">Você ganhou %1$s pts com esta tarefa. Ela já está no histórico da casa.</string>
+    <string name="detalhe_nota_cancelada">Cancelada. Ninguém ganha pontos por ela.</string>
+    <string name="detalhe_devolver">Devolver</string>
+    <string name="detalhe_concluir">Concluir</string>
+    <string name="detalhe_assumir">Assumir · %1$s pts</string>
+    <string name="detalhe_cancelar">Cancelar tarefa</string>
+    <string name="detalhe_devolver_titulo">Devolver ao deck?</string>
+    <string name="detalhe_devolver_texto">Ela volta pra pilha de todo mundo. Você pode devolver enquanto faltar mais de 24 h.</string>
+    <string name="detalhe_cancelar_titulo">Cancelar esta tarefa?</string>
+    <string name="detalhe_cancelar_texto">%1$s perde a tarefa e ninguém ganha pontos por ela.</string>
+    <string name="detalhe_cancelar_texto_sem_dono">Ela sai do deck e ninguém ganha pontos por ela.</string>
+    <string name="detalhe_dialogo_voltar">Voltar</string>
+    <string name="detalhe_devolvida">Devolvida ao deck</string>
+    <string name="detalhe_assumida">Tarefa assumida</string>
+    <string name="detalhe_cancelada_aviso">Tarefa cancelada</string>
+    <string name="detalhe_erro">Não deu certo. Confere a conexão e tenta de novo.</string>
+    <string name="detalhe_nao_existe">Essa tarefa não existe mais.</string>
+    <string name="detalhe_erro_prazo_curto">Falta menos de 24 h: não dá mais para devolver.</string>
+    <string name="detalhe_erro_limite">Você já tem 5 tarefas abertas. Conclua uma para pegar outra.</string>
+    <string name="detalhe_erro_ja_assumida">Alguém já pegou essa</string>
+    <string name="detalhe_erro_sem_permissao">Você não pode mais mexer nesta tarefa.</string>
+
+    <!-- C4 (docs/design/fonte/Concluida.dc.html) -->
+    <string name="concluida_rotulo">tarefa concluída</string>
+    <string name="concluida_fechar">Fechar</string>
+    <string name="concluida_tarefa">%1$s · %2$s</string>
+    <string name="concluida_pontos">+%1$d</string>
+    <string name="concluida_na_conta">pontos na conta</string>
+    <string name="concluida_ranking">ranking do mês</string>
+    <string name="concluida_posicao">%1$dº</string>
+    <string name="concluida_passou">você passou %1$s</string>
+    <string name="concluida_manteve">você segue em %1$dº</string>
+    <string name="concluida_sequencia">sequência</string>
+    <plurals name="concluida_dias">
+        <item quantity="one">dia</item>
+        <item quantity="other">dias</item>
+    </plurals>
+    <plurals name="concluida_dias_descricao">
+        <item quantity="one">%1$d dia seguido</item>
+        <item quantity="other">%1$d dias seguidos</item>
+    </plurals>
+    <string name="concluida_pegar">Pegar outra tarefa</string>
+    <string name="concluida_continuar">Continuar</string>
 </resources>

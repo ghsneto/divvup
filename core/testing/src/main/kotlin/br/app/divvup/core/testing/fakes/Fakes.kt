@@ -12,6 +12,7 @@ import br.app.divvup.core.domain.conta.RepositorioDeConta
 import br.app.divvup.core.domain.tarefa.EstadoDasTarefas
 import br.app.divvup.core.domain.tarefa.FormularioTarefa
 import br.app.divvup.core.domain.tarefa.RepositorioDeTarefas
+import br.app.divvup.core.domain.tarefa.ResultadoDaConclusao
 import br.app.divvup.core.domain.tarefa.ResultadoTarefa
 import br.app.divvup.core.domain.tarefa.Swipe
 import br.app.divvup.core.domain.conta.ResultadoConta
@@ -21,8 +22,11 @@ import br.app.divvup.core.model.Convite
 import br.app.divvup.core.model.Membro
 import br.app.divvup.core.model.Papel
 import br.app.divvup.core.model.TipoDeCasa
+import br.app.divvup.core.model.Tarefa
 import br.app.divvup.core.model.Usuario
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.StateFlow
 import java.time.Instant
 
@@ -189,6 +193,29 @@ class FakeRepositorioDeTarefas(inicial: EstadoDasTarefas = EstadoDasTarefas.Carr
     override suspend fun desfazer(tarefaId: String, acao: Swipe): ResultadoTarefa<Unit> = registrar("desfazer:$tarefaId:$acao")
 
     override suspend fun reverPassadas(): ResultadoTarefa<Unit> = registrar("rever")
+
+    val listaMinhas = MutableStateFlow<List<Tarefa>>(emptyList())
+    override val minhas: StateFlow<List<Tarefa>> = listaMinhas
+
+    /** Tarefas visíveis em C3, por id. */
+    val porId = MutableStateFlow<Map<String, Tarefa>>(emptyMap())
+    override fun tarefa(id: String): Flow<Tarefa?> = porId.map { it[id] }
+
+    var resultadoConcluir: ResultadoTarefa<ResultadoDaConclusao> =
+        ResultadoTarefa.Ok(ResultadoDaConclusao(50, noPrazo = true, posicaoAntes = 3, posicaoDepois = 2, ultrapassou = "Bruno", sequencia = 4))
+
+    override suspend fun concluir(id: String): ResultadoTarefa<ResultadoDaConclusao> {
+        swipes += "concluir:$id"
+        return resultadoConcluir
+    }
+
+    override suspend fun devolver(id: String): ResultadoTarefa<Unit> = registrar("devolver:$id")
+
+    override suspend fun cancelar(id: String): ResultadoTarefa<Unit> = registrar("cancelar:$id")
+
+    override suspend fun editar(id: String, formulario: FormularioTarefa): ResultadoTarefa<Unit> = registrar("editar:$id:${formulario.titulo}")
+
+    override suspend fun excluir(id: String): ResultadoTarefa<Unit> = registrar("excluir:$id")
 
     private fun registrar(chamada: String): ResultadoTarefa<Unit> {
         swipes += chamada

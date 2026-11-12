@@ -55,7 +55,8 @@ fun EstruturaPrincipal(
 ) {
     val c = DivvupTheme.colors
     Column(modifier.fillMaxSize().background(c.background)) {
-        BarraDaCasa(casa, temporada, naoLidas, aoAbrirNotificacoes)
+        // Só o deck mostra "novembro · faltam 24 dias" (Main); as outras abas, só o nome.
+        BarraDaCasa(casa, temporada.takeIf { aba == Aba.Deck }, naoLidas, aoAbrirNotificacoes)
         Box(Modifier.weight(1f).fillMaxWidth()) { conteudo(aba) }
         DivvupTabBar(
             abas = Aba.entries.map { AbaNavegacao(it.icone, stringResource(it.rotulo)) },
@@ -66,7 +67,7 @@ fun EstruturaPrincipal(
 }
 
 @Composable
-private fun BarraDaCasa(casa: Casa?, temporada: ResumoDaTemporada, naoLidas: Int, aoAbrirNotificacoes: () -> Unit) {
+private fun BarraDaCasa(casa: Casa?, temporada: ResumoDaTemporada?, naoLidas: Int, aoAbrirNotificacoes: () -> Unit) {
     val c = DivvupTheme.colors
     val t = DivvupTheme.typography
     DivvupTopBar {
@@ -84,12 +85,9 @@ private fun BarraDaCasa(casa: Casa?, temporada: ResumoDaTemporada, naoLidas: Int
                     overflow = TextOverflow.Ellipsis,
                 )
             }
-            DivvupLabel(
-                rotuloDaTemporada(temporada),
-                cor = c.textMuted,
-                maxLinhas = 1,
-                modifier = Modifier,
-            )
+            temporada?.let {
+                DivvupLabel(rotuloDaTemporada(it), cor = c.textMuted, maxLinhas = 1)
+            }
         }
         val descricao = if (naoLidas > 0) {
             pluralStringResource(R.plurals.principal_notificacoes_nao_lidas, naoLidas, naoLidas)

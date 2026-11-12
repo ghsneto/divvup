@@ -1,5 +1,6 @@
 package br.app.divvup.feature.house
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
@@ -31,7 +32,7 @@ class PrincipalTest {
 
     @Test
     fun `mostra a casa atual, troca de aba e calcula a temporada no fuso de Brasilia`() = runTest {
-        val vm = PrincipalViewModel(FakeRepositorioDeCasa(casa))
+        val vm = PrincipalViewModel(FakeRepositorioDeCasa(casa), SavedStateHandle())
         assertEquals(casa, vm.casa.first { it != null })
         vm.aoTrocarAba(Aba.Ranking)
         assertEquals(Aba.Ranking, vm.aba.value)

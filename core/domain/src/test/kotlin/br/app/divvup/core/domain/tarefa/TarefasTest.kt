@@ -48,6 +48,8 @@ class TarefasTest {
         assertEquals(PrazoFalado(DiaDoPrazo.Amanha, 7, 0), prazoFalado(Instant.parse("2026-11-11T10:00:00Z"), agora))
         assertEquals(PrazoFalado(DiaDoPrazo.NaSemana(6), 18, 30), prazoFalado(Instant.parse("2026-11-14T21:30:00Z"), agora))
         assertEquals(PrazoFalado(DiaDoPrazo.Data(20, 11), 9, 0), prazoFalado(Instant.parse("2026-11-20T12:00:00Z"), agora))
+        assertEquals(PrazoFalado(DiaDoPrazo.Ontem, 20, 0), prazoFalado(Instant.parse("2026-11-09T23:00:00Z"), agora))
+        assertEquals(PrazoFalado(DiaDoPrazo.NaSemana(7), 12, 0), prazoFalado(Instant.parse("2026-11-08T15:00:00Z"), agora))
     }
 
     @Test

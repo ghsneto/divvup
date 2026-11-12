@@ -17,6 +17,7 @@ fun textoDaHora(hora: Int, minuto: Int): String =
 fun textoDoDia(dia: DiaDoPrazo, diaLongo: Boolean = false): String = when (dia) {
     DiaDoPrazo.Hoje -> stringResource(R.string.prazo_hoje)
     DiaDoPrazo.Amanha -> stringResource(R.string.prazo_amanha)
+    DiaDoPrazo.Ontem -> stringResource(R.string.prazo_ontem)
     is DiaDoPrazo.NaSemana ->
         stringArrayResource(if (diaLongo) R.array.prazo_dias_semana else R.array.prazo_dias_curtos)[dia.diaDaSemana - 1]
     is DiaDoPrazo.Data -> stringResource(R.string.prazo_data, dia.dia, stringArrayResource(R.array.prazo_meses)[dia.mes - 1])

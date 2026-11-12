@@ -43,8 +43,9 @@ fun pesoDe(pontos: Int): Peso = Peso.entries.firstOrNull { it.pontos == pontos }
 sealed interface DiaDoPrazo {
     data object Hoje : DiaDoPrazo
     data object Amanha : DiaDoPrazo
+    data object Ontem : DiaDoPrazo
 
-    /** Nos próximos 6 dias. 1 = segunda … 7 = domingo. */
+    /** Até 6 dias para a frente ou para trás. 1 = segunda … 7 = domingo. */
     data class NaSemana(val diaDaSemana: Int) : DiaDoPrazo
     data class Data(val dia: Int, val mes: Int) : DiaDoPrazo
 }
@@ -55,9 +56,10 @@ fun prazoFalado(prazo: Instant, agora: Instant, fuso: ZoneId = FUSO_DA_TEMPORADA
     val quando = prazo.atZone(fuso)
     val dias = ChronoUnit.DAYS.between(agora.atZone(fuso).toLocalDate(), quando.toLocalDate())
     val dia = when {
-        dias <= 0L -> DiaDoPrazo.Hoje
+        dias == 0L -> DiaDoPrazo.Hoje
         dias == 1L -> DiaDoPrazo.Amanha
-        dias < SEMANA -> DiaDoPrazo.NaSemana(quando.dayOfWeek.value)
+        dias == -1L -> DiaDoPrazo.Ontem
+        dias in -SEMANA + 1..SEMANA - 1 -> DiaDoPrazo.NaSemana(quando.dayOfWeek.value)
         else -> DiaDoPrazo.Data(quando.dayOfMonth, quando.monthValue)
     }
     return PrazoFalado(dia, quando.hour, quando.minute)
@@ -107,6 +109,12 @@ sealed interface ErroDeTarefa {
 
     /** R-18: passou da janela de desfazer. */
     data object NaoDaParaDesfazer : ErroDeTarefa
+
+    /** R-19: faltam 24 h ou menos, não dá mais para devolver. */
+    data object PrazoCurto : ErroDeTarefa
+
+    /** R-12: sem permissão, ou a tarefa já tem dono / não é mais sua. */
+    data object SemPermissao : ErroDeTarefa
     data object SemConexao : ErroDeTarefa
     data object Desconhecido : ErroDeTarefa
 }
@@ -145,6 +153,27 @@ interface RepositorioDeTarefas {
 
     /** "Rever" as passadas (R-17). */
     suspend fun reverPassadas(): ResultadoTarefa<Unit>
+
+    /** C5: todas as tarefas que já foram do usuário na casa atual (abertas e concluídas). */
+    val minhas: Flow<List<Tarefa>>
+
+    /** C3: uma ocorrência em tempo real; `null` se não existe (ex.: foi excluída). */
+    fun tarefa(id: String): Flow<Tarefa?>
+
+    /** C3/C5 "Concluir" (R-21, R-22). */
+    suspend fun concluir(id: String): ResultadoTarefa<ResultadoDaConclusao>
+
+    /** C3 "Devolver" (R-19). */
+    suspend fun devolver(id: String): ResultadoTarefa<Unit>
+
+    /** C3 "Cancelar tarefa" (admin, R-12). */
+    suspend fun cancelar(id: String): ResultadoTarefa<Unit>
+
+    /** C2 em modo edição (R-12). */
+    suspend fun editar(id: String, formulario: FormularioTarefa): ResultadoTarefa<Unit>
+
+    /** C2 "Excluir tarefa" (R-12). */
+    suspend fun excluir(id: String): ResultadoTarefa<Unit>
 }
 
 /** Direção do swipe. */

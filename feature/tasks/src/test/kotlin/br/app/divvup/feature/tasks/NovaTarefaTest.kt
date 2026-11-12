@@ -1,5 +1,6 @@
 package br.app.divvup.feature.tasks
 
+import androidx.lifecycle.SavedStateHandle
 import br.app.divvup.core.domain.tarefa.AtalhoDePrazo
 import br.app.divvup.core.domain.tarefa.ErroDeTarefa
 import br.app.divvup.core.domain.tarefa.ResultadoTarefa
@@ -29,7 +30,7 @@ class NovaTarefaTest {
     @Test
     fun `cria com titulo, categoria, peso e prazo padrao amanha 20h`() = runTest {
         val repo = FakeRepositorioDeTarefas()
-        val vm = NovaTarefaViewModel(repo)
+        val vm = NovaTarefaViewModel(repo, SavedStateHandle())
         assertFalse(vm.estado.value.podeCriar)
         vm.aoMudarTitulo("Lavar a louça")
         vm.aoEscolherCategoria(Categoria.LIXO)
@@ -45,7 +46,7 @@ class NovaTarefaTest {
 
     @Test
     fun `titulo e descricao respeitam os limites`() = runTest {
-        val vm = NovaTarefaViewModel(FakeRepositorioDeTarefas())
+        val vm = NovaTarefaViewModel(FakeRepositorioDeTarefas(), SavedStateHandle())
         vm.aoMudarTitulo("x".repeat(80))
         vm.aoMudarDescricao("y".repeat(300))
         assertEquals(60, vm.estado.value.formulario.titulo.length)
@@ -55,7 +56,7 @@ class NovaTarefaTest {
     @Test
     fun `prazo no passado nao vai para o backend`() = runTest {
         val repo = FakeRepositorioDeTarefas()
-        val vm = NovaTarefaViewModel(repo)
+        val vm = NovaTarefaViewModel(repo, SavedStateHandle())
         vm.aoMudarTitulo("Lavar")
         vm.aoEscolherData(LocalDate.now().minusDays(1))
         vm.criar()
@@ -67,7 +68,7 @@ class NovaTarefaTest {
     @Test
     fun `fechar com alteracoes pede confirmacao e falha de rede aparece`() = runTest {
         val repo = FakeRepositorioDeTarefas().apply { resultadoCriar = ResultadoTarefa.Falha(ErroDeTarefa.SemConexao) }
-        val vm = NovaTarefaViewModel(repo)
+        val vm = NovaTarefaViewModel(repo, SavedStateHandle())
         assertTrue(vm.aoFechar())
         vm.aoMudarTitulo("Lavar")
         assertFalse(vm.aoFechar())
