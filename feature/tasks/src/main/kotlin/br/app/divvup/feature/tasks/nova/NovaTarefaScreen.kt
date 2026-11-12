@@ -93,6 +93,9 @@ fun NovaTarefaScreen(
     aoContinuarEditando: () -> Unit,
     aoDescartar: () -> Unit,
     modifier: Modifier = Modifier,
+    aoPedirExclusao: () -> Unit = {},
+    aoConfirmarExclusao: () -> Unit = {},
+    aoCancelarExclusao: () -> Unit = {},
 ) {
     val c = DivvupTheme.colors
     val t = DivvupTheme.typography
@@ -103,11 +106,11 @@ fun NovaTarefaScreen(
             DivvupTopBar {
                 DivvupIconButton(DivvupIcone.X, stringResource(R.string.nova_fechar), aoFechar)
                 Spacer(Modifier.weight(1f))
-                DivvupLabel(stringResource(R.string.nova_contexto), Modifier.padding(end = e.s2), cor = c.textMuted)
+                DivvupLabel(stringResource(if (estado.editando) R.string.editar_contexto else R.string.nova_contexto), Modifier.padding(end = e.s2), cor = c.textMuted)
             }
             Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(start = e.s4, end = e.s4, bottom = e.s5)) {
                 DivvupText(
-                    stringResource(R.string.nova_titulo),
+                    stringResource(if (estado.editando) R.string.editar_titulo else R.string.nova_titulo),
                     t.h2.copy(fontSize = TarefasMedidas.tituloFonte),
                     Modifier.padding(top = TarefasMedidas.tituloTopo, bottom = TarefasMedidas.tituloFundo),
                 )
@@ -189,14 +192,40 @@ fun NovaTarefaScreen(
                 }
             }
             DivvupDivider()
-            DivvupButton(
-                stringResource(R.string.nova_criar),
-                aoCriar,
-                larguraTotal = true,
-                habilitado = estado.formulario.podeCriar,
-                carregando = estado.criando,
-                modifier = Modifier.background(c.background).padding(start = e.s4, end = e.s4, top = e.s3, bottom = e.s4),
-            )
+            Row(
+                Modifier.background(c.background).padding(start = e.s4, end = e.s4, top = e.s3, bottom = e.s4),
+                horizontalArrangement = Arrangement.spacedBy(e.s2),
+            ) {
+                // Modo edição (R-12): "Excluir tarefa" com confirmação e "Salvar".
+                if (estado.editando) {
+                    DivvupButton(stringResource(R.string.editar_excluir), aoPedirExclusao, variante = VarianteBotao.Perigo, icone = DivvupIcone.Lixo)
+                }
+                DivvupButton(
+                    stringResource(if (estado.editando) R.string.editar_salvar else R.string.nova_criar),
+                    aoCriar,
+                    larguraTotal = true,
+                    habilitado = estado.formulario.podeCriar,
+                    carregando = estado.criando,
+                    modifier = Modifier.weight(1f),
+                )
+            }
+        }
+        if (estado.confirmandoExclusao) {
+            DivvupScrim(onFechar = aoCancelarExclusao, alinhamento = Alignment.Center) {
+                DivvupDialog(
+                    titulo = stringResource(R.string.excluir_titulo),
+                    texto = stringResource(R.string.excluir_texto),
+                    modifier = Modifier.padding(horizontal = e.s4),
+                ) {
+                    DivvupButton(stringResource(R.string.detalhe_dialogo_voltar), aoCancelarExclusao, variante = VarianteBotao.Texto)
+                    DivvupButton(
+                        stringResource(R.string.editar_excluir),
+                        aoConfirmarExclusao,
+                        variante = VarianteBotao.PerigoCheio,
+                        carregando = estado.excluindo,
+                    )
+                }
+            }
         }
         if (estado.confirmandoDescarte) {
             DivvupScrim(onFechar = aoContinuarEditando, alinhamento = Alignment.Center) {

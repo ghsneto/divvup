@@ -18,6 +18,7 @@
     <!-- Prazo: "amanhã, 20h", "vence hoje às 22h", "sáb., 8 nov", "20:00". -->
     <string name="prazo_hoje">hoje</string>
     <string name="prazo_amanha">amanhã</string>
+    <string name="prazo_ontem">ontem</string>
     <string name="prazo_atalho">%1$s, %2$s</string>
     <string name="prazo_hora">%1$dh</string>
     <string name="prazo_hora_min">%1$dh%2$02d</string>

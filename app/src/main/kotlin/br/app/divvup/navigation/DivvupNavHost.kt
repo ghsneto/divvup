@@ -38,6 +38,11 @@ import br.app.divvup.feature.deck.AbaDeck
 import br.app.divvup.feature.house.navegacao.RotaConvide
 import br.app.divvup.feature.tasks.navegacao.RotaNovaTarefa
 import br.app.divvup.feature.tasks.navegacao.telaNovaTarefa
+import br.app.divvup.feature.tasks.navegacao.AbaMinhasTarefas
+import br.app.divvup.feature.tasks.navegacao.AcoesDaConclusao
+import br.app.divvup.feature.tasks.navegacao.RotaDetalhe
+import br.app.divvup.feature.tasks.navegacao.telasDeTarefa
+import br.app.divvup.feature.house.principal.PrincipalViewModel
 import br.app.divvup.feature.house.navegacao.RotaMinhaCasa
 import br.app.divvup.feature.house.navegacao.RotaPrincipal
 import br.app.divvup.feature.house.navegacao.telasDeConvite
@@ -101,31 +106,40 @@ fun DivvupNavHost() {
         telasDeMembros(nav, aoSairDaCasa = { nav.navigate(RotaSuaCasa) { limparPilha(nav) } })
         telaGaleria(nav)
         telaNovaTarefa(nav)
+        // C4 volta para a estrutura principal já na aba certa.
+        val irParaAba = { aba: Aba ->
+            nav.popBackStack<RotaPrincipal>(inclusive = false)
+            nav.getBackStackEntry<RotaPrincipal>().savedStateHandle[PrincipalViewModel.ARG_ABA] = aba.name
+        }
+        telasDeTarefa(nav, AcoesDaConclusao(aoPegarOutra = { irParaAba(Aba.Deck) }, aoContinuar = { irParaAba(Aba.MinhasTarefas) }))
         telaPrincipal(aoAbrirNotificacoes = { nav.navigate(RotaNotificacoesProvisoria) }) { aba, trocarAba ->
-            if (aba == Aba.Deck) {
-                // Detalhe da tarefa (C3) chega na #14.
-                AbaDeck(
+            when (aba) {
+                Aba.Deck -> AbaDeck(
                     aoNovaTarefa = { nav.navigate(RotaNovaTarefa) },
                     aoMinhasTarefas = { trocarAba(Aba.MinhasTarefas) },
-                    aoDetalhes = {},
+                    aoDetalhes = { nav.navigate(RotaDetalhe(it.id)) },
                 )
-                return@telaPrincipal
+                Aba.MinhasTarefas -> AbaMinhasTarefas(nav, aoIrParaDeck = { trocarAba(Aba.Deck) })
+                else -> AbaProvisoria(aba, aoSair, aoMinhaCasa = { nav.navigate(RotaMinhaCasa) })
             }
-            val titulo = when (aba) {
-                Aba.Deck -> R.string.provisorio_deck
-                Aba.MinhasTarefas -> R.string.provisorio_minhas_tarefas
-                Aba.Ranking -> R.string.provisorio_ranking
-                Aba.Perfil -> R.string.provisorio_perfil
-            }
-            // Até E1 (#26), o perfil provisório leva a G1 "Minha casa" e oferece "Sair".
-            EmConstrucao(
-                stringResource(titulo),
-                aoSair = aoSair.takeIf { aba == Aba.Perfil },
-                aoMinhaCasa = { nav.navigate(RotaMinhaCasa) }.takeIf { aba == Aba.Perfil },
-            )
         }
         composable<RotaNotificacoesProvisoria> { EmConstrucao(stringResource(R.string.provisorio_notificacoes), aoSair = null) }
     }
+}
+
+/** Ranking e Perfil até as issues delas (#22, #26). */
+@Composable
+private fun AbaProvisoria(aba: Aba, aoSair: () -> Unit, aoMinhaCasa: () -> Unit) {
+    val titulo = when (aba) {
+        Aba.Ranking -> R.string.provisorio_ranking
+        else -> R.string.provisorio_perfil
+    }
+    // Até E1 (#26), o perfil provisório leva a G1 "Minha casa" e oferece "Sair".
+    EmConstrucao(
+        stringResource(titulo),
+        aoSair = aoSair.takeIf { aba == Aba.Perfil },
+        aoMinhaCasa = aoMinhaCasa.takeIf { aba == Aba.Perfil },
+    )
 }
 
 @HiltViewModel
