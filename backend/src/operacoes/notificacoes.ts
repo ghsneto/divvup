@@ -54,6 +54,9 @@ export async function notificar(db: Firestore, env: Env, uids: string[], aviso: 
     uids.forEach((uid, i) => {
       const perfil = perfis[i];
       if (!perfil) return;
+      const quer = querPush(perfil, aviso.tipo);
+      // R-35: no horário silencioso o push fica retido e sai no fim, exceto "vence em 2 h".
+      const reter = quer && aviso.tipo !== "DUE_2H" && emSilencio(perfil, agora);
       escritas.push({
         tipo: "gravar",
         caminho: `users/${uid}/notifications/${gerarId()}`,
@@ -63,12 +66,13 @@ export async function notificar(db: Firestore, env: Env, uids: string[], aviso: 
           body: aviso.corpo,
           refs: aviso.refs,
           read: false,
+          pendingPush: reter,
           createdAt: agora,
           expireAt: new Date(agora.getTime() + VALIDADE_MS),
         },
       });
       const tokens = (perfil["fcmTokens"] as string[] | undefined) ?? [];
-      if (tokens.length > 0 && querPush(perfil, aviso.tipo)) pushes.push({ uid, tokens });
+      if (tokens.length > 0 && quer && !reter) pushes.push({ uid, tokens });
     });
     await db.commit(escritas);
     for (const { uid, tokens } of pushes) {
@@ -173,3 +177,114 @@ export async function avisarNovaTarefa(db: Firestore, env: Env, autor: string, t
     refs: { houseId: casaId, taskId: tarefaId },
   }, agora);
 }
+
+/** Quem recebe e o quê; as rotinas devolvem avisos e quem chama decide entregar. */
+export type Avisar = (uids: string[], aviso: Aviso) => Promise<void>;
+
+/** "22h" ou "22h30" no fuso de Brasília. */
+export function horaEmBrasilia(d: Date): string {
+  const partes = new Intl.DateTimeFormat("pt-BR", { timeZone: "America/Sao_Paulo", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(d);
+  const hora = Number(partes.find((p) => p.type === "hour")?.value ?? "0");
+  const minuto = partes.find((p) => p.type === "minute")?.value ?? "00";
+  return minuto === "00" ? `${hora}h` : `${hora}h${minuto}`;
+}
+
+/** R-33 "Um morador concluiu" (desligado por padrão): todos menos quem concluiu. */
+export async function avisarConclusao(db: Firestore, env: Env, quem: string, tarefaId: string, pontos: number, agora: Date = new Date()): Promise<void> {
+  const [perfil] = await db.lerVarios([`users/${quem}`]);
+  const casaId = perfil?.["currentHouseId"];
+  if (typeof casaId !== "string") return;
+  const [tarefa] = await db.lerVarios([`houses/${casaId}/tasks/${tarefaId}`]);
+  const outros = (await db.listar(`houses/${casaId}/members`)).filter((m) => m.dados["status"] === "ACTIVE" && m.uid !== quem).map((m) => m.uid);
+  const nome = ((perfil?.["displayName"] as string | undefined) ?? "").split(" ")[0] ?? "";
+  await notificar(db, env, outros, {
+    tipo: "MEMBER_COMPLETED",
+    titulo: `${nome} concluiu ${(tarefa?.["title"] as string | undefined) ?? ""}`,
+    corpo: `+${pontos} pts`,
+    refs: { houseId: casaId, taskId: tarefaId },
+  }, agora);
+}
+
+/** R-33 "Você foi removido da casa": só quem saiu. */
+export async function avisarRemocao(db: Firestore, env: Env, admin: string, removido: string, agora: Date = new Date()): Promise<void> {
+  const [perfil] = await db.lerVarios([`users/${admin}`]);
+  const casaId = perfil?.["currentHouseId"];
+  const [casa] = typeof casaId === "string" ? await db.lerVarios([`houses/${casaId}`]) : [undefined];
+  await notificar(db, env, [removido], {
+    tipo: "REMOVED",
+    titulo: `Você saiu da ${(casa?.["name"] as string | undefined) ?? "casa"}`,
+    corpo: "Um admin te removeu. Suas medalhas e seu histórico seguem com você.",
+    refs: {},
+  }, agora);
+}
+
+/** R-35: padrão 22:00–08:00, ligado. */
+export const SILENCIO_PADRAO = { enabled: true, start: "22:00", end: "08:00" };
+
+const minutos = (hhmm: string) => {
+  const [h, m] = hhmm.split(":").map(Number);
+  return (h ?? 0) * 60 + (m ?? 0);
+};
+
+/** Está no horário silencioso da pessoa agora (fuso de Brasília)? Atravessa a meia-noite. */
+export function emSilencio(perfil: Documento | undefined, agora: Date): boolean {
+  const q = { ...SILENCIO_PADRAO, ...((perfil?.["quietHours"] as Documento | undefined) ?? {}) } as typeof SILENCIO_PADRAO;
+  if (!q.enabled) return false;
+  const [h, m] = horaEmBrasilia(agora).replace("h", ":").split(":");
+  const agoraMin = Number(h) * 60 + Number(m || "0");
+  const inicio = minutos(q.start);
+  const fim = minutos(q.end);
+  return inicio <= fim ? agoraMin >= inicio && agoraMin < fim : agoraMin >= inicio || agoraMin < fim;
+}
+
+const TIPOS = Object.keys(PADRAO) as TipoDeNotificacao[];
+const HORARIO = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+/** E4 (R-34, R-35): liga/desliga cada tipo e o horário silencioso. */
+export async function salvarPreferencias(db: Firestore, usuario: Usuario, corpo: unknown): Promise<{ ok: true }> {
+  const c = typeof corpo === "object" && corpo !== null ? (corpo as Record<string, unknown>) : {};
+  const tipos = (c["tipos"] ?? {}) as Record<string, unknown>;
+  const prefs: Documento = {};
+  for (const t of TIPOS) {
+    const v = tipos[t];
+    if (v !== undefined && typeof v !== "boolean") throw new ErroHttp(400, "preferencia-invalida");
+    if (typeof v === "boolean") prefs[t] = v;
+  }
+  const s = (c["silencio"] ?? {}) as Record<string, unknown>;
+  const silencio = {
+    enabled: typeof s["ligado"] === "boolean" ? s["ligado"] : SILENCIO_PADRAO.enabled,
+    start: typeof s["inicio"] === "string" ? s["inicio"] : SILENCIO_PADRAO.start,
+    end: typeof s["fim"] === "string" ? s["fim"] : SILENCIO_PADRAO.end,
+  };
+  if (!HORARIO.test(silencio.start) || !HORARIO.test(silencio.end)) throw new ErroHttp(400, "horario-invalido");
+  return db.transacao(async (tx) => {
+    const [perfil] = await db.lerVarios([`users/${usuario.uid}`], tx);
+    if (!perfil) throw new ErroHttp(409, "perfil-inexistente");
+    const atuais = (perfil["notifPrefs"] as Documento | undefined) ?? {};
+    return {
+      escritas: [
+        { tipo: "gravar", caminho: `users/${usuario.uid}`, dados: { notifPrefs: { ...atuais, ...prefs }, quietHours: silencio }, campos: ["notifPrefs", "quietHours"], exigirExistente: true },
+      ],
+      resultado: { ok: true as const },
+    };
+  });
+}
+
+/** Rotina: entrega os pushes retidos de quem já saiu do horário silencioso (R-35). */
+export async function entregarRetidos(db: Firestore, env: Env, agora: Date = new Date(), http: typeof fetch = fetch): Promise<{ entregues: number }> {
+  const retidos = await db.consultarGrupo("notifications", [{ campo: "pendingPush", op: "EQUAL", valor: true }], LOTE_RETIDOS);
+  let entregues = 0;
+  for (const { caminho, dados } of retidos) {
+    const uid = caminho.split("/")[1] ?? "";
+    const [perfil] = await db.lerVarios([`users/${uid}`]);
+    if (emSilencio(perfil, agora)) continue;
+    await db.commit([{ tipo: "gravar", caminho, dados: { pendingPush: false }, campos: ["pendingPush"], exigirExistente: true }]);
+    const tokens = (perfil?.["fcmTokens"] as string[] | undefined) ?? [];
+    const aviso: Aviso = { tipo: dados["type"] as TipoDeNotificacao, titulo: dados["title"] as string, corpo: dados["body"] as string, refs: (dados["refs"] as Documento | undefined) ?? {} };
+    for (const token of tokens) await enviarPush(db, env, token, aviso, http);
+    entregues++;
+  }
+  return { entregues };
+}
+
+const LOTE_RETIDOS = 200;

@@ -1,7 +1,9 @@
 import type { Documento, Escrita, Firestore } from "../firestore.js";
 import { ganhar, lerMedalhas } from "./medalhas.js";
+import type { Avisar } from "./notificacoes.js";
 
 const FUSO = "America/Sao_Paulo";
+const MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
 
 /** Mesmo texto do `wrangler.toml`: 00:00 de Brasília (UTC-3, sem horário de verão) no dia 1º. */
 export const CRON_TEMPORADA = "0 3 1 * *";
@@ -44,14 +46,14 @@ export function rankingFinal(membros: { uid: string; dados: Documento }[]): { ra
  * `houses/{id}/seasons/{yyyy-MM}` com o campeão e zera `seasonPoints` dos moradores. Idempotente:
  * casa que já tem a temporada gravada é pulada. A medalha do campeão entra com as medalhas (#25).
  */
-export async function virarTemporada(db: Firestore, agora: Date = new Date()): Promise<{ temporada: string; casas: number }> {
+export async function virarTemporada(db: Firestore, agora: Date = new Date(), avisar?: Avisar): Promise<{ temporada: string; casas: number }> {
   const temporada = temporadaQueTermina(agora);
   const casas = await db.listar("houses");
   let viradas = 0;
   for (const casa of casas) {
     const virou = await db.transacao(async (tx) => {
       const [jaTem] = await db.lerVarios([`houses/${casa.uid}/seasons/${temporada}`], tx);
-      if (jaTem) return { escritas: [], resultado: false };
+      if (jaTem) return { escritas: [], resultado: undefined };
       const membros = await db.listar(`houses/${casa.uid}/members`, tx);
       const { ranking, campeoes } = rankingFinal(membros);
       const campeao = campeoes[0];
@@ -83,9 +85,18 @@ export async function virarTemporada(db: Firestore, agora: Date = new Date()): P
         // Mês novo, placar zerado: equilíbrio volta a 100 e a temporada atual avança.
         { tipo: "gravar", caminho: `houses/${casa.uid}`, dados: { balanceIndex: 100, currentSeason: mesEmBrasilia(agora) }, campos: ["balanceIndex", "currentSeason"], exigirExistente: true },
       ];
-      return { escritas, resultado: true };
+      return { escritas, resultado: { ranking, campeao } };
     });
-    if (virou) viradas++;
+    if (virou) {
+      viradas++;
+      // R-33 "Fim de temporada + campeão do mês": todos os moradores, cada um com a sua posição.
+      const nomeDoMes = MESES[Number(temporada.slice(5, 7)) - 1] ?? temporada;
+      for (const c of virou.ranking) {
+        const posicao = 1 + virou.ranking.filter((o) => o.points > c.points).length;
+        const titulo = virou.campeao ? `${virou.campeao.uid === c.uid ? "Você" : virou.campeao.name.split(" ")[0]} venceu ${nomeDoMes}` : `${nomeDoMes} terminou`;
+        await avisar?.([c.uid], { tipo: "SEASON_END", titulo, corpo: `Temporada fechada. Você ficou em ${posicao}º com ${c.points} pts.`, refs: { houseId: casa.uid, season: temporada } });
+      }
+    }
   }
   return { temporada, casas: viradas };
 }

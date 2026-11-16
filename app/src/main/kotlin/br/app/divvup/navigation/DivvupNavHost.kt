@@ -58,6 +58,8 @@ import br.app.divvup.feature.house.principal.Aba
 import br.app.divvup.feature.onboarding.navegacao.grafoDeOnboarding
 import br.app.divvup.feature.profile.navegacao.RotaGaleria
 import br.app.divvup.feature.profile.navegacao.telaGaleria
+import br.app.divvup.feature.profile.navegacao.RotaPrefsNotif
+import br.app.divvup.feature.profile.navegacao.telaPrefsNotif
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -109,6 +111,7 @@ fun DivvupNavHost() {
         telaGaleria(nav)
         telaNovaTarefa(nav)
         telaTemporadas(nav)
+        telaPrefsNotif(nav)
         // C4 volta para a estrutura principal já na aba certa.
         val irParaAba = { aba: Aba ->
             nav.popBackStack<RotaPrincipal>(inclusive = false)
@@ -124,7 +127,7 @@ fun DivvupNavHost() {
                 )
                 Aba.MinhasTarefas -> AbaMinhasTarefas(nav, aoIrParaDeck = { trocarAba(Aba.Deck) })
                 Aba.Ranking -> AbaRanking(aoAbrirMembro = { nav.navigate(RotaMembro(it)) }, aoTemporadas = { nav.navigate(RotaTemporadas) })
-                else -> AbaProvisoria(aba, aoSair, aoMinhaCasa = { nav.navigate(RotaMinhaCasa) })
+                else -> AbaProvisoria(aba, aoSair, aoMinhaCasa = { nav.navigate(RotaMinhaCasa) }, aoNotificacoes = { nav.navigate(RotaPrefsNotif) })
             }
         }
         telaAvisos(nav) { aviso ->
@@ -140,13 +143,14 @@ fun DivvupNavHost() {
 
 /** Perfil até a issue dele (#26). */
 @Composable
-private fun AbaProvisoria(aba: Aba, aoSair: () -> Unit, aoMinhaCasa: () -> Unit) {
+private fun AbaProvisoria(aba: Aba, aoSair: () -> Unit, aoMinhaCasa: () -> Unit, aoNotificacoes: () -> Unit) {
     val titulo = R.string.provisorio_perfil
     // Até E1 (#26), o perfil provisório leva a G1 "Minha casa" e oferece "Sair".
     EmConstrucao(
         stringResource(titulo),
         aoSair = aoSair.takeIf { aba == Aba.Perfil },
         aoMinhaCasa = aoMinhaCasa.takeIf { aba == Aba.Perfil },
+        aoNotificacoes = aoNotificacoes.takeIf { aba == Aba.Perfil },
     )
 }
 
@@ -156,7 +160,13 @@ class SessaoViewModel @Inject constructor(private val conta: RepositorioDeConta)
 }
 
 @Composable
-private fun EmConstrucao(titulo: String, aoSair: (() -> Unit)?, aoMinhaCasa: (() -> Unit)? = null, viewModel: SessaoViewModel = hiltViewModel()) {
+private fun EmConstrucao(
+    titulo: String,
+    aoSair: (() -> Unit)?,
+    aoMinhaCasa: (() -> Unit)? = null,
+    aoNotificacoes: (() -> Unit)? = null,
+    viewModel: SessaoViewModel = hiltViewModel(),
+) {
     val escopo = rememberCoroutineScope()
     val e = DivvupTheme.spacing
     Column(
@@ -167,6 +177,9 @@ private fun EmConstrucao(titulo: String, aoSair: (() -> Unit)?, aoMinhaCasa: (()
         Text(titulo, style = DivvupTheme.typography.h2, color = DivvupTheme.colors.text)
         if (aoMinhaCasa != null) {
             DivvupButton(stringResource(R.string.provisorio_minha_casa), onClick = aoMinhaCasa, variante = VarianteBotao.Contorno)
+        }
+        if (aoNotificacoes != null) {
+            DivvupButton(stringResource(R.string.provisorio_notificacoes), onClick = aoNotificacoes, variante = VarianteBotao.Contorno)
         }
         if (aoSair != null) {
             DivvupButton(

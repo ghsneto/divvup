@@ -1,5 +1,7 @@
 import type { Escrita, Firestore } from "../firestore.js";
 import { daTarefa, evento } from "./atividade.js";
+import { horaEmBrasilia, type Avisar } from "./notificacoes.js";
+import { pontosDaConclusao } from "./tarefas.js";
 
 /** Quantas ocorrências cada passada da rotina trata no máximo (o resto fica para a próxima). */
 export const LOTE = 200;
@@ -9,7 +11,7 @@ export const LOTE = 200;
  * `LATE` (R-23). Cada uma muda numa transação própria, que confere de novo o estado: se o dono
  * concluiu ou devolveu no meio do caminho, nada muda. Os pontos pela metade saem na conclusão (R-22).
  */
-export async function marcarAtrasadas(db: Firestore, agora: Date = new Date()): Promise<{ atrasadas: number }> {
+export async function marcarAtrasadas(db: Firestore, agora: Date = new Date(), avisar?: Avisar): Promise<{ atrasadas: number }> {
   const vencidas = await db.consultarGrupo(
     "tasks",
     [
@@ -23,13 +25,22 @@ export async function marcarAtrasadas(db: Firestore, agora: Date = new Date()): 
     const mudou = await db.transacao(async (tx) => {
       const [tarefa] = await db.lerVarios([caminho], tx);
       const vencida = tarefa?.["status"] === "ASSIGNED" && (tarefa["dueAt"] as Date).getTime() < agora.getTime();
-      if (!vencida) return { escritas: [], resultado: false };
+      if (!vencida || !tarefa) return { escritas: [], resultado: undefined };
       return {
         escritas: [{ tipo: "gravar" as const, caminho, dados: { status: "LATE", lateAt: agora }, campos: ["status", "lateAt"], exigirExistente: true }],
-        resultado: true,
+        resultado: tarefa,
       };
     });
-    if (mudou) atrasadas++;
+    if (mudou) {
+      atrasadas++;
+      // R-33 "Sua tarefa atrasou": o dono, com quanto vale concluir agora (R-22).
+      await avisar?.([mudou["assigneeId"] as string], {
+        tipo: "LATE",
+        titulo: `${mudou["title"] as string} atrasou`,
+        corpo: `Concluindo agora você ganha ${pontosDaConclusao(mudou["points"] as number, mudou["dueAt"] as Date, agora)} pts.`,
+        refs: { houseId: caminho.split("/")[1] ?? "", taskId: caminho.split("/")[3] ?? "" },
+      });
+    }
   }
   return { atrasadas };
 }
@@ -46,6 +57,7 @@ export async function atribuirAutomaticamente(
   db: Firestore,
   agora: Date = new Date(),
   sortear: (n: number) => number = (n) => Math.floor(Math.random() * n),
+  avisar?: Avisar,
 ): Promise<{ atribuidas: number }> {
   const limite = new Date(agora.getTime() + JANELA_AUTOMATICA_MS);
   const perto = await db.consultarGrupo(
@@ -61,14 +73,14 @@ export async function atribuirAutomaticamente(
     const casaId = caminho.split("/")[1] ?? "";
     const mudou = await db.transacao(async (tx) => {
       const [tarefa] = await db.lerVarios([caminho], tx);
-      if (tarefa?.["status"] !== "OPEN" || (tarefa["dueAt"] as Date).getTime() > limite.getTime()) return { escritas: [], resultado: false };
+      if (tarefa?.["status"] !== "OPEN" || (tarefa["dueAt"] as Date).getTime() > limite.getTime()) return { escritas: [], resultado: undefined };
       const ativos = (await db.listar(`houses/${casaId}/members`, tx)).filter((m) => m.dados["status"] === "ACTIVE");
-      if (ativos.length === 0) return { escritas: [], resultado: false };
+      if (ativos.length === 0) return { escritas: [], resultado: undefined };
       const pontos = (m: (typeof ativos)[number]) => (m.dados["seasonPoints"] as number | undefined) ?? 0;
       const menor = Math.min(...ativos.map(pontos));
       const empatados = ativos.filter((m) => pontos(m) === menor).sort((a, b) => (a.uid < b.uid ? -1 : a.uid > b.uid ? 1 : 0));
       const escolhido = empatados[sortear(empatados.length)] ?? empatados[0];
-      if (!escolhido) return { escritas: [], resultado: false };
+      if (!escolhido) return { escritas: [], resultado: undefined };
       const escritas: Escrita[] = [
         {
           tipo: "gravar",
@@ -86,17 +98,73 @@ export async function atribuirAutomaticamente(
         },
         evento(casaId, `auto-${caminho.split("/")[3]}`, "AUTO_ASSIGNED", escolhido, daTarefa(caminho.split("/")[3] ?? "", tarefa), agora),
       ];
-      return { escritas, resultado: true };
+      return { escritas, resultado: { uid: escolhido.uid, titulo: tarefa["title"] as string, prazo: tarefa["dueAt"] as Date } };
     });
-    if (mudou) atribuidas++;
+    if (mudou) {
+      atribuidas++;
+      // R-26/R-33: o escolhido recebe push.
+      await avisar?.([mudou.uid], {
+        tipo: "AUTO_ASSIGNED",
+        titulo: `${mudou.titulo} veio pra você`,
+        corpo: "Ninguém pegou e você tem menos pontos no mês.",
+        refs: { houseId: casaId, taskId: caminho.split("/")[3] ?? "" },
+      });
+    }
   }
   return { atribuidas };
+}
+
+const HORA_MS = 60 * 60 * 1000;
+
+/**
+ * R-33 "Sua tarefa vence em 24 h / em 2 h": avisa o dono uma vez de cada (marca `notified24h` /
+ * `notified2h` na ocorrência). Atribuída automaticamente já recebeu aviso próprio; o de 24 h não
+ * se repete para ela.
+ */
+export async function lembrarPrazos(db: Firestore, agora: Date = new Date(), avisar?: Avisar): Promise<{ lembretes: number }> {
+  const perto = await db.consultarGrupo(
+    "tasks",
+    [
+      { campo: "status", op: "EQUAL", valor: "ASSIGNED" },
+      { campo: "dueAt", op: "LESS_THAN_OR_EQUAL", valor: new Date(agora.getTime() + JANELA_AUTOMATICA_MS) },
+    ],
+    LOTE,
+  );
+  let lembretes = 0;
+  for (const { caminho, dados } of perto) {
+    const prazo = dados["dueAt"] as Date;
+    const falta = prazo.getTime() - agora.getTime();
+    if (falta <= 0) continue;
+    const de2h = falta <= 2 * HORA_MS && dados["notified2h"] !== true;
+    const de24h = !de2h && dados["notified24h"] !== true && dados["assignedVia"] !== "AUTO";
+    if (!de2h && !de24h) continue;
+    const campo = de2h ? "notified2h" : "notified24h";
+    const marcou = await db.transacao(async (tx) => {
+      const [t] = await db.lerVarios([caminho], tx);
+      if (t?.["status"] !== "ASSIGNED" || t[campo] === true) return { escritas: [], resultado: false };
+      return { escritas: [{ tipo: "gravar" as const, caminho, dados: { [campo]: true }, campos: [campo], exigirExistente: true }], resultado: true };
+    });
+    if (!marcou) continue;
+    lembretes++;
+    const titulo = dados["title"] as string;
+    await avisar?.([dados["assigneeId"] as string], {
+      tipo: de2h ? "DUE_2H" : "DUE_24H",
+      titulo: de2h ? `${titulo} vence em 2 h` : `${titulo} vence em 24 h`,
+      corpo: de2h ? `Às ${horaEmBrasilia(prazo)}. Bora?` : `Amanhã às ${horaEmBrasilia(prazo)}.`,
+      refs: { houseId: caminho.split("/")[1] ?? "", taskId: caminho.split("/")[3] ?? "" },
+    });
+  }
+  return { lembretes };
 }
 
 /**
  * Tudo o que roda a cada disparo do Cron Trigger. A atribuição vem antes: uma aberta já vencida
  * ganha dono e, na passada seguinte, vira atrasada.
  */
-export async function rotinaAgendada(db: Firestore, agora: Date = new Date()) {
-  return { ...(await atribuirAutomaticamente(db, agora)), ...(await marcarAtrasadas(db, agora)) };
+export async function rotinaAgendada(db: Firestore, agora: Date = new Date(), avisar?: Avisar) {
+  return {
+    ...(await atribuirAutomaticamente(db, agora, undefined, avisar)),
+    ...(await lembrarPrazos(db, agora, avisar)),
+    ...(await marcarAtrasadas(db, agora, avisar)),
+  };
 }

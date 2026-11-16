@@ -148,9 +148,9 @@
 users/{uid}
   displayName, email, avatarId, photoUrl?, currentHouseId?
   totalPoints, tasksDone, streak{current, best, lastDay}, badges{<FIRST_TASK|STREAK_7|CHAMPION|TASKS_100|LIFESAVER>: {count, firstAt}}
-  notifPrefs{<tipo>: bool}, quietHours{start, end}, fcmTokens[]
+  notifPrefs{<tipo>: bool}, quietHours{enabled, start "HH:mm", end "HH:mm"} (fuso de Brasília), fcmTokens[] (até 10)
   └ notifications/{id}      title, body, type(AUTO_ASSIGNED|DUE_24H|DUE_2H|LATE|NEW_TASK|SEASON_END|MEMBER_COMPLETED|REMOVED),
-                            refs{houseId, taskId}, read (único campo que o dono grava), createdAt, expireAt (TTL 30d)
+                            refs{houseId, taskId}, read (único campo que o dono grava), pendingPush (retido no silêncio), createdAt, expireAt (TTL 30d)
 
 houses/{houseId}
   name, type, createdBy, createdAt, memberCount, city, neighborhood, street
