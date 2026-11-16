@@ -36,7 +36,11 @@ import br.app.divvup.core.designsystem.icon.DivvupIcone
 import br.app.divvup.core.designsystem.icon.icone
 import br.app.divvup.core.designsystem.theme.DivvupTheme
 import br.app.divvup.core.domain.tarefa.ResultadoDaConclusao
+import br.app.divvup.core.designsystem.icon.conquista
+import br.app.divvup.core.designsystem.icon.nome
 import br.app.divvup.core.model.Categoria
+import br.app.divvup.core.model.Medalha
+import br.app.divvup.core.designsystem.R as RDs
 import br.app.divvup.feature.tasks.R
 import br.app.divvup.feature.tasks.TarefasMedidas
 
@@ -47,7 +51,7 @@ data class ConcluidaEstado(
     val resultado: ResultadoDaConclusao,
 )
 
-/** C4 Tarefa concluída (docs/design/fonte/Concluida.dc.html). Medalha nova chega com as conquistas (#25). */
+/** C4 Tarefa concluída (docs/design/fonte/Concluida.dc.html, R-30: cartão "medalha nova"). */
 @Composable
 fun ConcluidaScreen(
     estado: ConcluidaEstado,
@@ -112,6 +116,7 @@ fun ConcluidaScreen(
             verticalArrangement = Arrangement.spacedBy(e.s4),
         ) {
             Quadro(r)
+            r.medalhaNova?.let { MedalhaNova(it) }
             Row(horizontalArrangement = Arrangement.spacedBy(e.s2)) {
                 DivvupButton(
                     stringResource(R.string.concluida_pegar),
@@ -121,6 +126,28 @@ fun ConcluidaScreen(
                 )
                 DivvupButton(stringResource(R.string.concluida_continuar), aoContinuar, variante = VarianteBotao.Contorno)
             }
+        }
+    }
+}
+
+/** Cartão escuro "medalha nova" com o ícone num círculo lima. */
+@Composable
+private fun MedalhaNova(medalha: Medalha) {
+    val c = DivvupTheme.colors
+    val t = DivvupTheme.typography
+    val e = DivvupTheme.spacing
+    Row(
+        Modifier.fillMaxWidth().clip(DivvupTheme.shapes.md).background(c.tinta).padding(e.s4),
+        horizontalArrangement = Arrangement.spacedBy(e.s4),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(Modifier.size(TarefasMedidas.medalha).clip(DivvupTheme.shapes.pill).background(c.lima), contentAlignment = Alignment.Center) {
+            DivvupIcon(medalha.icone, tamanho = TamanhoIcone.Grande.dp, tint = c.tinta)
+        }
+        Column(Modifier.weight(1f)) {
+            DivvupLabel(stringResource(RDs.string.medalha_nova), cor = c.lima)
+            Text(stringResource(medalha.nome), style = t.ttl.copy(fontSize = TarefasMedidas.tituloMedalha), color = c.sobreTinta.texto)
+            Text(stringResource(medalha.conquista), style = t.small, color = c.sobreTinta.textoMudo)
         }
     }
 }

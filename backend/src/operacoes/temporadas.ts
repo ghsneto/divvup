@@ -1,4 +1,5 @@
 import type { Documento, Escrita, Firestore } from "../firestore.js";
+import { ganhar, lerMedalhas } from "./medalhas.js";
 
 const FUSO = "America/Sao_Paulo";
 
@@ -77,6 +78,8 @@ export async function virarTemporada(db: Firestore, agora: Date = new Date()): P
             campos: ["seasonPoints", "seasonTasks", "seasonCategories"],
             exigirExistente: true,
           })),
+        // Campeão do mês (R-27, R-30): medalha na conta e na cópia do membro (D3).
+        ...(await medalhasDosCampeoes(db, tx, casa.uid, campeoes.map((c) => c.uid), agora)),
         // Mês novo, placar zerado: equilíbrio volta a 100 e a temporada atual avança.
         { tipo: "gravar", caminho: `houses/${casa.uid}`, dados: { balanceIndex: 100, currentSeason: mesEmBrasilia(agora) }, campos: ["balanceIndex", "currentSeason"], exigirExistente: true },
       ];
@@ -85,4 +88,18 @@ export async function virarTemporada(db: Firestore, agora: Date = new Date()): P
     if (virou) viradas++;
   }
   return { temporada, casas: viradas };
+}
+
+async function medalhasDosCampeoes(db: Firestore, tx: string, casaId: string, uids: string[], agora: Date): Promise<Escrita[]> {
+  if (uids.length === 0) return [];
+  const perfis = await db.lerVarios(uids.map((u) => `users/${u}`), tx);
+  return uids.flatMap((uid, i): Escrita[] => {
+    const perfil = perfis[i];
+    if (!perfil) return [];
+    const { medalhas } = ganhar(lerMedalhas(perfil), "CHAMPION", agora);
+    return [
+      { tipo: "gravar", caminho: `users/${uid}`, dados: { badges: medalhas }, campos: ["badges"], exigirExistente: true },
+      { tipo: "gravar", caminho: `houses/${casaId}/members/${uid}`, dados: { badges: medalhas }, campos: ["badges"], exigirExistente: true },
+    ];
+  });
 }

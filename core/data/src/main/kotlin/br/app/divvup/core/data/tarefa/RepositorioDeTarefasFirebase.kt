@@ -12,6 +12,7 @@ import br.app.divvup.core.domain.tarefa.ResultadoTarefa
 import br.app.divvup.core.domain.tarefa.Swipe
 import br.app.divvup.core.data.casa.observar
 import br.app.divvup.core.model.Categoria
+import br.app.divvup.core.model.Medalha
 import br.app.divvup.core.model.SituacaoDaTarefa
 import br.app.divvup.core.model.Tarefa
 import br.app.divvup.core.model.ViaDeAtribuicao
@@ -132,6 +133,7 @@ class RepositorioDeTarefasFirebase @Inject constructor(
                 posicaoDepois = inteiro("posicaoDepois"),
                 ultrapassou = r["ultrapassou"]?.jsonPrimitive?.contentOrNull,
                 sequencia = inteiro("sequencia"),
+                medalhaNova = Medalha.deId(r["medalhaNova"]?.jsonPrimitive?.contentOrNull),
             ),
         )
     } catch (e: CancellationException) {

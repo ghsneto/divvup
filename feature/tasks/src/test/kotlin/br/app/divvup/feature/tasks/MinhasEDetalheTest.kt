@@ -21,6 +21,7 @@ import br.app.divvup.core.domain.tarefa.ResultadoTarefa
 import br.app.divvup.core.domain.tarefa.SituacaoParaMim
 import br.app.divvup.core.domain.tarefa.secoesDasMinhas
 import br.app.divvup.core.model.Categoria
+import br.app.divvup.core.model.Medalha
 import br.app.divvup.core.model.Membro
 import br.app.divvup.core.model.Papel
 import br.app.divvup.core.model.Peso
@@ -98,7 +99,7 @@ class MinhasEDetalheTest {
 
     private val eu = Membro("eu", "Iane", "avataaars:divvup-02", Papel.ADMIN, true, 325, null)
     private val bruno = Membro("bruno", "Bruno", "avataaars:divvup-06", Papel.MEMBER, true, 300, null)
-    private val conclusao = ResultadoDaConclusao(50, noPrazo = true, posicaoAntes = 3, posicaoDepois = 2, ultrapassou = "Bruno", sequencia = 4)
+    private val conclusao = ResultadoDaConclusao(50, noPrazo = true, posicaoAntes = 3, posicaoDepois = 2, ultrapassou = "Bruno", sequencia = 4, medalhaNova = Medalha.SALVA_VIDAS)
 
     // ---- C5 ----
 
@@ -251,7 +252,7 @@ class MinhasEDetalheTest {
     @Test
     fun screenshotC4SemSubir() = capturarTela("C4_concluida_mesma_posicao") {
         ConcluidaScreen(
-            ConcluidaEstado("Trocar a lâmpada da cozinha", Categoria.MANUTENCAO, conclusao.copy(pontos = 25, noPrazo = false, posicaoAntes = 1, posicaoDepois = 1, ultrapassou = null, sequencia = 1)),
+            ConcluidaEstado("Trocar a lâmpada da cozinha", Categoria.MANUTENCAO, conclusao.copy(medalhaNova = null, pontos = 25, noPrazo = false, posicaoAntes = 1, posicaoDepois = 1, ultrapassou = null, sequencia = 1)),
             {},
             {},
             {},

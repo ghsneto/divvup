@@ -1,6 +1,7 @@
 package br.app.divvup.core.domain.tarefa
 
 import br.app.divvup.core.domain.casa.FUSO_DA_TEMPORADA
+import br.app.divvup.core.model.Medalha
 import br.app.divvup.core.model.SituacaoDaTarefa
 import br.app.divvup.core.model.Tarefa
 import java.time.Duration
@@ -67,4 +68,6 @@ data class ResultadoDaConclusao(
     /** Nome de quem a pessoa passou no ranking do mês, se passou alguém. */
     val ultrapassou: String?,
     val sequencia: Int,
+    /** Medalha ganha pela primeira vez nesta conclusão (C4 "medalha nova"). */
+    val medalhaNova: Medalha? = null,
 )

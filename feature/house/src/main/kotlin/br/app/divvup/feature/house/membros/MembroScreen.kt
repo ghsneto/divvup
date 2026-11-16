@@ -36,6 +36,11 @@ import br.app.divvup.core.designsystem.icon.ilustracao
 import br.app.divvup.core.designsystem.icon.nome
 import br.app.divvup.core.domain.tarefa.prazoFalado
 import br.app.divvup.core.model.Tarefa
+import br.app.divvup.core.model.Medalha
+import br.app.divvup.core.designsystem.component.DivvupChip
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import br.app.divvup.core.designsystem.R as RDs
 import br.app.divvup.core.designsystem.component.DivvupAvatarDaGaleria
 import br.app.divvup.core.designsystem.component.DivvupButton
 import br.app.divvup.core.designsystem.component.DivvupDialog
@@ -120,6 +125,7 @@ fun MembroScreen(
                 }
                 Numeros(m, estado.posicao, Modifier.padding(top = e.s5))
                 PorCategoria(m)
+                Medalhas(m)
                 Abertas(estado)
                 if (estado.visaoDeAdmin) {
                     Acoes(m, estado, aoAlternarAdmin, aoPedirRemocao, Modifier.padding(top = CasaMedidas.sairTopo))
@@ -209,6 +215,23 @@ private fun PorCategoria(m: Membro) {
                     modifier = Modifier.width(CasaMedidas.numeroCategoria),
                 )
             }
+        }
+    }
+}
+
+/** Medalhas ganhas (R-30), com "×4" quando ganhou mais de uma vez. */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun Medalhas(m: Membro) {
+    val e = DivvupTheme.spacing
+    val ganhas = Medalha.entries.filter { (m.medalhas[it] ?: 0) > 0 }
+    if (ganhas.isEmpty()) return
+    DivvupLabel(stringResource(R.string.membro_medalhas), Modifier.padding(top = e.s5, bottom = e.s3))
+    FlowRow(horizontalArrangement = Arrangement.spacedBy(e.s2), verticalArrangement = Arrangement.spacedBy(e.s2)) {
+        ganhas.forEach { medalha ->
+            val vezes = m.medalhas[medalha] ?: 1
+            val nome = stringResource(medalha.nome)
+            DivvupChip(if (vezes > 1) stringResource(RDs.string.medalha_vezes, nome, vezes) else nome, icone = medalha.icone)
         }
     }
 }

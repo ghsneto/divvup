@@ -32,7 +32,7 @@ describe("criarPerfil", () => {
       totalPoints: 0,
       tasksDone: 0,
       streak: { current: 0, best: 0, lastDay: null },
-      badges: [],
+      badges: {},
       quietHours: { start: "22:00", end: "08:00" },
     });
   });

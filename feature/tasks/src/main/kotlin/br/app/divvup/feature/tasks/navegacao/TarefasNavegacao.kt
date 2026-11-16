@@ -26,6 +26,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import br.app.divvup.core.domain.tarefa.ResultadoDaConclusao
 import br.app.divvup.core.model.Categoria
+import br.app.divvup.core.model.Medalha
 import br.app.divvup.feature.tasks.concluida.ConcluidaEstado
 import br.app.divvup.feature.tasks.concluida.ConcluidaScreen
 import br.app.divvup.feature.tasks.concluida.ConclusaoFeita
@@ -64,12 +65,14 @@ data class RotaConcluida(
     val posicaoDepois: Int,
     val ultrapassou: String? = null,
     val sequencia: Int,
+    /** `Medalha.id` da medalha nova, se houver (R-30). */
+    val medalha: String? = null,
 ) {
     val estado: ConcluidaEstado
         get() = ConcluidaEstado(
             titulo,
             Categoria.valueOf(categoria),
-            ResultadoDaConclusao(pontos, noPrazo, posicaoAntes, posicaoDepois, ultrapassou, sequencia),
+            ResultadoDaConclusao(pontos, noPrazo, posicaoAntes, posicaoDepois, ultrapassou, sequencia, Medalha.deId(medalha)),
         )
 
     companion object {
@@ -82,6 +85,7 @@ data class RotaConcluida(
             posicaoDepois = c.resultado.posicaoDepois,
             ultrapassou = c.resultado.ultrapassou,
             sequencia = c.resultado.sequencia,
+            medalha = c.resultado.medalhaNova?.id,
         )
     }
 }

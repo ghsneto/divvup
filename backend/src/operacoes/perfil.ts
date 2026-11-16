@@ -27,7 +27,7 @@ export async function criarPerfil(db: Firestore, usuario: Usuario, corpo: unknow
     totalPoints: 0,
     tasksDone: 0,
     streak: { current: 0, best: 0, lastDay: null },
-    badges: [],
+    badges: {},
     notifPrefs: {},
     quietHours: SILENCIO_PADRAO,
     fcmTokens: [],

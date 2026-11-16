@@ -4,6 +4,7 @@ import type { Documento, Escrita, Firestore } from "../firestore.js";
 import { daTarefa, evento } from "./atividade.js";
 import { gerarId } from "./casa.js";
 import { indiceDeEquilibrio } from "./equilibrio.js";
+import { lerMedalhas, medalhasDaConclusao } from "./medalhas.js";
 
 /** R-11: categorias fixas. */
 export const CATEGORIAS = [
@@ -186,6 +187,20 @@ export async function concluirTarefa(db: Firestore, usuario: Usuario, corpo: unk
     const equilibrio = indiceDeEquilibrio(moradores.map((m) => (m.uid === usuario.uid ? meus + pontos : doMes(m))));
     const sequenciaAtual = (perfil["streak"] as { current: number; best: number; lastDay: string | null } | undefined) ?? { current: 0, best: 0, lastDay: null };
     const sequencia = novaSequencia(sequenciaAtual, diaEmBrasilia(agora));
+    const tarefasFeitas = ((perfil["tasksDone"] as number | undefined) ?? 0) + 1;
+    const assumidaEm = tarefa["assignedAt"];
+    const { medalhas, nova } = medalhasDaConclusao(
+      lerMedalhas(perfil),
+      {
+        tarefasFeitas,
+        sequencia: sequencia.current,
+        sequenciaAntes: sequenciaAtual.lastDay === sequencia.lastDay ? sequencia.current : sequenciaAtual.current,
+        via: tarefa["assignedVia"],
+        assumidaEm: assumidaEm instanceof Date ? assumidaEm : null,
+        prazo,
+      },
+      agora,
+    );
     const escritas: Escrita[] = [
       {
         tipo: "gravar",
@@ -205,10 +220,11 @@ export async function concluirTarefa(db: Firestore, usuario: Usuario, corpo: unk
           seasonTasks: ((membro["seasonTasks"] as number | undefined) ?? 0) + 1,
           totalTasks: ((membro["totalTasks"] as number | undefined) ?? 0) + 1,
           seasonCategories: { [categoria]: (porCategoria[categoria] ?? 0) + 1 },
-          // D3 mostra a sequência de outro morador, que não lê `users/{uid}`.
+          // D3 mostra a sequência e as medalhas de outro morador, que não lê `users/{uid}`.
           streak: sequencia,
+          badges: medalhas,
         },
-        campos: ["seasonPoints", "totalPoints", "openTasks", "seasonTasks", "totalTasks", `seasonCategories.${categoria}`, "streak"],
+        campos: ["seasonPoints", "totalPoints", "openTasks", "seasonTasks", "totalTasks", `seasonCategories.${categoria}`, "streak", "badges"],
         exigirExistente: true,
       },
       {
@@ -216,10 +232,11 @@ export async function concluirTarefa(db: Firestore, usuario: Usuario, corpo: unk
         caminho: `users/${usuario.uid}`,
         dados: {
           totalPoints: ((perfil["totalPoints"] as number | undefined) ?? 0) + pontos,
-          tasksDone: ((perfil["tasksDone"] as number | undefined) ?? 0) + 1,
+          tasksDone: tarefasFeitas,
           streak: sequencia,
+          badges: medalhas,
         },
-        campos: ["totalPoints", "tasksDone", "streak"],
+        campos: ["totalPoints", "tasksDone", "streak", "badges"],
         exigirExistente: true,
       },
       { ...evento(casaId, eventoId, "COMPLETED", { uid: usuario.uid, dados: membro }, { ...daTarefa(tarefaId, tarefa), points: pontos, late: agora.getTime() > prazo.getTime() }, agora), exigirInexistente: true },
@@ -234,6 +251,7 @@ export async function concluirTarefa(db: Firestore, usuario: Usuario, corpo: unk
         posicaoDepois: posicao(meus + pontos),
         ultrapassou: (ultrapassado?.dados["displayName"] as string | undefined) ?? null,
         sequencia: sequencia.current,
+        medalhaNova: nova,
       },
     };
   });
