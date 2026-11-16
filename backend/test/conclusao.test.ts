@@ -64,7 +64,7 @@ describe("concluir, devolver, cancelar, editar e excluir", () => {
     const id = await tarefa(ana);
     await chamar("assumirTarefa", ana.token, { tarefaId: id });
     const r = await json(await chamar("concluirTarefa", ana.token, { tarefaId: id }));
-    expect(r).toEqual({ pontos: 50, noPrazo: true, posicaoAntes: 2, posicaoDepois: 1, ultrapassou: "Bruno", sequencia: 1 });
+    expect(r).toEqual({ pontos: 50, noPrazo: true, posicaoAntes: 2, posicaoDepois: 1, ultrapassou: "Bruno", sequencia: 1, medalhaNova: "FIRST_TASK" });
     expect(await db.ler(`houses/${casaId}/tasks/${id}`)).toMatchObject({ status: "DONE", pointsAwarded: 50 });
     expect(await db.ler(`houses/${casaId}/members/${ana.uid}`)).toMatchObject({ seasonPoints: 50, totalPoints: 50, openTasks: 0 });
     expect(await db.ler(`users/${ana.uid}`)).toMatchObject({ totalPoints: 50, tasksDone: 1, streak: { current: 1, best: 1 } });

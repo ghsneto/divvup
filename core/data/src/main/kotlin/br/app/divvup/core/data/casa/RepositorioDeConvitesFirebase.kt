@@ -6,6 +6,7 @@ import br.app.divvup.core.domain.casa.ErroDeConvite
 import br.app.divvup.core.domain.casa.RepositorioDeConvites
 import br.app.divvup.core.domain.casa.ResultadoConvite
 import br.app.divvup.core.model.Categoria
+import br.app.divvup.core.model.Medalha
 import br.app.divvup.core.model.Convite
 import br.app.divvup.core.model.Membro
 import br.app.divvup.core.model.Papel
@@ -116,4 +117,8 @@ internal fun DocumentSnapshot.paraMembro(): Membro = Membro(
     }.toMap(),
     sequencia = getLong("streak.current")?.toInt() ?: 0,
     melhorSequencia = getLong("streak.best")?.toInt() ?: 0,
+    medalhas = (get("badges") as? Map<*, *>).orEmpty().mapNotNull { (k, v) ->
+        val medalha = Medalha.deId(k as? String) ?: return@mapNotNull null
+        medalha to (((v as? Map<*, *>)?.get("count") as? Number)?.toInt() ?: 1)
+    }.toMap(),
 )

@@ -8,6 +8,7 @@ import br.app.divvup.core.domain.casa.ResumoDaTemporada
 import br.app.divvup.core.domain.conta.Sessao
 import br.app.divvup.core.model.Casa
 import br.app.divvup.core.model.Categoria
+import br.app.divvup.core.model.Medalha
 import br.app.divvup.core.model.SituacaoDaTarefa
 import br.app.divvup.core.model.Tarefa
 import br.app.divvup.core.model.Membro
@@ -62,6 +63,7 @@ class MembrosTest {
         sequencia = 9,
         melhorSequencia = 21,
         categoriasDoMes = mapOf(Categoria.COZINHA to 5, Categoria.BANHEIRO to 3, Categoria.LAVANDERIA to 2, Categoria.COMPRAS to 1, Categoria.PETS to 1),
+        medalhas = mapOf(Medalha.CAMPEAO to 4, Medalha.SETE_DIAS to 1, Medalha.PRIMEIRA_TAREFA to 1, Medalha.SALVA_VIDAS to 1),
     )
 
     private fun aberta(id: String, titulo: String, cat: Categoria, prazo: String) =

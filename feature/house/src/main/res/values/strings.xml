@@ -149,6 +149,7 @@
     <string name="membro_sequencia">sequência</string>
     <string name="membro_recorde">recorde %1$d</string>
     <string name="membro_por_categoria">tarefas por categoria · mês</string>
+    <string name="membro_medalhas">medalhas</string>
     <string name="membro_abertas">abertas agora · %1$d</string>
     <string name="membro_acoes">ações de admin</string>
     <string name="membro_tornar_admin">Tornar admin</string>

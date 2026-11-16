@@ -57,4 +57,18 @@
         <item>dez</item>
     </string-array>
     <string name="prazo_vence">vence %1$s às %2$s</string>
+
+    <!-- Medalhas (R-30; E1 Perfil, C4 Concluida, D3 Membro) -->
+    <string name="medalha_primeira_tarefa">primeira tarefa</string>
+    <string name="medalha_sete_dias">7 dias</string>
+    <string name="medalha_campeao">campeão do mês</string>
+    <string name="medalha_cem_tarefas">100 tarefas</string>
+    <string name="medalha_salva_vidas">salva-vidas</string>
+    <string name="medalha_primeira_tarefa_conquista">Concluiu a primeira tarefa.</string>
+    <string name="medalha_sete_dias_conquista">7 dias seguidos concluindo ao menos uma tarefa.</string>
+    <string name="medalha_campeao_conquista">Fechou o mês em 1º lugar.</string>
+    <string name="medalha_cem_tarefas_conquista">Concluiu 100 tarefas.</string>
+    <string name="medalha_salva_vidas_conquista">Assumiu uma tarefa a menos de 48 h do prazo.</string>
+    <string name="medalha_vezes">%1$s ×%2$d</string>
+    <string name="medalha_nova">medalha nova</string>
 </resources>

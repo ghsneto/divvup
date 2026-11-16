@@ -40,6 +40,8 @@ data class Membro(
     /** D3 "sequência" (R-31), copiada do perfil a cada conclusão. */
     val sequencia: Int = 0,
     val melhorSequencia: Int = 0,
+    /** Medalhas (R-30) e quantas vezes cada uma, copiadas da conta para D3. */
+    val medalhas: Map<Medalha, Int> = emptyMap(),
 )
 
 /** Código de convite (`houses/{id}/invites/{codigo}`, R-06). */

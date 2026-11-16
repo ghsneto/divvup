@@ -77,7 +77,7 @@
 - R-29 · **Saída de membro:** pontos permanecem no histórico da casa (aparece como "ex-morador" no ranking geral, some do mensal); ocorrências assumidas voltam ao deck; histórico pessoal (medalhas, totais) segue com a conta.
 
 ### 3.7 Gamificação
-- R-30 · **Medalhas v1.0:** primeira tarefa · sequência de 7 dias · campeão do mês · 100 tarefas concluídas · salva-vidas (assumiu ocorrência a menos de 48 h do prazo).
+- R-30 · **Medalhas v1.0:** primeira tarefa · sequência de 7 dias · campeão do mês · 100 tarefas concluídas · salva-vidas (assumiu ocorrência a menos de 48 h do prazo). Todas são dadas pelo backend: primeira tarefa e 100 tarefas na conclusão; 7 dias quando a sequência chega a 7; salva-vidas ao concluir uma ocorrência assumida pelo swipe a menos de 48 h do prazo (atribuição automática não conta); campeão do mês na virada da temporada (empatados no topo ganham todos). Ganhar de novo soma a contagem ("campeão ×4").
 - R-31 · **Sequência diária:** dias consecutivos com ao menos uma conclusão.
 - R-32 · **Avatares:** DiceBear estilo **avataaars**. v1.0: galeria de ~24 avatares com seeds pré-escolhidas, **empacotados como SVG no app** (sem rede), livres para todos. Foto pessoal **fica fora da v1.0** (ADR 0003): armazenar imagens sem custo não cabe no plano atual; o campo `photoUrl` continua no modelo (guarda a foto do Google) para quando entrar. `avatarId` guarda `estilo + seed + opções` para um **editor de avatar** futuro (geração no backend com `@dicebear/core`, nunca pela API pública).
 
@@ -147,7 +147,7 @@
 ```
 users/{uid}
   displayName, email, avatarId, photoUrl?, currentHouseId?
-  totalPoints, tasksDone, streak{current, best, lastDay}, badges[]
+  totalPoints, tasksDone, streak{current, best, lastDay}, badges{<FIRST_TASK|STREAK_7|CHAMPION|TASKS_100|LIFESAVER>: {count, firstAt}}
   notifPrefs{<tipo>: bool}, quietHours{start, end}, fcmTokens[]
   └ notifications/{id}      title, body, type, refs, read, createdAt, expireAt (TTL 30d)
 
@@ -159,7 +159,7 @@ houses/{houseId}
   └ private/address          number, complement, exactLocation (só membros + aprovados)
   └ members/{uid}            role, status(ACTIVE|LEFT), joinedAt, leftAt?,
                              displayName, avatarId, seasonPoints, totalPoints, openTasks,
-                             seasonTasks, totalTasks, seasonCategories{<categoria>: n}, streak{current, best, lastDay}
+                             seasonTasks, totalTasks, seasonCategories{<categoria>: n}, streak{current, best, lastDay}, badges (cópia para D3)
       └ passes/{taskId}      expiresAt (+12h)
   └ invites/{code}           createdBy, createdByName, createdAt, expiresAt (+24h), usedBy?, usedByName?, usedAt?, revoked, revokedAt?
   └ joinRequests/{uid}       status(PENDING|APPROVED|REJECTED), message, createdAt   ← v1.1
