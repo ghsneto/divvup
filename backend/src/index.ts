@@ -92,7 +92,7 @@ export default {
     }
   },
 
-  /** Cron Trigger (`wrangler.toml`): atrasadas (R-23). */
+  /** Cron Trigger (`wrangler.toml`): atribuição automática (R-26) e atrasadas (R-23). */
   async scheduled(evento: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
     ctx.waitUntil(
       rotinaAgendada(new Firestore(env), new Date(evento.scheduledTime)).then((r) => console.log("rotina agendada", JSON.stringify(r))),
