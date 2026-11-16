@@ -1,0 +1,64 @@
+name: Release (AAB de produção)
+
+# Gera o Android App Bundle do flavor prod, com R8 e assinado com a chave de upload da Play.
+# Roda manualmente (Actions › Run workflow) ou ao criar uma tag v*. Nada sensível fica no
+# repositório: google-services.json e keystore vêm de segredos e são apagados no fim.
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  aab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES_JSON_PROD }}
+      KEYSTORE_BASE64: ${{ secrets.DIVVUP_KEYSTORE_BASE64 }}
+      DIVVUP_KEYSTORE_PASSWORD: ${{ secrets.DIVVUP_KEYSTORE_PASSWORD }}
+      DIVVUP_KEY_ALIAS: ${{ secrets.DIVVUP_KEY_ALIAS }}
+      DIVVUP_KEY_PASSWORD: ${{ secrets.DIVVUP_KEY_PASSWORD }}
+    steps:
+      - name: Verificar segredos
+        run: |
+          faltando=""
+          for nome in GOOGLE_SERVICES KEYSTORE_BASE64 DIVVUP_KEYSTORE_PASSWORD DIVVUP_KEY_ALIAS DIVVUP_KEY_PASSWORD; do
+            [ -z "${!nome}" ] && faltando="$faltando $nome"
+          done
+          if [ -n "$faltando" ]; then
+            echo "::error::Segredos ausentes:$faltando (issue #31)"
+            exit 1
+          fi
+
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Configuração do Firebase e chave de upload
+        run: |
+          printf '%s' "$GOOGLE_SERVICES" > app/google-services.json
+          printf '%s' "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/upload.jks"
+          echo "DIVVUP_KEYSTORE_PATH=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
+
+      - name: Gerar AAB
+        run: ./gradlew bundleProdRelease -Pdivvup.versionCode=${{ github.run_number }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: divvup-prod-release-${{ github.ref_name }}
+          path: |
+            app/build/outputs/bundle/prodRelease/*.aab
+            app/build/outputs/mapping/prodRelease/mapping.txt
+          retention-days: 30
+
+      - name: Apagar segredos do runner
+        if: always()
+        run: rm -f app/google-services.json "$RUNNER_TEMP/upload.jks"

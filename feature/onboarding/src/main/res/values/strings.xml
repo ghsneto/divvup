@@ -92,4 +92,29 @@
     <string name="permissao_ex3_titulo">Ana venceu novembro</string>
     <string name="permissao_ex3_texto">Temporada fechada. Você ficou em 2º com 325 pts.</string>
     <string name="permissao_ex3_quando">dia 1</string>
+
+    <!-- B6 (docs/design/fonte/Tutorial.dc.html) -->
+    <string name="tutorial_pular">Pular</string>
+    <string name="tutorial_passo">tutorial · %1$d de 3</string>
+    <string name="tutorial_completo">tutorial completo</string>
+    <string name="tutorial_titulo_1">arrasta pra direita: a tarefa é sua</string>
+    <string name="tutorial_titulo_2">arrasta pra esquerda: passa a vez</string>
+    <string name="tutorial_titulo_3">errou? desfaz em até 3 segundos</string>
+    <string name="tutorial_titulo_4">pronto, você já sabe jogar</string>
+    <string name="tutorial_de_mentira">de mentira</string>
+    <string name="tutorial_cartao">Cartão de exemplo: %1$s</string>
+    <string name="tutorial_lavar">Lavar a louça</string>
+    <string name="tutorial_lixo">Tirar o lixo</string>
+    <string name="tutorial_vence">vence amanhã às 20h</string>
+    <string name="tutorial_e_minha">É MINHA</string>
+    <string name="tutorial_passo_carimbo">PASSO</string>
+    <string name="tutorial_passar">Passar</string>
+    <string name="tutorial_assumir">Assumir</string>
+    <string name="tutorial_voce_passou">Você passou</string>
+    <string name="tutorial_desfazer">Desfazer</string>
+    <string name="tutorial_assumir_curto">assumir</string>
+    <string name="tutorial_passar_curto">passar</string>
+    <string name="tutorial_desfazer_curto">desfazer</string>
+    <string name="tutorial_fim">Essas tarefas eram de mentira, nada foi salvo. As de verdade estão te esperando no deck.</string>
+    <string name="tutorial_continuar">Continuar</string>
 </resources>

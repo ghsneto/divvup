@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.divvup.android.compose)
     alias(libs.plugins.divvup.hilt)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 // Configuração do Firebase por flavor, sem o plugin google-services (ADR 0002).
@@ -41,10 +42,13 @@ android {
 
     buildFeatures {
         buildConfig = true
+        resValues = true
     }
 
     productFlavors {
         getByName("dev") {
+            // Crashlytics e Analytics existem no dev, mas não coletam: o projeto é fictício (ADR 0002).
+            manifestPlaceholders["coletar"] = "false"
             buildConfigField("String", "FIREBASE_PROJECT_ID", texto("demo-divvup"))
             buildConfigField("String", "FIREBASE_API_KEY", texto("chave-falsa-do-emulador"))
             buildConfigField("String", "FIREBASE_APP_ID", texto("1:000000000000:android:0000000000000000"))
@@ -55,6 +59,9 @@ android {
             buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", texto(googleServices["googleWebClientId"] ?: ""))
         }
         getByName("prod") {
+            manifestPlaceholders["coletar"] = "true"
+            // Crashlytics lê o App ID deste recurso para enviar o mapeamento do R8.
+            resValue("string", "google_app_id", googleServices["applicationId"] ?: "")
             buildConfigField("String", "FIREBASE_PROJECT_ID", texto(googleServices["projectId"] ?: "divvup-prod"))
             buildConfigField("String", "FIREBASE_API_KEY", texto(googleServices["apiKey"] ?: ""))
             buildConfigField("String", "FIREBASE_APP_ID", texto(googleServices["applicationId"] ?: ""))
@@ -67,12 +74,26 @@ android {
 
     defaultConfig {
         applicationId = "br.app.divvup"
-        versionCode = 1
-        versionName = "0.1.0"
+        // A CI pode subir o código de versão a cada envio (-Pdivvup.versionCode=N).
+        versionCode = providers.gradleProperty("divvup.versionCode").map(String::toInt).getOrElse(1)
+        versionName = "1.0.0"
     }
 
     testOptions {
         unitTests.isIncludeAndroidResources = true
+    }
+
+    // Assinatura de release só na CI: keystore e senhas vêm de segredos (nada no repositório).
+    val keystore = providers.environmentVariable("DIVVUP_KEYSTORE_PATH").orNull
+    signingConfigs {
+        if (keystore != null) {
+            create("release") {
+                storeFile = file(keystore)
+                storePassword = providers.environmentVariable("DIVVUP_KEYSTORE_PASSWORD").get()
+                keyAlias = providers.environmentVariable("DIVVUP_KEY_ALIAS").get()
+                keyPassword = providers.environmentVariable("DIVVUP_KEY_PASSWORD").get()
+            }
+        }
     }
 
     buildTypes {
@@ -80,6 +101,11 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            if (keystore != null) signingConfig = signingConfigs.getByName("release")
+            // Sem google-services.json (build local) não há para onde enviar o mapeamento.
+            configure<com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension> {
+                mappingFileUploadEnabled = googleServices.isNotEmpty()
+            }
         }
     }
 }
@@ -101,6 +127,8 @@ dependencies {
     implementation(project(":feature:discover"))
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)

@@ -78,6 +78,26 @@ internal object OnboardingMedidas {
     val permissaoTopo = 28.dp
     val permissaoTitulo = 57.sp
     val permissaoTextoMaximo = 290.dp
+
+    // B6 Tutorial.
+    val tutorialTopo = 16.dp
+    val tutorialCabecalho = 150.dp
+    val tutorialTitulo = 36.sp
+    val cartaoAltura = 360.dp
+    val cartaoImagem = 190.dp
+    val cartaoTitulo = 28.sp
+    val cartaoAtrasDescida = 14.dp
+    const val CARTAO_ATRAS_ESCALA = 0.94f
+    val setaTopo = 150.dp
+    val seta = 36.dp
+    val seloPadding = 12.dp
+    val carimbo = 36.sp
+    val limiteDoSwipe = 100.dp
+    const val GIRO_POR_DP = 0.06f
+    const val PESO_ASSUMIR = 1.6f
+    val chipFinal = 64.dp
+    val snackFundo = 96.dp
+    val empurrao = 6.dp
 }
 
 /** Passos do onboarding (TELAS.md: B1 → B2 → B3/B4 → B6 → B7). */
