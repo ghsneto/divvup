@@ -26,7 +26,13 @@ import br.app.divvup.feature.onboarding.R
  * Com [aoVoltar], o cabeçalho de B2/B3: botão "voltar" à esquerda (padding 12 16 0 8).
  */
 @Composable
-internal fun ProgressoOnboarding(passo: Int, modifier: Modifier = Modifier, aoVoltar: (() -> Unit)? = null) {
+internal fun ProgressoOnboarding(
+    passo: Int,
+    modifier: Modifier = Modifier,
+    aoVoltar: (() -> Unit)? = null,
+    /** No lugar do "n/5" (B6 "Pular"). */
+    final: (@Composable () -> Unit)? = null,
+) {
     val c = DivvupTheme.colors
     val e = DivvupTheme.spacing
     val descricao = stringResource(R.string.onb_passo_descricao, passo, PASSOS_ONBOARDING)
@@ -57,10 +63,14 @@ internal fun ProgressoOnboarding(passo: Int, modifier: Modifier = Modifier, aoVo
                 )
             }
         }
-        Text(
-            stringResource(R.string.onb_passo, passo, PASSOS_ONBOARDING),
-            style = DivvupTheme.typography.small.copy(fontFeatureSettings = "tnum"),
-            color = c.textMuted,
-        )
+        if (final != null) {
+            final()
+        } else {
+            Text(
+                stringResource(R.string.onb_passo, passo, PASSOS_ONBOARDING),
+                style = DivvupTheme.typography.small.copy(fontFeatureSettings = "tnum"),
+                color = c.textMuted,
+            )
+        }
     }
 }

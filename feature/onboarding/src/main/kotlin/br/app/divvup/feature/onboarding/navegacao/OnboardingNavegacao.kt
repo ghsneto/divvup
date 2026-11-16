@@ -9,6 +9,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.navigation.toRoute
 import br.app.divvup.feature.onboarding.permissao.PermissaoScreen
+import br.app.divvup.feature.onboarding.tutorial.PASSOS_DO_TUTORIAL
+import br.app.divvup.feature.onboarding.tutorial.TutorialScreen
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -48,6 +53,9 @@ import kotlinx.serialization.Serializable
 /** B5. */
 @Serializable data object RotaBemVindo
 
+/** B6: tutorial do swipe, antes de B7. */
+@Serializable data class RotaTutorial(val criouCasa: Boolean)
+
 /** B7: depois de criar (segue para B8) ou de entrar numa casa (segue para C1). */
 @Serializable data class RotaPermissao(val criouCasa: Boolean)
 
@@ -70,7 +78,20 @@ fun NavGraphBuilder.grafoDeOnboarding(nav: NavController, acoes: OnboardingAcoes
     composable<RotaSuaCasa> { SuaCasaRota(nav, acoes) }
     composable<RotaCriarCasa> { CriarCasaRota(nav, acoes) }
     composable<RotaCodigo> { CodigoRota(nav) }
-    composable<RotaBemVindo> { BemVindoRota(acoes, aoBora = { nav.navigate(RotaPermissao(criouCasa = false)) }) }
+    composable<RotaBemVindo> { BemVindoRota(acoes, aoBora = { nav.navigate(RotaTutorial(criouCasa = false)) }) }
+    composable<RotaTutorial> { entrada ->
+        val criou = entrada.toRoute<RotaTutorial>().criouCasa
+        var passo by rememberSaveable { mutableIntStateOf(0) }
+        val seguir = { nav.navigate(RotaPermissao(criou)) }
+        TutorialScreen(
+            passo = passo,
+            aoAssumir = { if (passo == 0) passo = 1 },
+            aoPassar = { if (passo == 1) passo = 2 },
+            aoDesfazer = { if (passo == 2) passo = PASSOS_DO_TUTORIAL },
+            aoPular = seguir,
+            aoContinuar = seguir,
+        )
+    }
     composable<RotaPermissao> { entrada ->
         val criou = entrada.toRoute<RotaPermissao>().criouCasa
         PermissaoRota(aoSeguir = if (criou) acoes.aoCriarCasa else acoes.aoTerCasa)
@@ -145,7 +166,7 @@ private fun CriarCasaRota(nav: NavController, acoes: OnboardingAcoes, viewModel:
         aoEscolherTipo = viewModel::aoEscolherTipo,
         aoAnunciar = viewModel::aoAnunciar,
         aoCriar = viewModel::criar,
-        aoSeguir = { nav.navigate(RotaPermissao(criouCasa = true)) },
+        aoSeguir = { nav.navigate(RotaTutorial(criouCasa = true)) },
     )
 }
 

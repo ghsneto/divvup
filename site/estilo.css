@@ -1,0 +1,17 @@
+:root{--fundo:#f5f5f0;--texto:#0c0f18;--mudo:#5a5e68;--linha:#d9dad3;--ultramarino:#2f2bd9;--lima:#c9f24d}
+@media (prefers-color-scheme:dark){:root{--fundo:#0c0f18;--texto:#f2f3f5;--mudo:#9ea1aa;--linha:#3d414d}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fundo);color:var(--texto);font:16px/1.6 "Bricolage Grotesque",system-ui,sans-serif}
+main{max-width:720px;margin:0 auto;padding:32px 16px 64px}
+header{display:flex;align-items:center;gap:12px;padding-bottom:24px;border-bottom:1px solid var(--linha)}
+header a{color:var(--texto);text-decoration:none;font-weight:800;font-size:20px}
+.marca{width:28px;height:28px;border-radius:4px;background:var(--ultramarino);display:inline-block}
+h1{font-size:44px;line-height:1.05;letter-spacing:-.03em;margin:32px 0 8px}
+h2{font-size:20px;margin:32px 0 8px}
+p,li{color:var(--texto)}
+.mudo{color:var(--mudo)}
+a{color:var(--ultramarino)}
+@media (prefers-color-scheme:dark){a{color:var(--lima)}}
+nav.paginas{display:flex;flex-direction:column;margin-top:24px;border-top:1px solid var(--linha)}
+nav.paginas a{padding:16px 0;border-bottom:1px solid var(--linha);font-weight:600;text-decoration:none}
+footer{margin-top:48px;color:var(--mudo);font-size:14px}
