@@ -51,4 +51,109 @@
     <string name="prefs_erro">Não deu para salvar. Confere a conexão.</string>
     <string name="prefs_ok">OK</string>
     <string name="prefs_cancelar">Cancelar</string>
+
+    <!-- E1 (docs/design/fonte/Perfil.dc.html) -->
+    <string name="perfil_editar">Editar</string>
+    <string name="perfil_sequencia">sequência</string>
+    <plurals name="perfil_dias">
+        <item quantity="one">dia</item>
+        <item quantity="other">dias</item>
+    </plurals>
+    <string name="perfil_ultimos_dias">Últimos 14 dias</string>
+    <plurals name="perfil_recorde">
+        <item quantity="one">recorde: %1$d dia</item>
+        <item quantity="other">recorde: %1$d dias</item>
+    </plurals>
+    <string name="perfil_mes">mês</string>
+    <string name="perfil_total">total</string>
+    <string name="perfil_pts">%1$s pts</string>
+    <plurals name="perfil_tarefas">
+        <item quantity="one">%1$d tarefa</item>
+        <item quantity="other">%1$d tarefas</item>
+    </plurals>
+    <string name="perfil_medalhas">medalhas</string>
+    <string name="perfil_medalhas_de">%1$d de %2$d</string>
+    <string name="perfil_bloqueada">bloqueada</string>
+    <string name="perfil_conquistada">conquistada</string>
+    <string name="perfil_cem_progresso">%1$d de 100</string>
+    <string name="perfil_medalha_estado">%1$s, %2$s</string>
+    <string name="perfil_minha_casa">Minha casa</string>
+    <string name="perfil_notificacoes">Notificações</string>
+    <string name="perfil_aparencia">Aparência</string>
+    <string name="perfil_sobre">Sobre o Divvup</string>
+    <string name="perfil_sair">Sair da conta</string>
+    <string name="perfil_excluir">Excluir conta</string>
+    <string name="perfil_sair_titulo">Sair da conta?</string>
+    <string name="perfil_sair_texto">Você continua na %1$s. É só entrar de novo.</string>
+    <string name="perfil_sair_texto_sem_casa">É só entrar de novo quando quiser.</string>
+    <string name="perfil_cancelar">Cancelar</string>
+    <string name="tema_sistema">sistema</string>
+    <string name="tema_claro">claro</string>
+    <string name="tema_escuro">escuro</string>
+    <string-array name="perfil_meses">
+        <item>janeiro</item><item>fevereiro</item><item>março</item><item>abril</item><item>maio</item><item>junho</item>
+        <item>julho</item><item>agosto</item><item>setembro</item><item>outubro</item><item>novembro</item><item>dezembro</item>
+    </string-array>
+    <string-array name="perfil_meses_curtos">
+        <item>jan.</item><item>fev.</item><item>mar.</item><item>abr.</item><item>maio</item><item>jun.</item>
+        <item>jul.</item><item>ago.</item><item>set.</item><item>out.</item><item>nov.</item><item>dez.</item>
+    </string-array>
+
+    <!-- E2/E5/E6 -->
+    <string name="editar_titulo">editar perfil</string>
+    <string name="editar_trocar_avatar">Trocar avatar</string>
+    <string name="editar_nome">nome de exibição</string>
+    <string name="editar_email">e-mail</string>
+    <string name="editar_email_nota">O e-mail da conta não muda por aqui.</string>
+    <string name="editar_senha">Alterar senha</string>
+    <string name="editar_salvar">Salvar</string>
+    <string name="editar_erro">Não deu para salvar. Confere a conexão e tenta de novo.</string>
+    <string name="aparencia_titulo">aparência</string>
+    <string name="aparencia_texto">Toca pra ver a tela mudar na hora.</string>
+    <string name="aparencia_sistema">Seguir o sistema</string>
+    <string name="aparencia_sistema_texto">Acompanha o Android</string>
+    <string name="aparencia_claro">Claro</string>
+    <string name="aparencia_claro_texto">Papel frio, sempre</string>
+    <string name="aparencia_escuro">Escuro</string>
+    <string name="aparencia_escuro_texto">Tinta, sempre</string>
+    <string name="sobre_nome">Divvup: Tarefas da Casa</string>
+    <string name="sobre_versao">versão %1$s (%2$d)</string>
+    <string name="sobre_termos">Termos de uso</string>
+    <string name="sobre_dominio" translatable="false">divvup.app.br</string>
+    <string name="sobre_privacidade">Política de privacidade</string>
+    <string name="sobre_lgpd" translatable="false">LGPD</string>
+    <string name="sobre_contato">Fale com a gente</string>
+    <string name="sobre_licencas">licenças de código aberto</string>
+    <string name="sobre_dicebear" translatable="false">DiceBear</string>
+    <string name="sobre_dicebear_licenca" translatable="false">MIT</string>
+    <string name="sobre_avataaars" translatable="false">avataaars</string>
+    <string name="sobre_avataaars_licenca">Pablo Stanley · uso comercial livre</string>
+    <string name="sobre_bricolage" translatable="false">Bricolage Grotesque</string>
+    <string name="sobre_bricolage_licenca" translatable="false">SIL Open Font License 1.1</string>
+    <string name="sobre_rodape">Feito no Brasil para quem divide casa.</string>
+
+    <!-- E7 (docs/design/fonte/ExcluirConta.dc.html) -->
+    <string name="excluir_passo">passo %1$d de 2</string>
+    <string name="excluir_titulo">excluir conta</string>
+    <string name="excluir_antes">Antes, veja o que acontece:</string>
+    <string name="excluir_1_titulo">Seus dados pessoais somem.</string>
+    <string name="excluir_1_texto">Nome, e-mail, foto, medalhas e estatísticas.</string>
+    <string name="excluir_2_titulo">O histórico da casa fica anônimo.</string>
+    <string name="excluir_2_texto">Suas tarefas aparecem como "ex-morador".</string>
+    <string name="excluir_3_titulo">Não tem volta.</string>
+    <string name="excluir_3_texto">Nem a gente consegue recuperar.</string>
+    <string name="excluir_unico_admin">Você é o único admin da %1$s. %2$s, morador mais antigo, vira admin.</string>
+    <string name="excluir_continuar">Entendi, continuar</string>
+    <string name="excluir_manter">Manter minha conta</string>
+    <string name="excluir_confirma">confirma que é você</string>
+    <string name="excluir_senha">sua senha</string>
+    <string name="excluir_google">Entrou com Google? A confirmação abre a sua conta Google.</string>
+    <string name="excluir_digite">digite EXCLUIR</string>
+    <string name="excluir_palavra" translatable="false">EXCLUIR</string>
+    <string name="excluir_botao">Excluir minha conta</string>
+    <string name="excluir_feita">conta excluída</string>
+    <string name="excluir_valeu">valeu por dividir a casa com a gente</string>
+    <string name="excluir_inicio">Voltar ao início</string>
+    <string name="excluir_erro_senha">Senha incorreta. Confere e tenta de novo.</string>
+    <string name="excluir_erro">Não deu para excluir. Confere a conexão e tenta de novo.</string>
 </resources>

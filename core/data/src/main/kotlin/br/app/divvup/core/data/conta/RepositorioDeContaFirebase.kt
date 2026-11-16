@@ -5,10 +5,14 @@ import br.app.divvup.core.domain.conta.ErroDeConta
 import br.app.divvup.core.domain.conta.RepositorioDeConta
 import br.app.divvup.core.domain.conta.ResultadoConta
 import br.app.divvup.core.domain.conta.Sessao
+import br.app.divvup.core.model.Conquista
+import br.app.divvup.core.model.Medalha
 import br.app.divvup.core.model.Usuario
+import com.google.firebase.auth.EmailAuthProvider
+import com.google.firebase.auth.GoogleAuthProvider
+import java.time.LocalDate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
-import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.awaitClose
@@ -68,6 +72,19 @@ class RepositorioDeContaFirebase @Inject constructor(
 
     override suspend fun sair() = auth.signOut()
 
+    override suspend fun excluirConta(senha: String?, idTokenGoogle: String?): ResultadoConta<Unit> = executar {
+        val usuario = checkNotNull(auth.currentUser)
+        val credencial = when {
+            idTokenGoogle != null -> GoogleAuthProvider.getCredential(idTokenGoogle, null)
+            else -> EmailAuthProvider.getCredential(usuario.email.orEmpty(), senha.orEmpty())
+        }
+        // O backend só exclui com login recente (auth_time do token novo).
+        usuario.reauthenticate(credencial).await()
+        usuario.getIdToken(true).await()
+        backend.chamar("excluirConta", buildJsonObject { put("confirmacao", JsonPrimitive("EXCLUIR")) })
+        auth.signOut()
+    }
+
     override suspend fun salvarPerfil(uid: String, nome: String, avatarId: String): ResultadoConta<Unit> = executar {
         // As Rules só permitem ao dono mudar displayName e avatarId (firebase/firestore.rules).
         firestore.collection("users").document(uid)
@@ -88,6 +105,19 @@ class RepositorioDeContaFirebase @Inject constructor(
                 avatarId = doc.getString("avatarId"),
                 casaAtualId = doc.getString("currentHouseId"),
                 sequencia = doc.getLong("streak.current")?.toInt() ?: 0,
+                melhorSequencia = doc.getLong("streak.best")?.toInt() ?: 0,
+                ultimoDiaDaSequencia = doc.getString("streak.lastDay")?.let { runCatching { LocalDate.parse(it) }.getOrNull() },
+                pontosTotais = doc.getLong("totalPoints")?.toInt() ?: 0,
+                tarefasFeitas = doc.getLong("tasksDone")?.toInt() ?: 0,
+                medalhas = (doc.get("badges") as? Map<*, *>).orEmpty().mapNotNull { (k, v) ->
+                    val medalha = Medalha.deId(k as? String) ?: return@mapNotNull null
+                    val m = v as? Map<*, *>
+                    medalha to Conquista(
+                        (m?.get("count") as? Number)?.toInt() ?: 1,
+                        (m?.get("firstAt") as? com.google.firebase.Timestamp)?.toDate()?.toInstant(),
+                    )
+                }.toMap(),
+                temSenha = auth.currentUser?.providerData?.any { it.providerId == "password" } ?: true,
             )
         }
     }

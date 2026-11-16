@@ -31,7 +31,7 @@ async function ativos(db: Firestore, casaId: string, tx: string): Promise<{ uid:
  * membro (`LEFT`), que some do ranking do mês e aparece como ex-morador no geral; o histórico
  * pessoal em `users/{uid}` não muda. O Histórico da casa registra a saída.
  */
-async function saida(db: Firestore, tx: string, casaId: string, uid: string, membro: Documento, casa: Documento, agora: Date): Promise<Escrita[]> {
+export async function saida(db: Firestore, tx: string, casaId: string, uid: string, membro: Documento, casa: Documento, agora: Date): Promise<Escrita[]> {
   const comEle = (await db.listar(`houses/${casaId}/tasks`, tx, { campo: "assigneeId", valor: uid })).filter(
     (t) => t.dados["status"] === "ASSIGNED" || t.dados["status"] === "LATE",
   );
@@ -96,14 +96,9 @@ export async function sairDaCasa(db: Firestore, usuario: Usuario, agora: Date = 
   return db.transacao(async (tx) => {
     const { casaId, casa, eu } = await contexto(db, usuario.uid, tx);
     const escritas = await saida(db, tx, casaId, usuario.uid, eu, casa, agora);
-    let novoAdmin: string | null = null;
-    if (eu["role"] === "ADMIN") {
-      const outros = (await ativos(db, casaId, tx)).filter((m) => m.uid !== usuario.uid);
-      if (outros.length > 0 && !outros.some((m) => m.dados["role"] === "ADMIN")) {
-        const maisAntigo = outros.reduce((a, b) => ((a.dados["joinedAt"] as Date) <= (b.dados["joinedAt"] as Date) ? a : b));
-        novoAdmin = maisAntigo.uid;
-        escritas.push({ tipo: "gravar", caminho: `houses/${casaId}/members/${novoAdmin}`, dados: { role: "ADMIN" }, campos: ["role"], exigirExistente: true });
-      }
+    const novoAdmin = await sucessor(db, tx, casaId, usuario.uid, eu);
+    if (novoAdmin) {
+      escritas.push({ tipo: "gravar", caminho: `houses/${casaId}/members/${novoAdmin}`, dados: { role: "ADMIN" }, campos: ["role"], exigirExistente: true });
     }
     return { escritas, resultado: { novoAdmin } };
   });
@@ -147,4 +142,12 @@ function objeto(corpo: unknown): Record<string, unknown> {
 function texto(v: unknown, erro: string): string {
   if (typeof v !== "string" || v.length === 0) throw new ErroHttp(400, erro);
   return v;
+}
+
+/** R-04: se quem sai era o único admin, o morador ativo mais antigo vira admin. */
+export async function sucessor(db: Firestore, tx: string, casaId: string, uid: string, membro: Documento): Promise<string | null> {
+  if (membro["role"] !== "ADMIN") return null;
+  const outros = (await ativos(db, casaId, tx)).filter((m) => m.uid !== uid);
+  if (outros.length === 0 || outros.some((m) => m.dados["role"] === "ADMIN")) return null;
+  return outros.reduce((a, b) => ((a.dados["joinedAt"] as Date) <= (b.dados["joinedAt"] as Date) ? a : b)).uid;
 }

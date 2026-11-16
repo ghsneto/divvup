@@ -8,6 +8,7 @@ import { alterarPapel, editarCasa, removerMembro, sairDaCasa } from "./operacoes
 import { assumirTarefa, desfazer, passarTarefa, reverPassadas } from "./operacoes/match.js";
 import { cancelarTarefa, concluirTarefa, criarTarefa, devolverTarefa, editarTarefa, excluirTarefa } from "./operacoes/tarefas.js";
 import { criarPerfil } from "./operacoes/perfil.js";
+import { excluirConta } from "./operacoes/conta.js";
 import {
   avisarConclusao,
   avisarNovaTarefa,
@@ -38,6 +39,7 @@ import { CRON_TEMPORADA, virarTemporada } from "./operacoes/temporadas.js";
  *   `{tarefaId}` e `/v1/editarTarefa` `{tarefaId, titulo, …}` (R-12, R-19, R-21, R-22).
  * - `POST /v1/registrarToken` / `/v1/removerToken` `{token}`: aparelhos que recebem push (R-36).
  * - `POST /v1/salvarPreferencias` `{tipos, silencio}`: E4 (R-34, R-35).
+ * - `POST /v1/excluirConta` `{confirmacao: "EXCLUIR"}`: E7, com login recente.
  * As operações protegidas da SPEC §4.2 entram aqui, uma rota por operação. O Cron Trigger chama
  * `scheduled`, que roda as rotinas de `operacoes/agendadas.ts`.
  */
@@ -95,6 +97,7 @@ export default {
         "/v1/registrarToken": registrarToken,
         "/v1/removerToken": removerToken,
         "/v1/salvarPreferencias": salvarPreferencias,
+        "/v1/excluirConta": (db, u, corpo) => excluirConta(db, env, u, corpo),
         "/v1/assumirTarefa": (db, u, corpo) => assumirTarefa(db, u, corpo),
         "/v1/passarTarefa": (db, u, corpo) => passarTarefa(db, u, corpo),
         "/v1/desfazer": (db, u, corpo) => desfazer(db, u, corpo),

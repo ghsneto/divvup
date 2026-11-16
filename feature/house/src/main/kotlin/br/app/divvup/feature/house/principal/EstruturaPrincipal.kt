@@ -56,7 +56,8 @@ fun EstruturaPrincipal(
     val c = DivvupTheme.colors
     Column(modifier.fillMaxSize().background(c.background)) {
         // Só o deck mostra "novembro · faltam 24 dias" (Main); as outras abas, só o nome.
-        BarraDaCasa(casa, temporada.takeIf { aba == Aba.Deck }, naoLidas, aoAbrirNotificacoes)
+        // E1 (Perfil) não tem a barra da casa no desenho.
+        if (aba != Aba.Perfil) BarraDaCasa(casa, temporada.takeIf { aba == Aba.Deck }, naoLidas, aoAbrirNotificacoes)
         Box(Modifier.weight(1f).fillMaxWidth()) { conteudo(aba) }
         DivvupTabBar(
             abas = Aba.entries.map { AbaNavegacao(it.icone, stringResource(it.rotulo)) },

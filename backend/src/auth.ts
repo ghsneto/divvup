@@ -13,6 +13,8 @@ export interface Usuario {
   /** Nome e foto do provedor (ex.: conta Google), quando o token traz. */
   nome?: string;
   foto?: string;
+  /** `auth_time` do token, em segundos. */
+  autenticadoEm?: number;
 }
 
 /**
@@ -47,6 +49,8 @@ export async function autenticar(req: Request, env: Env, chaves: JWTVerifyGetKey
   if (typeof payload["email"] === "string") usuario.email = payload["email"];
   if (typeof payload["name"] === "string") usuario.nome = payload["name"];
   if (typeof payload["picture"] === "string") usuario.foto = payload["picture"];
+  // Hora do último login (segundos), para operações que pedem reautenticação (E7).
+  if (typeof payload["auth_time"] === "number") usuario.autenticadoEm = payload["auth_time"];
   return usuario;
 }
 

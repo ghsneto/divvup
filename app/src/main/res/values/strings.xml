@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">divvup</string>
-    <!-- Destinos provisórios até as próximas issues existirem. -->
-    <string name="provisorio_rotulo">em construção</string>
-    <string name="provisorio_minha_casa">Minha casa</string>
-    <string name="provisorio_perfil">perfil</string>
-    <string name="provisorio_sair">Sair</string>
     <string name="canal_avisos">Avisos da casa</string>
-    <string name="provisorio_notificacoes">Notificações</string>
 </resources>

@@ -24,4 +24,43 @@ internal object ProfileMedidas {
     val textoHorario = 20.sp
     val textoSilencio = 16.sp
     val botaoBanner = 40.dp
+
+    // E1 Perfil.
+    val editarAltura = 40.dp
+    val avatarPerfil = 96.dp
+    val nomePerfil = 57.sp
+    val cartaoTopo = 20.dp
+    const val PESO_SEQUENCIA = 1.2f
+    val numeroSequencia = 57.sp
+    val medalhaAltura = 96.dp
+    val discoGrande = 56.dp
+    val discoPequeno = 36.dp
+    val nomeMedalhaGrande = 16.sp
+    val nomeMedalhaPequeno = 14.sp
+    val tracoBloqueada = 4.dp
+    val linkAltura = 56.dp
+    const val DIAS_NO_QUADRO = 14
+    const val DIAS_POR_LINHA = 7
+
+    // E5 Aparencia / E6 Sobre / E2 EditarPerfil.
+    val tituloGrande = 57.sp
+    val miniaturaLargura = 64.dp
+    val miniaturaAltura = 84.dp
+    val miniaturaBarra = 6.dp
+    val miniaturaBloco = 24.dp
+    val radio = 24.dp
+    val radioPonto = 12.dp
+    val bordaEscolhida = 2.dp
+    const val FRACAO_LINHA = 0.7f
+    const val FRACAO_CURTA = 0.4f
+    val sobreCartaoPadding = 20.dp
+    val sobreLogo = 40.dp
+    val avatarEditar = 96.dp
+    val semEspaco = 0.dp
+
+    // E7 ExcluirConta.
+    val numeroItem = 28.sp
+    val colunaNumero = 36.dp
+    val itensTopo = 20.dp
+    const val ESPACAMENTO_PALAVRA = 0.12f
 }

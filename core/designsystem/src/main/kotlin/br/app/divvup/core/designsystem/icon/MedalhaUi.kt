@@ -34,3 +34,19 @@ val Medalha.conquista: Int
         Medalha.CEM_TAREFAS -> R.string.medalha_cem_tarefas_conquista
         Medalha.SALVA_VIDAS -> R.string.medalha_salva_vidas_conquista
     }
+
+/** Critério para ganhar (E1, ao tocar numa bloqueada). */
+@get:StringRes
+val Medalha.criterio: Int
+    get() = when (this) {
+        Medalha.PRIMEIRA_TAREFA -> R.string.medalha_primeira_tarefa_criterio
+        Medalha.SETE_DIAS -> R.string.medalha_sete_dias_criterio
+        Medalha.CAMPEAO -> R.string.medalha_campeao_criterio
+        Medalha.CEM_TAREFAS -> R.string.medalha_cem_tarefas_criterio
+        Medalha.SALVA_VIDAS -> R.string.medalha_salva_vidas_criterio
+    }
+
+/** Nome na grade de E1 ("sequência de 7 dias"); nos chips de D3 fica o curto. */
+@get:StringRes
+val Medalha.nomeLongo: Int
+    get() = if (this == Medalha.SETE_DIAS) R.string.medalha_sete_dias_longo else nome
