@@ -17,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.app.divvup.R
 import br.app.divvup.core.designsystem.component.DivvupButton
@@ -48,6 +47,9 @@ import br.app.divvup.feature.house.navegacao.RotaMinhaCasa
 import br.app.divvup.feature.ranking.navegacao.AbaRanking
 import br.app.divvup.feature.ranking.navegacao.RotaTemporadas
 import br.app.divvup.feature.ranking.navegacao.telaTemporadas
+import br.app.divvup.feature.notifications.navegacao.RotaAvisos
+import br.app.divvup.feature.notifications.navegacao.telaAvisos
+import br.app.divvup.core.model.TipoDeNotificacao
 import br.app.divvup.feature.house.navegacao.RotaPrincipal
 import br.app.divvup.feature.house.navegacao.telasDeConvite
 import br.app.divvup.feature.house.navegacao.telasDeMembros
@@ -58,11 +60,7 @@ import br.app.divvup.feature.profile.navegacao.RotaGaleria
 import br.app.divvup.feature.profile.navegacao.telaGaleria
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
 import javax.inject.Inject
-
-/** Destino ainda não construído: F1 notificações. Provisório. */
-@Serializable data object RotaNotificacoesProvisoria
 
 /** Páginas legais (issue #29/#30). */
 private const val URL_TERMOS = "https://divvup.app.br/termos"
@@ -117,7 +115,7 @@ fun DivvupNavHost() {
             nav.getBackStackEntry<RotaPrincipal>().savedStateHandle[PrincipalViewModel.ARG_ABA] = aba.name
         }
         telasDeTarefa(nav, AcoesDaConclusao(aoPegarOutra = { irParaAba(Aba.Deck) }, aoContinuar = { irParaAba(Aba.MinhasTarefas) }))
-        telaPrincipal(aoAbrirNotificacoes = { nav.navigate(RotaNotificacoesProvisoria) }) { aba, trocarAba ->
+        telaPrincipal(aoAbrirNotificacoes = { nav.navigate(RotaAvisos) }) { aba, trocarAba ->
             when (aba) {
                 Aba.Deck -> AbaDeck(
                     aoNovaTarefa = { nav.navigate(RotaNovaTarefa) },
@@ -129,7 +127,14 @@ fun DivvupNavHost() {
                 else -> AbaProvisoria(aba, aoSair, aoMinhaCasa = { nav.navigate(RotaMinhaCasa) })
             }
         }
-        composable<RotaNotificacoesProvisoria> { EmConstrucao(stringResource(R.string.provisorio_notificacoes), aoSair = null) }
+        telaAvisos(nav) { aviso ->
+            val tarefa = aviso.tarefaId
+            when {
+                tarefa != null -> nav.navigate(RotaDetalhe(tarefa))
+                aviso.tipo == TipoDeNotificacao.SEASON_END -> nav.navigate(RotaTemporadas)
+                else -> Unit
+            }
+        }
     }
 }
 

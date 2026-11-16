@@ -5,6 +5,6 @@
     <string name="provisorio_rotulo">em construção</string>
     <string name="provisorio_minha_casa">Minha casa</string>
     <string name="provisorio_perfil">perfil</string>
-    <string name="provisorio_notificacoes">notificações</string>
     <string name="provisorio_sair">Sair</string>
+    <string name="canal_avisos">Avisos da casa</string>
 </resources>

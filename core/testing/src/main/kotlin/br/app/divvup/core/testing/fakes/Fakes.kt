@@ -18,7 +18,9 @@ import br.app.divvup.core.domain.tarefa.Swipe
 import br.app.divvup.core.domain.conta.ResultadoConta
 import br.app.divvup.core.domain.conta.Sessao
 import br.app.divvup.core.domain.ranking.RepositorioDeRanking
+import br.app.divvup.core.domain.notificacao.RepositorioDeNotificacoes
 import br.app.divvup.core.model.Casa
+import br.app.divvup.core.model.Notificacao
 import br.app.divvup.core.model.Evento
 import br.app.divvup.core.model.Temporada
 import br.app.divvup.core.model.Convite
@@ -31,6 +33,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import java.time.Instant
 
 /** Repositório de conta em memória para testes de ViewModel e de UI. */
@@ -237,4 +240,18 @@ class FakeRepositorioDeRanking(
     override val moradores: StateFlow<List<Membro>> = listaDeMoradores
     override val historico: StateFlow<List<Evento>> = listaDoHistorico
     override val temporadas: StateFlow<List<Temporada>> = listaDeTemporadas
+}
+
+class FakeRepositorioDeNotificacoes(iniciais: List<Notificacao> = emptyList()) : RepositorioDeNotificacoes {
+    val lista = MutableStateFlow(iniciais)
+    override val avisos: StateFlow<List<Notificacao>> = lista
+    val registrados = mutableListOf<String?>()
+
+    override suspend fun marcarLida(id: String) = lista.update { l -> l.map { if (it.id == id) it.copy(lida = true) else it } }
+
+    override suspend fun marcarTodas() = lista.update { l -> l.map { it.copy(lida = true) } }
+
+    override suspend fun registrarAparelho(token: String?) {
+        registrados += token
+    }
 }

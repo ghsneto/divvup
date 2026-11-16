@@ -10,6 +10,7 @@ import br.app.divvup.core.model.TipoDeCasa
 import br.app.divvup.core.testing.RegraDispatcherPrincipal
 import br.app.divvup.core.testing.capturarTela
 import br.app.divvup.core.testing.fakes.FakeRepositorioDeCasa
+import br.app.divvup.core.testing.fakes.FakeRepositorioDeNotificacoes
 import br.app.divvup.feature.house.principal.Aba
 import br.app.divvup.feature.house.principal.EstruturaPrincipal
 import br.app.divvup.feature.house.principal.PrincipalViewModel
@@ -32,7 +33,7 @@ class PrincipalTest {
 
     @Test
     fun `mostra a casa atual, troca de aba e calcula a temporada no fuso de Brasilia`() = runTest {
-        val vm = PrincipalViewModel(FakeRepositorioDeCasa(casa), SavedStateHandle())
+        val vm = PrincipalViewModel(FakeRepositorioDeCasa(casa), SavedStateHandle(), FakeRepositorioDeNotificacoes())
         assertEquals(casa, vm.casa.first { it != null })
         vm.aoTrocarAba(Aba.Ranking)
         assertEquals(Aba.Ranking, vm.aba.value)

@@ -22,11 +22,11 @@ fun NavGraphBuilder.telaPrincipal(aoAbrirNotificacoes: () -> Unit, conteudo: @Co
 private fun PrincipalRota(aoAbrirNotificacoes: () -> Unit, conteudo: @Composable (Aba, (Aba) -> Unit) -> Unit, viewModel: PrincipalViewModel = hiltViewModel()) {
     val casa by viewModel.casa.collectAsStateWithLifecycle()
     val aba by viewModel.aba.collectAsStateWithLifecycle()
+    val naoLidas by viewModel.naoLidas.collectAsStateWithLifecycle()
     EstruturaPrincipal(
         casa = casa,
         temporada = viewModel.temporada(),
-        // Notificações (F1) chegam na issue das notificações; até lá, sem contador.
-        naoLidas = 0,
+        naoLidas = naoLidas,
         aba = aba,
         aoTrocarAba = viewModel::aoTrocarAba,
         aoAbrirNotificacoes = aoAbrirNotificacoes,
