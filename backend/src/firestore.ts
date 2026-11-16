@@ -97,12 +97,17 @@ export class Firestore {
     return nomes.map((n) => porNome.get(n));
   }
 
-  /** Documentos de uma subcoleção (`runQuery`), com o id de cada um; dentro de transação, se dada. */
-  async listar(colecao: string, transacao?: string): Promise<{ uid: string; dados: Documento }[]> {
+  /**
+   * Documentos de uma subcoleção (`runQuery`), com o id de cada um; dentro de transação, se dada.
+   * Com `igual`, só os que têm `campo == valor` (índice simples, automático).
+   */
+  async listar(colecao: string, transacao?: string, igual?: { campo: string; valor: Valor }): Promise<{ uid: string; dados: Documento }[]> {
     const corte = colecao.lastIndexOf("/");
     // Coleção da raiz (ex.: `houses`) consulta direto em `documents`.
     const pai = corte < 0 ? "" : `/${colecao.slice(0, corte)}`;
-    const corpo: Record<string, unknown> = { structuredQuery: { from: [{ collectionId: colecao.slice(corte + 1) }] } };
+    const consulta: Record<string, unknown> = { from: [{ collectionId: colecao.slice(corte + 1) }] };
+    if (igual) consulta["where"] = { fieldFilter: { field: { fieldPath: igual.campo }, op: "EQUAL", value: paraRest(igual.valor) } };
+    const corpo: Record<string, unknown> = { structuredQuery: consulta };
     if (transacao) corpo["transaction"] = transacao;
     const resp = await this.chamar(`${this.base}${pai}:runQuery`, { method: "POST", body: JSON.stringify(corpo) });
     await garantirOk(resp, "runQuery");

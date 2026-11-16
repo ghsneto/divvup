@@ -1,6 +1,7 @@
 import type { Usuario } from "../auth.js";
 import { ErroHttp } from "../erros.js";
 import type { Documento, Escrita, Firestore } from "../firestore.js";
+import { evento } from "./atividade.js";
 import { NOME_CASA_MAXIMO, TIPOS_DE_CASA, type TipoDeCasa } from "./casa.js";
 
 /** Lê quem pede, a casa atual e todos os membros, dentro da transação. */
@@ -24,10 +25,34 @@ async function ativos(db: Firestore, casaId: string, tx: string): Promise<{ uid:
   return (await db.listar(`houses/${casaId}/members`, tx)).filter((m) => m.dados["status"] === "ACTIVE");
 }
 
-/** Escritas que tiram alguém da casa (R-29: tarefas assumidas voltam ao deck quando existirem). */
-function saida(casaId: string, uid: string, casa: Documento, agora: Date): Escrita[] {
+/**
+ * Escritas que tiram alguém da casa (R-29): as tarefas assumidas e não concluídas voltam ao deck
+ * (`OPEN`, sem dono; perto do prazo, a atribuição automática pega de novo); os pontos ficam no
+ * membro (`LEFT`), que some do ranking do mês e aparece como ex-morador no geral; o histórico
+ * pessoal em `users/{uid}` não muda. O Histórico da casa registra a saída.
+ */
+async function saida(db: Firestore, tx: string, casaId: string, uid: string, membro: Documento, casa: Documento, agora: Date): Promise<Escrita[]> {
+  const comEle = (await db.listar(`houses/${casaId}/tasks`, tx, { campo: "assigneeId", valor: uid })).filter(
+    (t) => t.dados["status"] === "ASSIGNED" || t.dados["status"] === "LATE",
+  );
   return [
-    { tipo: "gravar", caminho: `houses/${casaId}/members/${uid}`, dados: { status: "LEFT", leftAt: agora, role: "MEMBER" }, campos: ["status", "leftAt", "role"], exigirExistente: true },
+    ...comEle.map(
+      (t): Escrita => ({
+        tipo: "gravar",
+        caminho: `houses/${casaId}/tasks/${t.uid}`,
+        dados: { status: "OPEN", assigneeId: null, assignedVia: null, assignedAt: null },
+        campos: ["status", "assigneeId", "assignedVia", "assignedAt"],
+        exigirExistente: true,
+      }),
+    ),
+    {
+      tipo: "gravar",
+      caminho: `houses/${casaId}/members/${uid}`,
+      dados: { status: "LEFT", leftAt: agora, role: "MEMBER", openTasks: 0 },
+      campos: ["status", "leftAt", "role", "openTasks"],
+      exigirExistente: true,
+    },
+    evento(casaId, `saiu-${uid}-${agora.getTime()}`, "LEFT", { uid, dados: membro }, {}, agora),
     { tipo: "gravar", caminho: `houses/${casaId}`, dados: { memberCount: Math.max(((casa["memberCount"] as number) ?? 1) - 1, 0) }, campos: ["memberCount"], exigirExistente: true },
     { tipo: "gravar", caminho: `users/${uid}`, dados: { currentHouseId: null }, campos: ["currentHouseId"], exigirExistente: true },
   ];
@@ -61,8 +86,8 @@ export async function removerMembro(db: Firestore, usuario: Usuario, corpo: unkn
   return db.transacao(async (tx) => {
     const { casaId, casa, eu } = await contexto(db, usuario.uid, tx);
     if (eu["role"] !== "ADMIN") throw new ErroHttp(403, "nao-admin");
-    await membroAtivo(db, casaId, alvo, tx);
-    return { escritas: saida(casaId, alvo, casa, agora), resultado: { ok: true as const } };
+    const membro = await membroAtivo(db, casaId, alvo, tx);
+    return { escritas: await saida(db, tx, casaId, alvo, membro, casa, agora), resultado: { ok: true as const } };
   });
 }
 
@@ -70,7 +95,7 @@ export async function removerMembro(db: Firestore, usuario: Usuario, corpo: unkn
 export async function sairDaCasa(db: Firestore, usuario: Usuario, agora: Date = new Date()): Promise<{ novoAdmin: string | null }> {
   return db.transacao(async (tx) => {
     const { casaId, casa, eu } = await contexto(db, usuario.uid, tx);
-    const escritas = saida(casaId, usuario.uid, casa, agora);
+    const escritas = await saida(db, tx, casaId, usuario.uid, eu, casa, agora);
     let novoAdmin: string | null = null;
     if (eu["role"] === "ADMIN") {
       const outros = (await ativos(db, casaId, tx)).filter((m) => m.uid !== usuario.uid);

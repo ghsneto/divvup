@@ -122,3 +122,41 @@ describe("gestão de membros (R-03, R-04)", () => {
     expect((await chamar("editarCasa", iane.token, { nome: "", tipo: "REPUBLICA" })).status).toBe(400);
   });
 });
+
+describe("saída completa (R-29)", () => {
+  const db = new Firestore(envLocal);
+  beforeEach(limparFirestore);
+
+  it("tarefas assumidas voltam ao deck, pontos ficam como ex-morador e a saída entra no Histórico", async () => {
+    const chamarAqui = (rota: string, token: string, corpo: unknown = {}) =>
+      worker.fetch(
+        new Request(`http://local/v1/${rota}`, { method: "POST", headers: { authorization: `Bearer ${token}`, "content-type": "application/json" }, body: JSON.stringify(corpo) }),
+        envLocal,
+      );
+    const lerJson = async (r: Response) => (await r.json()) as Record<string, unknown>;
+    const ana = await criarUsuario();
+    await chamarAqui("criarPerfil", ana.token, { nome: "Ana" });
+    const { casaId } = (await lerJson(await chamarAqui("criarCasa", ana.token, { nome: "Rep", tipo: "REPUBLICA" }))) as { casaId: string };
+    const bruno = await criarUsuario();
+    await chamarAqui("criarPerfil", bruno.token, { nome: "Bruno" });
+    const { codigo } = (await lerJson(await chamarAqui("criarConvite", ana.token))) as { codigo: string };
+    await chamarAqui("entrarComCodigo", bruno.token, { codigo });
+    const prazo = new Date(Date.now() + 72 * 3600_000).toISOString();
+    const nova = async () => ((await lerJson(await chamarAqui("criarTarefa", ana.token, { titulo: "Lixo", categoria: "LIXO", peso: "LEVE", prazo }))) as { tarefaId: string }).tarefaId;
+    const t1 = await nova();
+    const t2 = await nova();
+    await chamarAqui("assumirTarefa", bruno.token, { tarefaId: t1 });
+    await chamarAqui("assumirTarefa", bruno.token, { tarefaId: t2 });
+    await chamarAqui("concluirTarefa", bruno.token, { tarefaId: t2 });
+
+    expect((await chamarAqui("removerMembro", ana.token, { uid: bruno.uid })).status).toBe(200);
+    const tarefa = await db.ler(`houses/${casaId}/tasks/${t1}`);
+    expect(tarefa).toMatchObject({ status: "OPEN", assigneeId: null });
+    expect((await db.ler(`houses/${casaId}/tasks/${t2}`))?.["status"]).toBe("DONE");
+    const membro = await db.ler(`houses/${casaId}/members/${bruno.uid}`);
+    expect(membro).toMatchObject({ status: "LEFT", openTasks: 0, totalPoints: 25 });
+    expect((await db.ler(`users/${bruno.uid}`))?.["totalPoints"]).toBe(25);
+    const feed = (await db.listar(`houses/${casaId}/activity`)).map((e) => e.dados["type"]);
+    expect(feed).toContain("LEFT");
+  });
+});
