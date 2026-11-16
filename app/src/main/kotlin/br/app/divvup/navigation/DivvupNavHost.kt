@@ -1,30 +1,17 @@
 package br.app.divvup.navigation
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.stringResource
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import br.app.divvup.R
-import br.app.divvup.core.designsystem.component.DivvupButton
-import br.app.divvup.core.designsystem.component.DivvupLabel
-import br.app.divvup.core.designsystem.component.VarianteBotao
 import br.app.divvup.core.designsystem.theme.DivvupTheme
 import br.app.divvup.core.domain.conta.DestinoInicial
-import br.app.divvup.core.domain.conta.RepositorioDeConta
 import br.app.divvup.feature.auth.navegacao.AcessoAcoes
 import br.app.divvup.feature.auth.navegacao.RotaBoasVindas
 import br.app.divvup.feature.auth.navegacao.RotaSplash
@@ -58,15 +45,20 @@ import br.app.divvup.feature.house.principal.Aba
 import br.app.divvup.feature.onboarding.navegacao.grafoDeOnboarding
 import br.app.divvup.feature.profile.navegacao.RotaGaleria
 import br.app.divvup.feature.profile.navegacao.telaGaleria
-import br.app.divvup.feature.profile.navegacao.RotaPrefsNotif
+import br.app.divvup.feature.profile.navegacao.AbaPerfil
+import br.app.divvup.feature.profile.navegacao.AcoesDoPerfil
+import br.app.divvup.feature.profile.navegacao.telasDoPerfil
+import br.app.divvup.feature.profile.navegacao.RotaExcluirConta
+import br.app.divvup.feature.profile.navegacao.telaExcluirConta
+import br.app.divvup.feature.auth.google.pedirTokenGoogle
+import br.app.divvup.feature.auth.navegacao.RotaRecuperarSenha
+import br.app.divvup.BuildConfig
 import br.app.divvup.feature.profile.navegacao.telaPrefsNotif
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /** Páginas legais (issue #29/#30). */
 private const val URL_TERMOS = "https://divvup.app.br/termos"
 private const val URL_PRIVACIDADE = "https://divvup.app.br/privacidade"
+private const val EMAIL_CONTATO = "mailto:contato@divvup.app.br"
 
 @Composable
 fun DivvupNavHost() {
@@ -112,6 +104,23 @@ fun DivvupNavHost() {
         telaNovaTarefa(nav)
         telaTemporadas(nav)
         telaPrefsNotif(nav)
+        val acoesDoPerfil = AcoesDoPerfil(
+            aoMinhaCasa = { nav.navigate(RotaMinhaCasa) },
+            aoSair = aoSair,
+            aoExcluir = { nav.navigate(RotaExcluirConta) },
+            aoAlterarSenha = { nav.navigate(RotaRecuperarSenha) },
+            aoTermos = { links.openUri(URL_TERMOS) },
+            aoPrivacidade = { links.openUri(URL_PRIVACIDADE) },
+            aoContato = { links.openUri(EMAIL_CONTATO) },
+            versao = BuildConfig.VERSION_NAME,
+            build = BuildConfig.VERSION_CODE,
+        )
+        telasDoPerfil(nav, acoesDoPerfil)
+        telaExcluirConta(
+            nav,
+            pedirTokenGoogle = { contexto -> pedirTokenGoogle(contexto, BuildConfig.GOOGLE_WEB_CLIENT_ID).getOrNull() },
+            aoExcluida = { nav.navigate(RotaBoasVindas) { limparPilha(nav) } },
+        )
         // C4 volta para a estrutura principal já na aba certa.
         val irParaAba = { aba: Aba ->
             nav.popBackStack<RotaPrincipal>(inclusive = false)
@@ -127,7 +136,7 @@ fun DivvupNavHost() {
                 )
                 Aba.MinhasTarefas -> AbaMinhasTarefas(nav, aoIrParaDeck = { trocarAba(Aba.Deck) })
                 Aba.Ranking -> AbaRanking(aoAbrirMembro = { nav.navigate(RotaMembro(it)) }, aoTemporadas = { nav.navigate(RotaTemporadas) })
-                else -> AbaProvisoria(aba, aoSair, aoMinhaCasa = { nav.navigate(RotaMinhaCasa) }, aoNotificacoes = { nav.navigate(RotaPrefsNotif) })
+                Aba.Perfil -> AbaPerfil(nav, acoesDoPerfil)
             }
         }
         telaAvisos(nav) { aviso ->
@@ -137,56 +146,6 @@ fun DivvupNavHost() {
                 aviso.tipo == TipoDeNotificacao.SEASON_END -> nav.navigate(RotaTemporadas)
                 else -> Unit
             }
-        }
-    }
-}
-
-/** Perfil até a issue dele (#26). */
-@Composable
-private fun AbaProvisoria(aba: Aba, aoSair: () -> Unit, aoMinhaCasa: () -> Unit, aoNotificacoes: () -> Unit) {
-    val titulo = R.string.provisorio_perfil
-    // Até E1 (#26), o perfil provisório leva a G1 "Minha casa" e oferece "Sair".
-    EmConstrucao(
-        stringResource(titulo),
-        aoSair = aoSair.takeIf { aba == Aba.Perfil },
-        aoMinhaCasa = aoMinhaCasa.takeIf { aba == Aba.Perfil },
-        aoNotificacoes = aoNotificacoes.takeIf { aba == Aba.Perfil },
-    )
-}
-
-@HiltViewModel
-class SessaoViewModel @Inject constructor(private val conta: RepositorioDeConta) : ViewModel() {
-    suspend fun sair() = conta.sair()
-}
-
-@Composable
-private fun EmConstrucao(
-    titulo: String,
-    aoSair: (() -> Unit)?,
-    aoMinhaCasa: (() -> Unit)? = null,
-    aoNotificacoes: (() -> Unit)? = null,
-    viewModel: SessaoViewModel = hiltViewModel(),
-) {
-    val escopo = rememberCoroutineScope()
-    val e = DivvupTheme.spacing
-    Column(
-        Modifier.fillMaxSize().background(DivvupTheme.colors.background).padding(e.s4),
-        verticalArrangement = Arrangement.spacedBy(e.s4),
-    ) {
-        DivvupLabel(stringResource(R.string.provisorio_rotulo), cor = DivvupTheme.colors.textMuted)
-        Text(titulo, style = DivvupTheme.typography.h2, color = DivvupTheme.colors.text)
-        if (aoMinhaCasa != null) {
-            DivvupButton(stringResource(R.string.provisorio_minha_casa), onClick = aoMinhaCasa, variante = VarianteBotao.Contorno)
-        }
-        if (aoNotificacoes != null) {
-            DivvupButton(stringResource(R.string.provisorio_notificacoes), onClick = aoNotificacoes, variante = VarianteBotao.Contorno)
-        }
-        if (aoSair != null) {
-            DivvupButton(
-                stringResource(R.string.provisorio_sair),
-                onClick = { escopo.launch { viewModel.sair(); aoSair() } },
-                variante = VarianteBotao.Contorno,
-            )
         }
     }
 }

@@ -53,6 +53,12 @@ interface RepositorioDeConta {
 
     /** Perfil do usuário conectado; `null` se ainda não existe. */
     suspend fun perfil(uid: String): ResultadoConta<Usuario?>
+
+    /**
+     * E7: confirma que é a pessoa (senha ou ID token do Google), pede ao backend para excluir tudo
+     * e encerra a sessão.
+     */
+    suspend fun excluirConta(senha: String?, idTokenGoogle: String?): ResultadoConta<Unit>
 }
 
 /** Para onde a Splash (A1) leva. */

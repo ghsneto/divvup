@@ -217,7 +217,7 @@ export class Firestore {
     if (!this.env.FIREBASE_SERVICE_ACCOUNT) throw new Error("FIREBASE_SERVICE_ACCOUNT ausente");
     const conta = JSON.parse(this.env.FIREBASE_SERVICE_ACCOUNT) as ContaDeServico;
     const chave = await importPKCS8(conta.private_key, "RS256");
-    const afirmacao = await new SignJWT({ scope: "https://www.googleapis.com/auth/datastore https://www.googleapis.com/auth/firebase.messaging" })
+    const afirmacao = await new SignJWT({ scope: "https://www.googleapis.com/auth/datastore https://www.googleapis.com/auth/firebase.messaging https://www.googleapis.com/auth/identitytoolkit" })
       .setProtectedHeader({ alg: "RS256", typ: "JWT" })
       .setIssuer(conta.client_email)
       .setAudience("https://oauth2.googleapis.com/token")

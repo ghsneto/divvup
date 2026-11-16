@@ -20,7 +20,9 @@ import br.app.divvup.core.domain.conta.Sessao
 import br.app.divvup.core.domain.ranking.RepositorioDeRanking
 import br.app.divvup.core.domain.notificacao.Preferencias
 import br.app.divvup.core.domain.notificacao.RepositorioDeNotificacoes
+import br.app.divvup.core.domain.conta.PreferenciasDoAparelho
 import br.app.divvup.core.model.Casa
+import br.app.divvup.core.model.Tema
 import br.app.divvup.core.model.Notificacao
 import br.app.divvup.core.model.Evento
 import br.app.divvup.core.model.Temporada
@@ -90,6 +92,13 @@ class FakeRepositorioDeConta(
     }
 
     override suspend fun perfil(uid: String): ResultadoConta<Usuario?> = ResultadoConta.Ok(perfilAtual)
+
+    var resultadoExcluir: ResultadoConta<Unit> = ResultadoConta.Ok(Unit)
+
+    override suspend fun excluirConta(senha: String?, idTokenGoogle: String?): ResultadoConta<Unit> {
+        chamadas += "excluir:${senha ?: "google"}"
+        return resultadoExcluir
+    }
 }
 
 /** Conexão controlável nos testes. */
@@ -263,5 +272,14 @@ class FakeRepositorioDeNotificacoes(iniciais: List<Notificacao> = emptyList()) :
     override suspend fun salvar(preferencias: Preferencias): Boolean {
         if (salvarDaCerto) prefs.value = preferencias
         return salvarDaCerto
+    }
+}
+
+class FakePreferenciasDoAparelho(inicial: Tema = Tema.SISTEMA) : PreferenciasDoAparelho {
+    private val _tema = MutableStateFlow(inicial)
+    override val tema: StateFlow<Tema> = _tema
+
+    override fun escolherTema(tema: Tema) {
+        _tema.value = tema
     }
 }
