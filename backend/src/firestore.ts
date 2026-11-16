@@ -100,10 +100,11 @@ export class Firestore {
   /** Documentos de uma subcoleção (`runQuery`), com o id de cada um; dentro de transação, se dada. */
   async listar(colecao: string, transacao?: string): Promise<{ uid: string; dados: Documento }[]> {
     const corte = colecao.lastIndexOf("/");
-    const pai = colecao.slice(0, corte);
+    // Coleção da raiz (ex.: `houses`) consulta direto em `documents`.
+    const pai = corte < 0 ? "" : `/${colecao.slice(0, corte)}`;
     const corpo: Record<string, unknown> = { structuredQuery: { from: [{ collectionId: colecao.slice(corte + 1) }] } };
     if (transacao) corpo["transaction"] = transacao;
-    const resp = await this.chamar(`${this.base}/${pai}:runQuery`, { method: "POST", body: JSON.stringify(corpo) });
+    const resp = await this.chamar(`${this.base}${pai}:runQuery`, { method: "POST", body: JSON.stringify(corpo) });
     await garantirOk(resp, "runQuery");
     const itens = (await resp.json()) as { document?: { name: string; fields?: Record<string, ValorRest> } }[];
     return itens

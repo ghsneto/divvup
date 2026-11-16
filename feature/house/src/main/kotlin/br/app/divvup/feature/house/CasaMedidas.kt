@@ -38,4 +38,8 @@ internal object CasaMedidas {
     val avatarMembro = 96.dp
     val numeroDoMes = 36.sp
     val dialogoTitulo = 28.sp
+    val colunaCategoria = 104.dp
+    val barraCategoria = 14.dp
+    val numeroCategoria = 24.dp
+    val miniaturaAberta = 40.dp
 }

@@ -15,6 +15,8 @@ data class Casa(
     val rua: String? = null,
     /** "Anunciar vagas" ligado (`listing.enabled`, v1.1). */
     val anuncioAtivo: Boolean = false,
+    /** D1 Geral: "desde mar. 2025". */
+    val criadaEm: java.time.Instant? = null,
 )
 
 /** Papel do morador (`members/{uid}.role`, R-03). */
@@ -30,6 +32,14 @@ data class Membro(
     val pontosDoMes: Int,
     val entrouEm: java.time.Instant?,
     val pontosTotais: Int = 0,
+    /** Concluídas na temporada (D1 "8 tarefas") e desde que entrou na casa (Geral, D3). */
+    val tarefasDoMes: Int = 0,
+    val tarefasTotais: Int = 0,
+    /** D3 "tarefas por categoria · mês". */
+    val categoriasDoMes: Map<Categoria, Int> = emptyMap(),
+    /** D3 "sequência" (R-31), copiada do perfil a cada conclusão. */
+    val sequencia: Int = 0,
+    val melhorSequencia: Int = 0,
 )
 
 /** Código de convite (`houses/{id}/invites/{codigo}`, R-06). */

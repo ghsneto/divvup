@@ -28,7 +28,7 @@
 | **Match** | Swipe à direita: o usuário assume a ocorrência. Primeiro a deslizar leva. |
 | **Passe** | Swipe à esquerda: oculta a ocorrência só do deck daquele usuário, temporariamente. |
 | **Temporada** | Mês civil (`yyyy-MM`). Pontos da temporada zeram a cada mês. |
-| **Índice de Equilíbrio** | 0–100: quão uniformemente os pontos da temporada estão distribuídos entre os membros. |
+| **Índice de Equilíbrio** | 0–100: quão uniformemente os pontos da temporada estão distribuídos entre os membros ativos. Conta: `100 × (1 − Gini × n/(n−1))`, arredondado; 1 membro ou ninguém com pontos = 100; todos iguais = 100; um só fez tudo = 0. Faixas: 75–100 "bem dividido", 50–74 "quase equilibrado", 0–49 "desequilibrado". |
 | **Anúncio** | Casa visível publicamente na busca (lista/mapa) com vagas. |
 
 ---
@@ -158,7 +158,8 @@ houses/{houseId}
   approxLocation{lat, lng}, geohash, balanceIndex, activityLast30d                         ← v1.1
   └ private/address          number, complement, exactLocation (só membros + aprovados)
   └ members/{uid}            role, status(ACTIVE|LEFT), joinedAt, leftAt?,
-                             displayName, avatarId, seasonPoints, totalPoints, openTasks
+                             displayName, avatarId, seasonPoints, totalPoints, openTasks,
+                             seasonTasks, totalTasks, seasonCategories{<categoria>: n}, streak{current, best, lastDay}
       └ passes/{taskId}      expiresAt (+12h)
   └ invites/{code}           createdBy, createdByName, createdAt, expiresAt (+24h), usedBy?, usedByName?, usedAt?, revoked, revokedAt?
   └ joinRequests/{uid}       status(PENDING|APPROVED|REJECTED), message, createdAt   ← v1.1
@@ -168,8 +169,9 @@ houses/{houseId}
                              status(OPEN|ASSIGNED|DONE|LATE|CANCELLED),
                              assigneeId?, assignedVia(SWIPE|AUTO), assignedAt?,
                              completedAt?, pointsAwarded?, createdBy
-  └ seasons/{yyyy-MM}        standings[], championId, closedAt
-  └ activity/{id}            type, actorId, taskId?, points?, createdAt   (alimenta o Histórico)
+  └ seasons/{yyyy-MM}        standings[{uid, name, avatarId, points}], championId, championIds[], championName, championAvatar, championPoints, closedAt
+  └ activity/{id}            type(COMPLETED|ASSIGNED|AUTO_ASSIGNED|JOINED|LEFT), actorId, actorName, actorAvatar,
+                             taskId?, taskTitle?, category?, points?, late?, createdAt   (alimenta o Histórico)
 
 inviteCodes/{code}           houseId, createdAt   (índice só do backend: código único entre casas)
 reports/{id}                 houseId, reporterId, reason, createdAt   ← v1.1

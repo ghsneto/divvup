@@ -95,6 +95,7 @@ class RepositorioDeCasaFirebase @Inject constructor(
             cidade = getString("city"),
             rua = getString("street"),
             anuncioAtivo = getBoolean("listing.enabled") == true,
+            criadaEm = getTimestamp("createdAt")?.toDate()?.toInstant(),
         )
     }
 }

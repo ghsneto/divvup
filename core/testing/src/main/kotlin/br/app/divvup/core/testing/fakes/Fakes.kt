@@ -17,7 +17,10 @@ import br.app.divvup.core.domain.tarefa.ResultadoTarefa
 import br.app.divvup.core.domain.tarefa.Swipe
 import br.app.divvup.core.domain.conta.ResultadoConta
 import br.app.divvup.core.domain.conta.Sessao
+import br.app.divvup.core.domain.ranking.RepositorioDeRanking
 import br.app.divvup.core.model.Casa
+import br.app.divvup.core.model.Evento
+import br.app.divvup.core.model.Temporada
 import br.app.divvup.core.model.Convite
 import br.app.divvup.core.model.Membro
 import br.app.divvup.core.model.Papel
@@ -221,4 +224,17 @@ class FakeRepositorioDeTarefas(inicial: EstadoDasTarefas = EstadoDasTarefas.Carr
         swipes += chamada
         return resultadoSwipe
     }
+}
+
+class FakeRepositorioDeRanking(
+    moradoresIniciais: List<Membro> = emptyList(),
+    historicoInicial: List<Evento> = emptyList(),
+    temporadasIniciais: List<Temporada> = emptyList(),
+) : RepositorioDeRanking {
+    val listaDeMoradores = MutableStateFlow(moradoresIniciais)
+    val listaDoHistorico = MutableStateFlow(historicoInicial)
+    val listaDeTemporadas = MutableStateFlow(temporadasIniciais)
+    override val moradores: StateFlow<List<Membro>> = listaDeMoradores
+    override val historico: StateFlow<List<Evento>> = listaDoHistorico
+    override val temporadas: StateFlow<List<Temporada>> = listaDeTemporadas
 }

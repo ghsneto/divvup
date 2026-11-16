@@ -5,6 +5,7 @@ import br.app.divvup.core.data.backend.ErroDoBackend
 import br.app.divvup.core.domain.casa.ErroDeConvite
 import br.app.divvup.core.domain.casa.RepositorioDeConvites
 import br.app.divvup.core.domain.casa.ResultadoConvite
+import br.app.divvup.core.model.Categoria
 import br.app.divvup.core.model.Convite
 import br.app.divvup.core.model.Membro
 import br.app.divvup.core.model.Papel
@@ -98,7 +99,7 @@ private fun DocumentSnapshot.paraConvite(): Convite? {
     )
 }
 
-private fun DocumentSnapshot.paraMembro(): Membro = Membro(
+internal fun DocumentSnapshot.paraMembro(): Membro = Membro(
     uid = id,
     nome = getString("displayName").orEmpty(),
     avatarId = getString("avatarId"),
@@ -107,4 +108,12 @@ private fun DocumentSnapshot.paraMembro(): Membro = Membro(
     pontosDoMes = getLong("seasonPoints")?.toInt() ?: 0,
     entrouEm = instante("joinedAt"),
     pontosTotais = getLong("totalPoints")?.toInt() ?: 0,
+    tarefasDoMes = getLong("seasonTasks")?.toInt() ?: 0,
+    tarefasTotais = getLong("totalTasks")?.toInt() ?: 0,
+    categoriasDoMes = (get("seasonCategories") as? Map<*, *>).orEmpty().mapNotNull { (k, v) ->
+        val categoria = Categoria.entries.firstOrNull { it.name == k } ?: return@mapNotNull null
+        categoria to ((v as? Number)?.toInt() ?: 0)
+    }.toMap(),
+    sequencia = getLong("streak.current")?.toInt() ?: 0,
+    melhorSequencia = getLong("streak.best")?.toInt() ?: 0,
 )

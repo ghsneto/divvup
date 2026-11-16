@@ -1,7 +1,9 @@
 import type { Usuario } from "../auth.js";
 import { ErroHttp } from "../erros.js";
 import type { Documento, Escrita, Firestore } from "../firestore.js";
+import { daTarefa, evento } from "./atividade.js";
 import { gerarId } from "./casa.js";
+import { indiceDeEquilibrio } from "./equilibrio.js";
 
 /** R-11: categorias fixas. */
 export const CATEGORIAS = [
@@ -178,6 +180,10 @@ export async function concluirTarefa(db: Firestore, usuario: Usuario, corpo: unk
     const posicao = (pts: number) => 1 + moradores.filter((m) => m.uid !== usuario.uid && doMes(m) > pts).length;
     const ultrapassados = moradores.filter((m) => m.uid !== usuario.uid && doMes(m) >= meus && doMes(m) < meus + pontos);
     const ultrapassado = ultrapassados.sort((a, b) => doMes(b) - doMes(a))[0];
+    const categoria = (tarefa["category"] as string | undefined) ?? "OUTROS";
+    const porCategoria = (membro["seasonCategories"] as Record<string, number> | undefined) ?? {};
+    // R-45: equilíbrio da temporada já com os pontos desta conclusão.
+    const equilibrio = indiceDeEquilibrio(moradores.map((m) => (m.uid === usuario.uid ? meus + pontos : doMes(m))));
     const sequenciaAtual = (perfil["streak"] as { current: number; best: number; lastDay: string | null } | undefined) ?? { current: 0, best: 0, lastDay: null };
     const sequencia = novaSequencia(sequenciaAtual, diaEmBrasilia(agora));
     const escritas: Escrita[] = [
@@ -195,8 +201,14 @@ export async function concluirTarefa(db: Firestore, usuario: Usuario, corpo: unk
           seasonPoints: meus + pontos,
           totalPoints: ((membro["totalPoints"] as number | undefined) ?? 0) + pontos,
           openTasks: Math.max(((membro["openTasks"] as number | undefined) ?? 1) - 1, 0),
+          // D1 "8 tarefas", D3 "tarefas por categoria · mês" e "81 tarefas".
+          seasonTasks: ((membro["seasonTasks"] as number | undefined) ?? 0) + 1,
+          totalTasks: ((membro["totalTasks"] as number | undefined) ?? 0) + 1,
+          seasonCategories: { [categoria]: (porCategoria[categoria] ?? 0) + 1 },
+          // D3 mostra a sequência de outro morador, que não lê `users/{uid}`.
+          streak: sequencia,
         },
-        campos: ["seasonPoints", "totalPoints", "openTasks"],
+        campos: ["seasonPoints", "totalPoints", "openTasks", "seasonTasks", "totalTasks", `seasonCategories.${categoria}`, "streak"],
         exigirExistente: true,
       },
       {
@@ -210,12 +222,8 @@ export async function concluirTarefa(db: Firestore, usuario: Usuario, corpo: unk
         campos: ["totalPoints", "tasksDone", "streak"],
         exigirExistente: true,
       },
-      {
-        tipo: "gravar",
-        caminho: `houses/${casaId}/activity/${eventoId}`,
-        dados: { type: "COMPLETED", actorId: usuario.uid, taskId: tarefaId, taskTitle: tarefa["title"] ?? "", points: pontos, createdAt: agora },
-        exigirInexistente: true,
-      },
+      { ...evento(casaId, eventoId, "COMPLETED", { uid: usuario.uid, dados: membro }, { ...daTarefa(tarefaId, tarefa), points: pontos, late: agora.getTime() > prazo.getTime() }, agora), exigirInexistente: true },
+      { tipo: "gravar", caminho: `houses/${casaId}`, dados: { balanceIndex: equilibrio }, campos: ["balanceIndex"], exigirExistente: true },
     ];
     return {
       escritas,

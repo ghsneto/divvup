@@ -7,6 +7,9 @@ import br.app.divvup.core.domain.casa.ResultadoCasa
 import br.app.divvup.core.domain.casa.ResumoDaTemporada
 import br.app.divvup.core.domain.conta.Sessao
 import br.app.divvup.core.model.Casa
+import br.app.divvup.core.model.Categoria
+import br.app.divvup.core.model.SituacaoDaTarefa
+import br.app.divvup.core.model.Tarefa
 import br.app.divvup.core.model.Membro
 import br.app.divvup.core.model.Papel
 import br.app.divvup.core.model.TipoDeCasa
@@ -15,6 +18,8 @@ import br.app.divvup.core.testing.capturarTela
 import br.app.divvup.core.testing.fakes.FakeRepositorioDeCasa
 import br.app.divvup.core.testing.fakes.FakeRepositorioDeConta
 import br.app.divvup.core.testing.fakes.FakeRepositorioDeConvites
+import br.app.divvup.core.testing.fakes.FakeRepositorioDeRanking
+import br.app.divvup.core.testing.fakes.FakeRepositorioDeTarefas
 import br.app.divvup.feature.house.membros.EditarCasaEstado
 import br.app.divvup.feature.house.membros.EditarCasaScreen
 import br.app.divvup.feature.house.membros.EditarCasaViewModel
@@ -51,6 +56,23 @@ class MembrosTest {
         Membro("davi", "Davi", "avataaars:divvup-03", Papel.MEMBER, true, 100, Instant.parse("2026-11-09T12:00:00Z"), 100),
     )
 
+    /** Ana como no artboard Membro: 81 tarefas, sequência 9 (recorde 21), barras por categoria. */
+    private val anaDoDesenho = moradores[1].copy(
+        tarefasTotais = 81,
+        sequencia = 9,
+        melhorSequencia = 21,
+        categoriasDoMes = mapOf(Categoria.COZINHA to 5, Categoria.BANHEIRO to 3, Categoria.LAVANDERIA to 2, Categoria.COMPRAS to 1, Categoria.PETS to 1),
+    )
+
+    private fun aberta(id: String, titulo: String, cat: Categoria, prazo: String) =
+        Tarefa(id, titulo, null, cat, 50, Instant.parse(prazo), SituacaoDaTarefa.ASSIGNED, "ana", "bruno", "Bruno", null)
+
+    // Terça, 10/11: "amanhã" e "seg.".
+    private val abertasDaAna = listOf(
+        aberta("t1", "Estender a roupa", Categoria.LAVANDERIA, "2026-11-11T21:00:00Z"),
+        aberta("t2", "Varrer a sala", Categoria.LIMPEZA_GERAL, "2026-11-16T21:00:00Z"),
+    )
+
     @Test
     fun `G1 junta casa, moradores e sai da casa`() = runTest {
         val casas = FakeRepositorioDeCasa(casa)
@@ -66,7 +88,7 @@ class MembrosTest {
     @Test
     fun `G3 admin alterna o papel, ve o erro do ultimo admin e remove`() = runTest {
         val casas = FakeRepositorioDeCasa(casa)
-        val vm = MembroViewModel(SavedStateHandle(mapOf("uid" to "ana")), casas, FakeRepositorioDeConvites(membrosIniciais = moradores), FakeRepositorioDeConta(Sessao.Conectado("eu")))
+        val vm = MembroViewModel(SavedStateHandle(mapOf("uid" to "ana")), casas, FakeRepositorioDeRanking(moradores), FakeRepositorioDeConta(Sessao.Conectado("eu")), FakeRepositorioDeTarefas())
         val e = vm.estado.first { it.membro != null }
         assertTrue(e.visaoDeAdmin)
         assertEquals(1, e.posicao)
@@ -81,7 +103,7 @@ class MembrosTest {
 
     @Test
     fun `D3 quem nao e admin nao ve acoes`() = runTest {
-        val vm = MembroViewModel(SavedStateHandle(mapOf("uid" to "eu")), FakeRepositorioDeCasa(casa), FakeRepositorioDeConvites(membrosIniciais = moradores), FakeRepositorioDeConta(Sessao.Conectado("bruno")))
+        val vm = MembroViewModel(SavedStateHandle(mapOf("uid" to "eu")), FakeRepositorioDeCasa(casa), FakeRepositorioDeRanking(moradores), FakeRepositorioDeConta(Sessao.Conectado("bruno")), FakeRepositorioDeTarefas())
         assertFalse(vm.estado.first { it.membro != null }.visaoDeAdmin)
     }
 
@@ -117,12 +139,12 @@ class MembrosTest {
 
     @Test
     fun screenshotG3() = capturarTela("G3_membro_admin") {
-        MembroScreen(MembroEstado(moradores[1], posicao = 1, visaoDeAdmin = true, agora = agora), {}, {}, {}, {}, {})
+        MembroScreen(MembroEstado(anaDoDesenho, posicao = 1, visaoDeAdmin = true, agora = agora, abertas = abertasDaAna), {}, {}, {}, {}, {})
     }
 
     @Test
     fun screenshotD3() = capturarTela("D3_membro") {
-        MembroScreen(MembroEstado(moradores[2], posicao = 3, agora = agora), {}, {}, {}, {}, {})
+        MembroScreen(MembroEstado(anaDoDesenho, posicao = 1, agora = agora, abertas = abertasDaAna), {}, {}, {}, {}, {})
     }
 
     @Test
