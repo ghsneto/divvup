@@ -65,7 +65,7 @@ export async function atribuirAutomaticamente(
       if (ativos.length === 0) return { escritas: [], resultado: false };
       const pontos = (m: (typeof ativos)[number]) => (m.dados["seasonPoints"] as number | undefined) ?? 0;
       const menor = Math.min(...ativos.map(pontos));
-      const empatados = ativos.filter((m) => pontos(m) === menor).sort((a, b) => a.uid.localeCompare(b.uid));
+      const empatados = ativos.filter((m) => pontos(m) === menor).sort((a, b) => (a.uid < b.uid ? -1 : a.uid > b.uid ? 1 : 0));
       const escolhido = empatados[sortear(empatados.length)] ?? empatados[0];
       if (!escolhido) return { escritas: [], resultado: false };
       const escritas: Escrita[] = [
