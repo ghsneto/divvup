@@ -1,4 +1,5 @@
 import type { Escrita, Firestore } from "../firestore.js";
+import { daTarefa, evento } from "./atividade.js";
 
 /** Quantas ocorrências cada passada da rotina trata no máximo (o resto fica para a próxima). */
 export const LOTE = 200;
@@ -57,7 +58,7 @@ export async function atribuirAutomaticamente(
   );
   let atribuidas = 0;
   for (const { caminho } of perto) {
-    const casaId = caminho.split("/")[1];
+    const casaId = caminho.split("/")[1] ?? "";
     const mudou = await db.transacao(async (tx) => {
       const [tarefa] = await db.lerVarios([caminho], tx);
       if (tarefa?.["status"] !== "OPEN" || (tarefa["dueAt"] as Date).getTime() > limite.getTime()) return { escritas: [], resultado: false };
@@ -83,6 +84,7 @@ export async function atribuirAutomaticamente(
           campos: ["openTasks"],
           exigirExistente: true,
         },
+        evento(casaId, `auto-${caminho.split("/")[3]}`, "AUTO_ASSIGNED", escolhido, daTarefa(caminho.split("/")[3] ?? "", tarefa), agora),
       ];
       return { escritas, resultado: true };
     });

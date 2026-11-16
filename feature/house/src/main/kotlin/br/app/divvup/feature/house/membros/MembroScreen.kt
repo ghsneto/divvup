@@ -18,7 +18,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import br.app.divvup.core.designsystem.component.DivvupIcon
+import br.app.divvup.core.designsystem.component.TamanhoIcone
+import br.app.divvup.core.designsystem.component.textoDoDia
+import br.app.divvup.core.designsystem.icon.icone
+import br.app.divvup.core.designsystem.icon.ilustracao
+import br.app.divvup.core.designsystem.icon.nome
+import br.app.divvup.core.domain.tarefa.prazoFalado
+import br.app.divvup.core.model.Tarefa
 import br.app.divvup.core.designsystem.component.DivvupAvatarDaGaleria
 import br.app.divvup.core.designsystem.component.DivvupButton
 import br.app.divvup.core.designsystem.component.DivvupDialog
@@ -54,11 +71,13 @@ data class MembroEstado(
     val erroUltimoAdmin: Boolean = false,
     /** Snackbar: id da string (recebe o nome). */
     val aviso: Int? = null,
+    /** Tarefas assumidas e ainda não concluídas por este morador (D3). */
+    val abertas: List<Tarefa> = emptyList(),
 )
 
 /**
- * D3 Morador e G3 visão de admin (docs/design/fonte/Membro.dc.html, R-03). Sequência, tarefas por
- * categoria, medalhas e tarefas abertas entram com as tarefas e a gamificação (M2/M3).
+ * D3 Morador e G3 visão de admin (docs/design/fonte/Membro.dc.html, R-03, R-31). As medalhas
+ * entram com a gamificação (#25).
  */
 @Composable
 fun MembroScreen(
@@ -100,6 +119,8 @@ fun MembroScreen(
                     DivvupAvatarDaGaleria(m.avatarId, CasaMedidas.avatarMembro, corDaBorda = c.lima)
                 }
                 Numeros(m, estado.posicao, Modifier.padding(top = e.s5))
+                PorCategoria(m)
+                Abertas(estado)
                 if (estado.visaoDeAdmin) {
                     Acoes(m, estado, aoAlternarAdmin, aoPedirRemocao, Modifier.padding(top = CasaMedidas.sairTopo))
                 }
@@ -145,7 +166,71 @@ private fun Numeros(m: Membro, posicao: Int, modifier: Modifier = Modifier) {
             Column(Modifier.weight(1f).padding(start = e.s3, top = e.s4, bottom = e.s4)) {
                 DivvupLabel(stringResource(R.string.membro_total), cor = c.textMuted)
                 Text(pontos(m.pontosTotais), style = t.pts, color = c.text, modifier = Modifier.padding(top = e.s2))
+                Text(pluralStringResource(R.plurals.membro_tarefas, m.tarefasTotais, m.tarefasTotais), style = t.small, color = c.textMuted)
             }
+            Box(Modifier.width(e.borda).fillMaxHeight().background(c.border))
+            Column(Modifier.weight(1f).padding(start = e.s3, top = e.s4, bottom = e.s4)) {
+                DivvupLabel(stringResource(R.string.membro_sequencia), cor = c.textMuted)
+                Row(Modifier.padding(top = e.s2), horizontalArrangement = Arrangement.spacedBy(e.s1), verticalAlignment = Alignment.CenterVertically) {
+                    DivvupIcon(DivvupIcone.Raio, tamanho = TamanhoIcone.Pequeno.dp, tint = c.text)
+                    Text(m.sequencia.toString(), style = t.pts, color = c.text)
+                }
+                Text(stringResource(R.string.membro_recorde, m.melhorSequencia), style = t.small, color = c.textMuted)
+            }
+        }
+        DivvupDivider()
+    }
+}
+
+/** "tarefas por categoria · mês": barras proporcionais à maior, só categorias com conclusão. */
+@Composable
+private fun PorCategoria(m: Membro) {
+    val c = DivvupTheme.colors
+    val t = DivvupTheme.typography
+    val e = DivvupTheme.spacing
+    val linhas = m.categoriasDoMes.filterValues { it > 0 }.entries.sortedByDescending { it.value }
+    val maior = linhas.firstOrNull()?.value ?: return
+    DivvupLabel(stringResource(R.string.membro_por_categoria), Modifier.padding(top = e.s5, bottom = e.s3))
+    Column(verticalArrangement = Arrangement.spacedBy(e.s2)) {
+        linhas.forEachIndexed { i, (categoria, n) ->
+            Row(horizontalArrangement = Arrangement.spacedBy(e.s2), verticalAlignment = Alignment.CenterVertically) {
+                Row(Modifier.width(CasaMedidas.colunaCategoria), horizontalArrangement = Arrangement.spacedBy(e.s2), verticalAlignment = Alignment.CenterVertically) {
+                    DivvupIcon(categoria.icone, tamanho = TamanhoIcone.MuitoPequeno.dp, tint = c.text)
+                    Text(stringResource(categoria.nome), style = t.small, color = c.text, maxLines = 1)
+                }
+                Box(Modifier.weight(1f).height(CasaMedidas.barraCategoria).clip(DivvupTheme.shapes.sm).background(c.surfaceAlt)) {
+                    Box(Modifier.fillMaxHeight().fillMaxWidth(n.toFloat() / maior).background(if (i == 0) c.primary else c.textMuted))
+                }
+                Text(
+                    n.toString(),
+                    style = t.small.copy(fontWeight = FontWeight.SemiBold, fontFeatureSettings = "tnum"),
+                    color = c.text,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.width(CasaMedidas.numeroCategoria),
+                )
+            }
+        }
+    }
+}
+
+/** "abertas · 2": tarefas com este morador agora, com o dia do prazo. */
+@Composable
+private fun Abertas(estado: MembroEstado) {
+    val c = DivvupTheme.colors
+    val t = DivvupTheme.typography
+    val e = DivvupTheme.spacing
+    if (estado.abertas.isEmpty()) return
+    DivvupLabel(stringResource(R.string.membro_abertas, estado.abertas.size), Modifier.padding(top = e.s5, bottom = e.s1))
+    estado.abertas.forEach { tarefa ->
+        Row(Modifier.fillMaxWidth().padding(vertical = e.s3), horizontalArrangement = Arrangement.spacedBy(e.s3), verticalAlignment = Alignment.CenterVertically) {
+            Image(
+                painterResource(tarefa.categoria.ilustracao.res),
+                null,
+                Modifier.size(CasaMedidas.miniaturaAberta).clip(DivvupTheme.shapes.sm),
+                contentScale = ContentScale.Crop,
+            )
+            Text(tarefa.titulo, style = t.ttl, color = c.text, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+            Text(textoDoDia(prazoFalado(tarefa.prazo, estado.agora).dia), style = t.small, color = c.textMuted)
         }
         DivvupDivider()
     }

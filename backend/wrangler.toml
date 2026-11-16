@@ -20,9 +20,10 @@ name = "divvup-backend"
 routes = [{ pattern = "api.divvup.app.br", custom_domain = true }]
 preview_urls = false
 
-# Rotinas agendadas (atribuição automática R-26 e atrasadas R-23). A cada 15 min; o plano gratuito permite Cron Triggers.
+# Rotinas agendadas (plano gratuito permite Cron Triggers): a cada 15 min, atribuição automática
+# (R-26) e atrasadas (R-23); à 00:00 do dia 1º em Brasília (03:00 UTC), a virada de temporada (R-27).
 [env.prod.triggers]
-crons = ["*/15 * * * *"]
+crons = ["*/15 * * * *", "0 3 1 * *"]
 
 [env.prod.vars]
 FIREBASE_PROJECT_ID = "divvup-prod"

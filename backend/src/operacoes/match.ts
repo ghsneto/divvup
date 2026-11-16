@@ -1,6 +1,7 @@
 import type { Usuario } from "../auth.js";
 import { ErroHttp } from "../erros.js";
 import type { Documento, Escrita, Firestore } from "../firestore.js";
+import { daTarefa, evento, idDeAssumiu } from "./atividade.js";
 
 /** R-20: no máximo 5 assumidas e não concluídas. */
 export const LIMITE_DE_ABERTAS = 5;
@@ -53,6 +54,7 @@ export async function assumirTarefa(db: Firestore, usuario: Usuario, corpo: unkn
       { tipo: "gravar", caminho: `houses/${casaId}/members/${usuario.uid}`, dados: { openTasks: abertas + 1 }, campos: ["openTasks"], exigirExistente: true },
       // Quem assume uma tarefa que tinha passado não precisa mais do passe.
       { tipo: "apagar", caminho: `houses/${casaId}/members/${usuario.uid}/passes/${tarefaId}` },
+      evento(casaId, idDeAssumiu(tarefaId), "ASSIGNED", { uid: usuario.uid, dados: membro }, daTarefa(tarefaId, tarefa), agora),
     ];
     return { escritas, resultado: { ok: true as const } };
   });
@@ -100,6 +102,8 @@ export async function desfazer(db: Firestore, usuario: Usuario, corpo: unknown, 
         exigirExistente: true,
       },
       { tipo: "gravar", caminho: `houses/${casaId}/members/${usuario.uid}`, dados: { openTasks: Math.max(abertas - 1, 0) }, campos: ["openTasks"], exigirExistente: true },
+      // Desfeito, o "assumiu" sai do Histórico.
+      { tipo: "apagar", caminho: `houses/${casaId}/activity/${idDeAssumiu(tarefaId)}` },
     ];
     return { escritas, resultado: { ok: true as const } };
   });

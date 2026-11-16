@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textos de D1/D2 (docs/design/fonte/Ranking.dc.html, Temporadas.dc.html). -->
+<resources>
+    <string name="ranking_aba_mes">Este mês</string>
+    <string name="ranking_aba_geral">Geral</string>
+    <string name="ranking_aba_historico">Histórico</string>
+    <string name="ranking_temporada">temporada</string>
+    <plurals name="ranking_faltam">
+        <item quantity="one">falta %1$d dia</item>
+        <item quantity="other">faltam %1$d dias</item>
+    </plurals>
+    <string name="ranking_ultimo_dia">último dia</string>
+    <string name="ranking_posicao">%1$dº</string>
+    <string name="ranking_pts">%1$s pts</string>
+    <string name="ranking_voce">Você</string>
+    <string name="ranking_campeao">Campeão do mês até agora</string>
+    <string name="ranking_equilibrio">equilíbrio</string>
+    <string name="ranking_de_cem">/100</string>
+    <string name="ranking_bem_dividido">bem dividido</string>
+    <string name="ranking_quase">quase equilibrado</string>
+    <string name="ranking_desequilibrado">desequilibrado</string>
+    <string name="ranking_lider">%1$s fez %2$d%% dos pontos.</string>
+    <string name="ranking_sem_pontos_equilibrio">Ninguém pontuou ainda.</string>
+    <string name="ranking_ajuda">O que é o índice de equilíbrio</string>
+    <plurals name="ranking_tarefas">
+        <item quantity="one">%1$d tarefa</item>
+        <item quantity="other">%1$d tarefas</item>
+    </plurals>
+    <string name="ranking_voce_aqui">%1$s · você está aqui</string>
+    <string name="ranking_ex_morador">ex-morador</string>
+    <string name="ranking_temporadas_anteriores">Temporadas anteriores</string>
+    <string name="ranking_vazio">Ninguém pontuou ainda neste mês</string>
+    <string name="ranking_desde">desde %1$s</string>
+    <string name="ranking_todos_os_tempos">de todos os tempos</string>
+    <string name="ranking_todos">Todos</string>
+    <string name="ranking_hoje">hoje</string>
+    <string name="ranking_ontem">ontem</string>
+    <string name="ranking_concluiu">concluiu</string>
+    <string name="ranking_assumiu">assumiu</string>
+    <string name="ranking_recebeu">recebeu automaticamente</string>
+    <string name="ranking_entrou">entrou na casa</string>
+    <string name="ranking_saiu">saiu da casa</string>
+    <string name="ranking_ha_min">há %1$d min</string>
+    <string name="ranking_ha_h">há %1$d h</string>
+    <string name="ranking_agora">agora</string>
+    <string name="ranking_dia_hora">%1$s às %2$s</string>
+    <string name="ranking_atrasada">%1$s · atrasada</string>
+    <string name="ranking_nada_de">Nada de %1$s nos últimos dias.</string>
+    <string name="ranking_historico_vazio">Nada aconteceu na casa ainda.</string>
+    <string name="ranking_ajuda_rotulo">índice de equilíbrio</string>
+    <string name="ranking_ajuda_titulo">quão dividida está a casa</string>
+    <string name="ranking_ajuda_texto">Vai de 0 a 100. Se todo mundo fez a mesma quantidade de pontos no mês, dá 100. Se uma pessoa fez tudo, dá 0. É ele que aparece no anúncio da casa, nunca os pontos de ninguém.</string>
+    <string name="ranking_faixa_alta" translatable="false">75–100</string>
+    <string name="ranking_faixa_media" translatable="false">50–74</string>
+    <string name="ranking_faixa_baixa" translatable="false">0–49</string>
+    <string name="ranking_entendi">Entendi</string>
+
+    <!-- D2 -->
+    <string name="temporadas_voltar">Voltar</string>
+    <string name="temporadas_rotulo">ranking</string>
+    <string name="temporadas_titulo">temporadas anteriores</string>
+    <string name="temporadas_texto">Cada mês o placar zera e o campeão leva uma medalha. Toque num mês para ver o ranking final.</string>
+    <string name="temporadas_vazio">A primeira temporada fecha no fim do mês. O ranking final dela aparece aqui.</string>
+    <string name="temporadas_sem_campeao">sem campeão</string>
+    <string name="temporadas_abrir">Ver ranking final de %1$s</string>
+
+    <string-array name="ranking_meses">
+        <item>janeiro</item>
+        <item>fevereiro</item>
+        <item>março</item>
+        <item>abril</item>
+        <item>maio</item>
+        <item>junho</item>
+        <item>julho</item>
+        <item>agosto</item>
+        <item>setembro</item>
+        <item>outubro</item>
+        <item>novembro</item>
+        <item>dezembro</item>
+    </string-array>
+    <string-array name="ranking_meses_curtos">
+        <item>jan.</item>
+        <item>fev.</item>
+        <item>mar.</item>
+        <item>abr.</item>
+        <item>maio</item>
+        <item>jun.</item>
+        <item>jul.</item>
+        <item>ago.</item>
+        <item>set.</item>
+        <item>out.</item>
+        <item>nov.</item>
+        <item>dez.</item>
+    </string-array>
+    <string name="ranking_mes_ano">%1$s %2$d</string>
+</resources>

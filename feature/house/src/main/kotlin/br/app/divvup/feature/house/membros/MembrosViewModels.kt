@@ -16,7 +16,11 @@ import br.app.divvup.core.domain.casa.resumoDaTemporada
 import br.app.divvup.core.domain.casa.situacao
 import br.app.divvup.core.domain.conta.RepositorioDeConta
 import br.app.divvup.core.domain.conta.Sessao
+import br.app.divvup.core.domain.ranking.RepositorioDeRanking
+import br.app.divvup.core.domain.tarefa.EstadoDasTarefas
+import br.app.divvup.core.domain.tarefa.RepositorioDeTarefas
 import br.app.divvup.core.model.Papel
+import br.app.divvup.core.model.SituacaoDaTarefa
 import br.app.divvup.feature.house.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -82,8 +86,9 @@ class MinhaCasaViewModel @Inject constructor(
 class MembroViewModel @Inject constructor(
     salvo: SavedStateHandle,
     private val casas: RepositorioDeCasa,
-    convites: RepositorioDeConvites,
+    ranking: RepositorioDeRanking,
     conta: RepositorioDeConta,
+    tarefas: RepositorioDeTarefas,
 ) : ViewModel() {
     private val uid: String = checkNotNull(salvo["uid"])
     private val local = MutableStateFlow(MembroEstado())
@@ -91,14 +96,21 @@ class MembroViewModel @Inject constructor(
     val removido: StateFlow<Boolean> = _removido.asStateFlow()
     private var aviso: Job? = null
 
-    val estado: StateFlow<MembroEstado> = combine(convites.membros, conta.sessao, local) { membros, sessao, l ->
+    // Inclui ex-moradores: o ranking geral também abre D3 (R-29).
+    val estado: StateFlow<MembroEstado> = combine(ranking.moradores, conta.sessao, tarefas.tarefas, local) { todos, sessao, emJogo, l ->
         val eu = (sessao as? Sessao.Conectado)?.uid
+        val membros = todos.filter { it.ativo }
         val souAdmin = membros.any { it.uid == eu && it.papel == Papel.ADMIN }
+        val membro = todos.firstOrNull { it.uid == uid }
+        val abertas = (emJogo as? EstadoDasTarefas.Carregadas)?.tarefas.orEmpty()
+            .filter { it.donoId == uid && (it.situacao == SituacaoDaTarefa.ASSIGNED || it.situacao == SituacaoDaTarefa.LATE) }
+            .sortedBy { it.prazo }
         l.copy(
-            membro = membros.firstOrNull { it.uid == uid },
+            membro = membro,
             posicao = posicoesNoMes(membros)[uid] ?: 1,
-            visaoDeAdmin = souAdmin && eu != uid,
+            visaoDeAdmin = souAdmin && eu != uid && membro?.ativo == true,
             agora = Instant.now(),
+            abertas = abertas,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(PARAR_APOS_MS), MembroEstado())
 

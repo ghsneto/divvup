@@ -142,6 +142,14 @@
     <string name="membro_este_mes">este mês</string>
     <string name="membro_lugar">%1$dº lugar</string>
     <string name="membro_total">total</string>
+    <plurals name="membro_tarefas">
+        <item quantity="one">%1$d tarefa</item>
+        <item quantity="other">%1$d tarefas</item>
+    </plurals>
+    <string name="membro_sequencia">sequência</string>
+    <string name="membro_recorde">recorde %1$d</string>
+    <string name="membro_por_categoria">tarefas por categoria · mês</string>
+    <string name="membro_abertas">abertas agora · %1$d</string>
     <string name="membro_acoes">ações de admin</string>
     <string name="membro_tornar_admin">Tornar admin</string>
     <string name="membro_remover_admin">Remover admin</string>

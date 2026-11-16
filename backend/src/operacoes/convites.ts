@@ -1,6 +1,7 @@
 import type { Usuario } from "../auth.js";
 import { ErroHttp } from "../erros.js";
 import type { Documento, Escrita, Firestore } from "../firestore.js";
+import { evento } from "./atividade.js";
 
 /** R-06: 6 caracteres sem ambíguos (sem O/0/I/1/L). */
 export const ALFABETO_CODIGO = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
@@ -114,6 +115,9 @@ export async function entrarComCodigo(
       avatarId: (perfil["avatarId"] as string | null) ?? null,
       seasonPoints: (membroAntigo?.["seasonPoints"] as number | undefined) ?? 0,
       totalPoints: (membroAntigo?.["totalPoints"] as number | undefined) ?? 0,
+      totalTasks: (membroAntigo?.["totalTasks"] as number | undefined) ?? 0,
+      seasonTasks: (membroAntigo?.["seasonTasks"] as number | undefined) ?? 0,
+      seasonCategories: (membroAntigo?.["seasonCategories"] as Documento | undefined) ?? {},
       openTasks: 0,
     };
     const escritas: Escrita[] = [
@@ -121,6 +125,7 @@ export async function entrarComCodigo(
       { tipo: "gravar", caminho: caminhoMembro, dados: membro },
       { tipo: "gravar", caminho: `houses/${casaId}`, dados: { memberCount: ((casa["memberCount"] as number) ?? 0) + 1 }, campos: ["memberCount"], exigirExistente: true },
       { tipo: "gravar", caminho: `users/${usuario.uid}`, dados: { currentHouseId: casaId }, campos: ["currentHouseId"], exigirExistente: true },
+      evento(casaId, `entrou-${usuario.uid}-${agora.getTime()}`, "JOINED", { uid: usuario.uid, dados: membro }, {}, agora),
     ];
     return { escritas, resultado: { casaId } };
   });

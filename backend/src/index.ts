@@ -9,6 +9,7 @@ import { assumirTarefa, desfazer, passarTarefa, reverPassadas } from "./operacoe
 import { cancelarTarefa, concluirTarefa, criarTarefa, devolverTarefa, editarTarefa, excluirTarefa } from "./operacoes/tarefas.js";
 import { criarPerfil } from "./operacoes/perfil.js";
 import { rotinaAgendada } from "./operacoes/agendadas.js";
+import { CRON_TEMPORADA, virarTemporada } from "./operacoes/temporadas.js";
 
 /**
  * Backend do Divvup (Cloudflare Worker, ADR 0001). Rotas:
@@ -92,11 +93,15 @@ export default {
     }
   },
 
-  /** Cron Trigger (`wrangler.toml`): atribuição automática (R-26) e atrasadas (R-23). */
+  /**
+   * Cron Triggers (`wrangler.toml`): a cada 15 min, atribuição automática (R-26) e atrasadas
+   * (R-23); à 00:00 do dia 1º em Brasília (03:00 UTC), a virada de temporada (R-27).
+   */
   async scheduled(evento: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
-    ctx.waitUntil(
-      rotinaAgendada(new Firestore(env), new Date(evento.scheduledTime)).then((r) => console.log("rotina agendada", JSON.stringify(r))),
-    );
+    const db = new Firestore(env);
+    const agora = new Date(evento.scheduledTime);
+    const rotina = evento.cron === CRON_TEMPORADA ? virarTemporada(db, agora) : rotinaAgendada(db, agora);
+    ctx.waitUntil(rotina.then((r) => console.log("rotina agendada", evento.cron, JSON.stringify(r))));
   },
 } satisfies ExportedHandler<Env>;
 

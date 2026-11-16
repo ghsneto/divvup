@@ -43,7 +43,11 @@ import br.app.divvup.feature.tasks.navegacao.AcoesDaConclusao
 import br.app.divvup.feature.tasks.navegacao.RotaDetalhe
 import br.app.divvup.feature.tasks.navegacao.telasDeTarefa
 import br.app.divvup.feature.house.principal.PrincipalViewModel
+import br.app.divvup.feature.house.navegacao.RotaMembro
 import br.app.divvup.feature.house.navegacao.RotaMinhaCasa
+import br.app.divvup.feature.ranking.navegacao.AbaRanking
+import br.app.divvup.feature.ranking.navegacao.RotaTemporadas
+import br.app.divvup.feature.ranking.navegacao.telaTemporadas
 import br.app.divvup.feature.house.navegacao.RotaPrincipal
 import br.app.divvup.feature.house.navegacao.telasDeConvite
 import br.app.divvup.feature.house.navegacao.telasDeMembros
@@ -106,6 +110,7 @@ fun DivvupNavHost() {
         telasDeMembros(nav, aoSairDaCasa = { nav.navigate(RotaSuaCasa) { limparPilha(nav) } })
         telaGaleria(nav)
         telaNovaTarefa(nav)
+        telaTemporadas(nav)
         // C4 volta para a estrutura principal já na aba certa.
         val irParaAba = { aba: Aba ->
             nav.popBackStack<RotaPrincipal>(inclusive = false)
@@ -120,6 +125,7 @@ fun DivvupNavHost() {
                     aoDetalhes = { nav.navigate(RotaDetalhe(it.id)) },
                 )
                 Aba.MinhasTarefas -> AbaMinhasTarefas(nav, aoIrParaDeck = { trocarAba(Aba.Deck) })
+                Aba.Ranking -> AbaRanking(aoAbrirMembro = { nav.navigate(RotaMembro(it)) }, aoTemporadas = { nav.navigate(RotaTemporadas) })
                 else -> AbaProvisoria(aba, aoSair, aoMinhaCasa = { nav.navigate(RotaMinhaCasa) })
             }
         }
@@ -127,13 +133,10 @@ fun DivvupNavHost() {
     }
 }
 
-/** Ranking e Perfil até as issues delas (#22, #26). */
+/** Perfil até a issue dele (#26). */
 @Composable
 private fun AbaProvisoria(aba: Aba, aoSair: () -> Unit, aoMinhaCasa: () -> Unit) {
-    val titulo = when (aba) {
-        Aba.Ranking -> R.string.provisorio_ranking
-        else -> R.string.provisorio_perfil
-    }
+    val titulo = R.string.provisorio_perfil
     // Até E1 (#26), o perfil provisório leva a G1 "Minha casa" e oferece "Sair".
     EmConstrucao(
         stringResource(titulo),
