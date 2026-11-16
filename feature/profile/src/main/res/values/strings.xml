@@ -14,4 +14,41 @@
     <string name="avatar_n">Avatar %1$d</string>
     <string name="avatar_salvar">Salvar</string>
     <string name="avatar_erro">Não deu para salvar. Confere a conexão e tenta de novo.</string>
+
+    <!-- E4 (docs/design/fonte/PrefsNotif.dc.html) -->
+    <string name="prefs_voltar">Voltar</string>
+    <string name="prefs_rotulo">perfil</string>
+    <string name="prefs_titulo">notificações</string>
+    <string name="prefs_negadas">As notificações estão desligadas no Android.</string>
+    <string name="prefs_negadas_texto">A central dentro do app continua funcionando.</string>
+    <string name="prefs_abrir_config">Abrir configurações</string>
+    <string name="prefs_suas_tarefas">suas tarefas</string>
+    <string name="prefs_sua_casa">sua casa</string>
+    <string name="prefs_temporada">temporada</string>
+    <string name="prefs_auto">Tarefa atribuída a você</string>
+    <string name="prefs_auto_quem">quando o sorteio te escolhe</string>
+    <string name="prefs_prazo">Vence em 24 h e em 2 h</string>
+    <string name="prefs_prazo_quem">lembretes das suas tarefas</string>
+    <string name="prefs_atraso">Sua tarefa atrasou</string>
+    <string name="prefs_atraso_quem">passou do prazo sem concluir</string>
+    <string name="prefs_nova">Nova tarefa criada</string>
+    <string name="prefs_nova_quem">quando alguém coloca no deck</string>
+    <string name="prefs_conclui">Um morador concluiu</string>
+    <string name="prefs_conclui_quem">cada tarefa feita na casa</string>
+    <string name="prefs_removido">Você foi removido</string>
+    <string name="prefs_removido_quem">aviso de saída da casa</string>
+    <string name="prefs_pedido">Pedido de entrada</string>
+    <string name="prefs_pedido_quem">só para admins</string>
+    <string name="prefs_resposta">Resposta ao seu pedido</string>
+    <string name="prefs_resposta_quem">aprovado ou recusado</string>
+    <string name="prefs_fim">Fim de temporada e campeão</string>
+    <string name="prefs_fim_quem">todo dia 1º</string>
+    <string name="prefs_v11" translatable="false">v1.1</string>
+    <string name="prefs_silencio">Horário silencioso</string>
+    <string name="prefs_de">de</string>
+    <string name="prefs_ate">até</string>
+    <string name="prefs_silencio_nota">Pushes ficam guardados e chegam às %1$s. Lembretes de 2 h ainda chegam.</string>
+    <string name="prefs_erro">Não deu para salvar. Confere a conexão.</string>
+    <string name="prefs_ok">OK</string>
+    <string name="prefs_cancelar">Cancelar</string>
 </resources>

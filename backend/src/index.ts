@@ -8,7 +8,17 @@ import { alterarPapel, editarCasa, removerMembro, sairDaCasa } from "./operacoes
 import { assumirTarefa, desfazer, passarTarefa, reverPassadas } from "./operacoes/match.js";
 import { cancelarTarefa, concluirTarefa, criarTarefa, devolverTarefa, editarTarefa, excluirTarefa } from "./operacoes/tarefas.js";
 import { criarPerfil } from "./operacoes/perfil.js";
-import { avisarNovaTarefa, registrarToken, removerToken } from "./operacoes/notificacoes.js";
+import {
+  avisarConclusao,
+  avisarNovaTarefa,
+  avisarRemocao,
+  entregarRetidos,
+  notificar,
+  registrarToken,
+  removerToken,
+  salvarPreferencias,
+  type Avisar,
+} from "./operacoes/notificacoes.js";
 import { rotinaAgendada } from "./operacoes/agendadas.js";
 import { CRON_TEMPORADA, virarTemporada } from "./operacoes/temporadas.js";
 
@@ -27,6 +37,7 @@ import { CRON_TEMPORADA, virarTemporada } from "./operacoes/temporadas.js";
  * - `POST /v1/concluirTarefa`, `/v1/devolverTarefa`, `/v1/cancelarTarefa`, `/v1/excluirTarefa`
  *   `{tarefaId}` e `/v1/editarTarefa` `{tarefaId, titulo, …}` (R-12, R-19, R-21, R-22).
  * - `POST /v1/registrarToken` / `/v1/removerToken` `{token}`: aparelhos que recebem push (R-36).
+ * - `POST /v1/salvarPreferencias` `{tipos, silencio}`: E4 (R-34, R-35).
  * As operações protegidas da SPEC §4.2 entram aqui, uma rota por operação. O Cron Trigger chama
  * `scheduled`, que roda as rotinas de `operacoes/agendadas.ts`.
  */
@@ -69,7 +80,11 @@ export default {
 
       const operacoes: Record<string, (db: Firestore, u: Awaited<ReturnType<typeof autenticar>>, corpo: unknown) => Promise<unknown>> = {
         "/v1/alterarPapel": alterarPapel,
-        "/v1/removerMembro": (db, u, corpo) => removerMembro(db, u, corpo),
+        "/v1/removerMembro": async (db, u, corpo) => {
+          const r = await removerMembro(db, u, corpo);
+          await avisarRemocao(db, env, u.uid, (corpo as { uid: string }).uid);
+          return r;
+        },
         "/v1/sairDaCasa": (db, u) => sairDaCasa(db, u),
         "/v1/editarCasa": editarCasa,
         "/v1/criarTarefa": async (db, u, corpo) => {
@@ -79,11 +94,16 @@ export default {
         },
         "/v1/registrarToken": registrarToken,
         "/v1/removerToken": removerToken,
+        "/v1/salvarPreferencias": salvarPreferencias,
         "/v1/assumirTarefa": (db, u, corpo) => assumirTarefa(db, u, corpo),
         "/v1/passarTarefa": (db, u, corpo) => passarTarefa(db, u, corpo),
         "/v1/desfazer": (db, u, corpo) => desfazer(db, u, corpo),
         "/v1/reverPassadas": (db, u) => reverPassadas(db, u),
-        "/v1/concluirTarefa": (db, u, corpo) => concluirTarefa(db, u, corpo),
+        "/v1/concluirTarefa": async (db, u, corpo) => {
+          const r = await concluirTarefa(db, u, corpo);
+          await avisarConclusao(db, env, u.uid, (corpo as { tarefaId: string }).tarefaId, r.pontos);
+          return r;
+        },
         "/v1/devolverTarefa": (db, u, corpo) => devolverTarefa(db, u, corpo),
         "/v1/cancelarTarefa": (db, u, corpo) => cancelarTarefa(db, u, corpo),
         "/v1/editarTarefa": (db, u, corpo) => editarTarefa(db, u, corpo),
@@ -108,7 +128,10 @@ export default {
   async scheduled(evento: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
     const db = new Firestore(env);
     const agora = new Date(evento.scheduledTime);
-    const rotina = evento.cron === CRON_TEMPORADA ? virarTemporada(db, agora) : rotinaAgendada(db, agora);
+    const avisar: Avisar = (uids, aviso) => notificar(db, env, uids, aviso, agora);
+    const rotina = evento.cron === CRON_TEMPORADA
+      ? virarTemporada(db, agora, avisar)
+      : rotinaAgendada(db, agora, avisar).then(async (r) => ({ ...r, ...(await entregarRetidos(db, env, agora)) }));
     ctx.waitUntil(rotina.then((r) => console.log("rotina agendada", evento.cron, JSON.stringify(r))));
   },
 } satisfies ExportedHandler<Env>;

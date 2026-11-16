@@ -18,6 +18,7 @@ import br.app.divvup.core.domain.tarefa.Swipe
 import br.app.divvup.core.domain.conta.ResultadoConta
 import br.app.divvup.core.domain.conta.Sessao
 import br.app.divvup.core.domain.ranking.RepositorioDeRanking
+import br.app.divvup.core.domain.notificacao.Preferencias
 import br.app.divvup.core.domain.notificacao.RepositorioDeNotificacoes
 import br.app.divvup.core.model.Casa
 import br.app.divvup.core.model.Notificacao
@@ -253,5 +254,14 @@ class FakeRepositorioDeNotificacoes(iniciais: List<Notificacao> = emptyList()) :
 
     override suspend fun registrarAparelho(token: String?) {
         registrados += token
+    }
+
+    val prefs = MutableStateFlow(Preferencias())
+    override val preferencias: StateFlow<Preferencias> = prefs
+    var salvarDaCerto = true
+
+    override suspend fun salvar(preferencias: Preferencias): Boolean {
+        if (salvarDaCerto) prefs.value = preferencias
+        return salvarDaCerto
     }
 }

@@ -23,6 +23,9 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import java.time.Instant
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import br.app.divvup.core.domain.notificacao.Preferencias
 import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -77,8 +80,51 @@ class RepositorioDeNotificacoesFirebase @Inject constructor(
         }
     }
 
+    override val preferencias: Flow<Preferencias> = atual.uid.flatMapLatest { uid ->
+        if (uid == null) {
+            flowOf(Preferencias())
+        } else {
+            observar(atual.firestore.collection("users").document(uid)).map { doc ->
+                val tipos = (doc?.get("notifPrefs") as? Map<*, *>).orEmpty().mapNotNull { (k, v) ->
+                    val tipo = TipoDeNotificacao.entries.firstOrNull { it.name == k } ?: return@mapNotNull null
+                    tipo to (v as? Boolean ?: return@mapNotNull null)
+                }.toMap()
+                val padrao = Preferencias()
+                Preferencias(
+                    tipos = tipos,
+                    silencioLigado = doc?.getBoolean("quietHours.enabled") ?: padrao.silencioLigado,
+                    inicio = doc?.getString("quietHours.start")?.let(::horario) ?: padrao.inicio,
+                    fim = doc?.getString("quietHours.end")?.let(::horario) ?: padrao.fim,
+                )
+            }
+        }
+    }
+
+    override suspend fun salvar(preferencias: Preferencias): Boolean = try {
+        backend.chamar(
+            "salvarPreferencias",
+            buildJsonObject {
+                put("tipos", buildJsonObject { TipoDeNotificacao.entries.forEach { put(it.name, JsonPrimitive(preferencias.ligado(it))) } })
+                put(
+                    "silencio",
+                    buildJsonObject {
+                        put("ligado", JsonPrimitive(preferencias.silencioLigado))
+                        put("inicio", JsonPrimitive(preferencias.inicio.format(HHMM)))
+                        put("fim", JsonPrimitive(preferencias.fim.format(HHMM)))
+                    },
+                )
+            },
+        )
+        true
+    } catch (e: CancellationException) {
+        throw e
+    } catch (_: Exception) {
+        false
+    }
+
     private companion object {
         const val LIMITE = 100L
+        val HHMM: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     }
 }
 
@@ -94,3 +140,5 @@ private fun DocumentSnapshot.paraNotificacao(): Notificacao? {
         tarefaId = getString("refs.taskId"),
     )
 }
+
+private fun horario(texto: String): LocalTime? = runCatching { LocalTime.parse(texto) }.getOrNull()
