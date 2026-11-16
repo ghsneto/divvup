@@ -63,6 +63,21 @@ internal object OnboardingMedidas {
     val numeroTarefas = 57.sp
     val miniatura = 72.dp
     val botaoBora = 56.dp
+
+    // B7 Permissao.
+    val exemplosTopo = 28.dp
+    val exemplosPadding = 20.dp
+    val exemploMarcaFundo = 28.dp
+    val exemploMarca = 20.dp
+    val exemploRecuo = 24.dp
+    val semRecuo = 0.dp
+    val exemploRecuoPequeno = 8.dp
+    val exemploRecuoMedio = 12.dp
+    val exemploPaddingV = 12.dp
+    val textoQuando = 12.sp
+    val permissaoTopo = 28.dp
+    val permissaoTitulo = 57.sp
+    val permissaoTextoMaximo = 290.dp
 }
 
 /** Passos do onboarding (TELAS.md: B1 → B2 → B3/B4 → B6 → B7). */

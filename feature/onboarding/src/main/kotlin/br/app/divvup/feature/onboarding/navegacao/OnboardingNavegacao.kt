@@ -1,5 +1,14 @@
 package br.app.divvup.feature.onboarding.navegacao
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
+import androidx.navigation.toRoute
+import br.app.divvup.feature.onboarding.permissao.PermissaoScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,6 +48,9 @@ import kotlinx.serialization.Serializable
 /** B5. */
 @Serializable data object RotaBemVindo
 
+/** B7: depois de criar (segue para B8) ou de entrar numa casa (segue para C1). */
+@Serializable data class RotaPermissao(val criouCasa: Boolean)
+
 /** Chave em que E3 devolve o avatar escolhido (igual a `GaleriaArgs.RESULTADO`). */
 const val RESULTADO_AVATAR = "avatarEscolhido"
 
@@ -47,9 +59,9 @@ class OnboardingAcoes(
     val aoAbrirGaleria: (avatarAtual: String) -> Unit,
     /** B2 "Sair da conta": a sessão já foi encerrada. */
     val aoSair: () -> Unit,
-    /** Casa criada (B3): segue para "chama a galera" (B8). */
+    /** Casa criada (B3 → B7): segue para "chama a galera" (B8). */
     val aoCriarCasa: () -> Unit,
-    /** Entrou numa casa (B5 "Bora") ou já tinha casa: segue para a estrutura principal. */
+    /** Entrou numa casa (B5 "Bora" → B7) ou já tinha casa: segue para a estrutura principal. */
     val aoTerCasa: () -> Unit,
 )
 
@@ -58,7 +70,29 @@ fun NavGraphBuilder.grafoDeOnboarding(nav: NavController, acoes: OnboardingAcoes
     composable<RotaSuaCasa> { SuaCasaRota(nav, acoes) }
     composable<RotaCriarCasa> { CriarCasaRota(nav, acoes) }
     composable<RotaCodigo> { CodigoRota(nav) }
-    composable<RotaBemVindo> { BemVindoRota(acoes) }
+    composable<RotaBemVindo> { BemVindoRota(acoes, aoBora = { nav.navigate(RotaPermissao(criouCasa = false)) }) }
+    composable<RotaPermissao> { entrada ->
+        val criou = entrada.toRoute<RotaPermissao>().criouCasa
+        PermissaoRota(aoSeguir = if (criou) acoes.aoCriarCasa else acoes.aoTerCasa)
+    }
+}
+
+/**
+ * R-36: só pede no Android 13+ e se ainda não foi concedida; senão segue direto. "Agora não" e a
+ * resposta do sistema (sim ou não) seguem o fluxo.
+ */
+@Composable
+private fun PermissaoRota(aoSeguir: () -> Unit) {
+    val contexto = LocalContext.current
+    val precisa = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+        ContextCompat.checkSelfPermission(contexto, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+    LaunchedEffect(precisa) { if (!precisa) aoSeguir() }
+    if (!precisa) return
+    val pedir = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { aoSeguir() }
+    PermissaoScreen(
+        aoAtivar = { if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) pedir.launch(Manifest.permission.POST_NOTIFICATIONS) },
+        aoAgoraNao = aoSeguir,
+    )
 }
 
 @Composable
@@ -111,7 +145,7 @@ private fun CriarCasaRota(nav: NavController, acoes: OnboardingAcoes, viewModel:
         aoEscolherTipo = viewModel::aoEscolherTipo,
         aoAnunciar = viewModel::aoAnunciar,
         aoCriar = viewModel::criar,
-        aoSeguir = acoes.aoCriarCasa,
+        aoSeguir = { nav.navigate(RotaPermissao(criouCasa = true)) },
     )
 }
 
@@ -140,7 +174,7 @@ private fun CodigoRota(nav: NavController, viewModel: CodigoViewModel = hiltView
 }
 
 @Composable
-private fun BemVindoRota(acoes: OnboardingAcoes, viewModel: BemVindoViewModel = hiltViewModel()) {
+private fun BemVindoRota(acoes: OnboardingAcoes, aoBora: () -> Unit, viewModel: BemVindoViewModel = hiltViewModel()) {
     val estado by viewModel.estado.collectAsStateWithLifecycle()
-    BemVindoScreen(estado, aoBora = acoes.aoTerCasa)
+    BemVindoScreen(estado, aoBora = aoBora)
 }

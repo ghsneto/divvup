@@ -99,6 +99,8 @@ dependencies {
     implementation(project(":feature:notifications"))
     implementation(project(":feature:profile"))
     implementation(project(":feature:discover"))
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)

@@ -6,12 +6,14 @@ import br.app.divvup.core.domain.casa.RepositorioDeCasa
 import br.app.divvup.core.domain.casa.RepositorioDeConvites
 import br.app.divvup.core.domain.conta.RepositorioDeConta
 import br.app.divvup.core.domain.ranking.RepositorioDeRanking
+import br.app.divvup.core.domain.notificacao.RepositorioDeNotificacoes
 import br.app.divvup.core.domain.tarefa.RepositorioDeTarefas
 import br.app.divvup.core.testing.fakes.FakeMonitorDeConexao
 import br.app.divvup.core.testing.fakes.FakeRepositorioDeCasa
 import br.app.divvup.core.testing.fakes.FakeRepositorioDeConvites
 import br.app.divvup.core.testing.fakes.FakeRepositorioDeConta
 import br.app.divvup.core.testing.fakes.FakeRepositorioDeRanking
+import br.app.divvup.core.testing.fakes.FakeRepositorioDeNotificacoes
 import br.app.divvup.core.testing.fakes.FakeRepositorioDeTarefas
 import dagger.Module
 import dagger.Provides
@@ -38,6 +40,10 @@ object RepositoriosDeTesteModule {
     @Provides
     @Singleton
     fun ranking(): RepositorioDeRanking = FakeRepositorioDeRanking()
+
+    @Provides
+    @Singleton
+    fun notificacoes(): RepositorioDeNotificacoes = FakeRepositorioDeNotificacoes()
 
     @Provides @Singleton
     fun conexao(): MonitorDeConexao = FakeMonitorDeConexao()

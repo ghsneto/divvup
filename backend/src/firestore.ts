@@ -208,7 +208,8 @@ export class Firestore {
     return this.http(url, { ...init, headers });
   }
 
-  private async tokenDeAcesso(): Promise<string> {
+  /** Token OAuth da conta de serviço (Firestore e FCM). */
+  async tokenDeAcesso(): Promise<string> {
     // O Emulator aceita "owner" como credencial de administrador.
     if (usaEmulador(this.env)) return "owner";
     const agora = Date.now();
@@ -216,7 +217,7 @@ export class Firestore {
     if (!this.env.FIREBASE_SERVICE_ACCOUNT) throw new Error("FIREBASE_SERVICE_ACCOUNT ausente");
     const conta = JSON.parse(this.env.FIREBASE_SERVICE_ACCOUNT) as ContaDeServico;
     const chave = await importPKCS8(conta.private_key, "RS256");
-    const afirmacao = await new SignJWT({ scope: "https://www.googleapis.com/auth/datastore" })
+    const afirmacao = await new SignJWT({ scope: "https://www.googleapis.com/auth/datastore https://www.googleapis.com/auth/firebase.messaging" })
       .setProtectedHeader({ alg: "RS256", typ: "JWT" })
       .setIssuer(conta.client_email)
       .setAudience("https://oauth2.googleapis.com/token")

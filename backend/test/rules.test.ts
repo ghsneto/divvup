@@ -133,4 +133,17 @@ describe("Security Rules de houses/{casaId}", () => {
     await assertFails(setDoc(doc(db, "houses/h1/members/novo"), { role: "ADMIN", status: "ACTIVE" }));
     await assertFails(updateDoc(doc(db, "houses/h1/tasks/t1"), { points: 100 }));
   });
+
+  it("F1: a pessoa lê os próprios avisos e só muda o campo read", async () => {
+    await ambiente.withSecurityRulesDisabled(async (c) => {
+      await setDoc(doc(c.firestore(), "users/u1/notifications/n1"), { title: "x", read: false });
+    });
+    const dono = ambiente.authenticatedContext("u1").firestore();
+    await assertSucceeds(getDoc(doc(dono, "users/u1/notifications/n1")));
+    await assertSucceeds(updateDoc(doc(dono, "users/u1/notifications/n1"), { read: true }));
+    await assertFails(updateDoc(doc(dono, "users/u1/notifications/n1"), { title: "y" }));
+    const outro = ambiente.authenticatedContext("u2").firestore();
+    await assertFails(getDoc(doc(outro, "users/u1/notifications/n1")));
+    await assertFails(setDoc(doc(dono, "users/u1/notifications/n2"), { title: "z", read: false }));
+  });
 });

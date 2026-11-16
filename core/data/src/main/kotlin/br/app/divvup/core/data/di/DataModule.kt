@@ -6,6 +6,8 @@ import br.app.divvup.core.data.backend.FonteDeToken
 import br.app.divvup.core.data.casa.RepositorioDeCasaFirebase
 import br.app.divvup.core.data.casa.RepositorioDeConvitesFirebase
 import br.app.divvup.core.data.ranking.RepositorioDeRankingFirebase
+import br.app.divvup.core.data.notificacao.RepositorioDeNotificacoesFirebase
+import br.app.divvup.core.domain.notificacao.RepositorioDeNotificacoes
 import br.app.divvup.core.domain.ranking.RepositorioDeRanking
 import br.app.divvup.core.data.tarefa.RepositorioDeTarefasFirebase
 import br.app.divvup.core.data.conexao.MonitorDeConexao
@@ -97,6 +99,9 @@ abstract class RepositoriosModule {
 
     @Binds
     abstract fun repositorioDeTarefas(impl: RepositorioDeTarefasFirebase): RepositorioDeTarefas
+
+    @Binds
+    abstract fun repositorioDeNotificacoes(impl: RepositorioDeNotificacoesFirebase): RepositorioDeNotificacoes
 
     @Binds
     abstract fun repositorioDeRanking(impl: RepositorioDeRankingFirebase): RepositorioDeRanking

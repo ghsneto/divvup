@@ -77,4 +77,19 @@
     <string name="bemvindo_esperando">esperando alguém no deck agora</string>
     <string name="bemvindo_temporada">O mês vale 1 temporada. Quem fizer mais pontos até dia %1$s leva a medalha.</string>
     <string name="bemvindo_bora">Bora</string>
+
+    <!-- B7 (docs/design/fonte/Permissao.dc.html) -->
+    <string name="permissao_titulo">te avisamos na hora certa</string>
+    <string name="permissao_texto">Quando uma tarefa for sua ou estiver perto do prazo. Dá pra ajustar tudo depois no perfil.</string>
+    <string name="permissao_ativar">Ativar notificações</string>
+    <string name="permissao_agora_nao">Agora não</string>
+    <string name="permissao_ex1_titulo">Tirar o lixo veio pra você</string>
+    <string name="permissao_ex1_texto">Você tem menos pontos no mês, então essa é sua. Vence em 24 h.</string>
+    <string name="permissao_ex1_quando">agora</string>
+    <string name="permissao_ex2_titulo">Faltam 2 h</string>
+    <string name="permissao_ex2_texto">Lavar a louça do jantar vence às 22h.</string>
+    <string name="permissao_ex2_quando" translatable="false">20:00</string>
+    <string name="permissao_ex3_titulo">Ana venceu novembro</string>
+    <string name="permissao_ex3_texto">Temporada fechada. Você ficou em 2º com 325 pts.</string>
+    <string name="permissao_ex3_quando">dia 1</string>
 </resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textos de F1 (docs/design/fonte/Notificacoes.dc.html) e B7 (Permissao.dc.html). -->
+<resources>
+    <string name="avisos_voltar">Voltar</string>
+    <string name="avisos_marcar_todas">Marcar todas como lidas</string>
+    <string name="avisos_titulo">avisos</string>
+    <plurals name="avisos_novas">
+        <item quantity="one">%1$d nova</item>
+        <item quantity="other">%1$d novas</item>
+    </plurals>
+    <string name="avisos_30_dias">Últimos 30 dias.</string>
+    <string name="avisos_vazio_titulo">nenhuma notificação por aqui</string>
+    <string name="avisos_vazio_texto">Quando algo acontecer na casa, aparece aqui.</string>
+    <string name="avisos_hoje">hoje</string>
+    <string name="avisos_ontem">ontem</string>
+    <string name="avisos_semana">esta semana</string>
+    <string name="avisos_antes">antes</string>
+    <string name="avisos_nao_lida">não lida</string>
+    <string name="avisos_agora">agora</string>
+    <string name="avisos_ha_min">há %1$d min</string>
+    <string name="avisos_ha_h">há %1$d h</string>
+    <string name="avisos_dia_hora">%1$s às %2$s</string>
+</resources>
