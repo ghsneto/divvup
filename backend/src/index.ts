@@ -8,6 +8,7 @@ import { alterarPapel, editarCasa, removerMembro, sairDaCasa } from "./operacoes
 import { assumirTarefa, desfazer, passarTarefa, reverPassadas } from "./operacoes/match.js";
 import { cancelarTarefa, concluirTarefa, criarTarefa, devolverTarefa, editarTarefa, excluirTarefa } from "./operacoes/tarefas.js";
 import { criarPerfil } from "./operacoes/perfil.js";
+import { rotinaAgendada } from "./operacoes/agendadas.js";
 
 /**
  * Backend do Divvup (Cloudflare Worker, ADR 0001). Rotas:
@@ -23,7 +24,8 @@ import { criarPerfil } from "./operacoes/perfil.js";
  *   `/v1/reverPassadas` (R-15 a R-20).
  * - `POST /v1/concluirTarefa`, `/v1/devolverTarefa`, `/v1/cancelarTarefa`, `/v1/excluirTarefa`
  *   `{tarefaId}` e `/v1/editarTarefa` `{tarefaId, titulo, …}` (R-12, R-19, R-21, R-22).
- * As operações protegidas da SPEC §4.2 entram aqui, uma rota por operação.
+ * As operações protegidas da SPEC §4.2 entram aqui, uma rota por operação. O Cron Trigger chama
+ * `scheduled`, que roda as rotinas de `operacoes/agendadas.ts`.
  */
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
@@ -88,6 +90,13 @@ export default {
     } catch (erro) {
       return respostaDeErro(erro);
     }
+  },
+
+  /** Cron Trigger (`wrangler.toml`): atrasadas (R-23). */
+  async scheduled(evento: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
+    ctx.waitUntil(
+      rotinaAgendada(new Firestore(env), new Date(evento.scheduledTime)).then((r) => console.log("rotina agendada", JSON.stringify(r))),
+    );
   },
 } satisfies ExportedHandler<Env>;
 

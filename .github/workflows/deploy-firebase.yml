@@ -1,0 +1,59 @@
+name: Deploy das regras e índices do Firestore
+
+# Publica firebase/firestore.rules e firebase/firestore.indexes.json no divvup-prod (ADR 0002)
+# a cada push na main que mexe neles. Usa a mesma conta de serviço do backend; nada roda contra
+# divvup-prod além deste deploy de configuração (testes usam só o Emulator).
+on:
+  push:
+    branches: [main]
+    paths: [firebase/firestore.rules, firebase/firestore.indexes.json, .github/workflows/deploy-firebase.yml]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-firebase
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CONTA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}
+    steps:
+      - name: Verificar segredo
+        id: segredo
+        run: |
+          if [ -z "$CONTA" ]; then
+            echo "Segredo FIREBASE_SERVICE_ACCOUNT_PROD ausente; deploy pulado."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v5
+        if: steps.segredo.outputs.ok == 'true'
+
+      - uses: actions/setup-node@v5
+        if: steps.segredo.outputs.ok == 'true'
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - if: steps.segredo.outputs.ok == 'true'
+        run: npm ci
+        working-directory: backend
+
+      - name: Publicar regras e índices
+        if: steps.segredo.outputs.ok == 'true'
+        working-directory: backend
+        run: |
+          credencial="$RUNNER_TEMP/conta.json"
+          printf '%s' "$CONTA" > "$credencial"
+          GOOGLE_APPLICATION_CREDENTIALS="$credencial" npx firebase deploy \
+            --only firestore:rules,firestore:indexes \
+            --config ../firebase/firebase.json --project divvup-prod --non-interactive
+          rm -f "$credencial"

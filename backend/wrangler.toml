@@ -20,5 +20,9 @@ name = "divvup-backend"
 routes = [{ pattern = "api.divvup.app.br", custom_domain = true }]
 preview_urls = false
 
+# Rotinas agendadas (atrasadas, R-23). A cada 15 min; o plano gratuito permite Cron Triggers.
+[env.prod.triggers]
+crons = ["*/15 * * * *"]
+
 [env.prod.vars]
 FIREBASE_PROJECT_ID = "divvup-prod"

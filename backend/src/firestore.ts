@@ -111,6 +111,31 @@ export class Firestore {
       .map((d) => ({ uid: d.name.slice(d.name.lastIndexOf("/") + 1), dados: camposDeRest(d.fields ?? {}) }));
   }
 
+  /**
+   * Consulta um grupo de coleções (todas as `tasks` de todas as casas, por exemplo) com filtros
+   * combinados por E. Precisa do índice de grupo em `firebase/firestore.indexes.json`.
+   */
+  async consultarGrupo(
+    colecao: string,
+    filtros: { campo: string; op: "EQUAL" | "LESS_THAN" | "LESS_THAN_OR_EQUAL"; valor: Valor }[],
+    limite: number,
+  ): Promise<{ caminho: string; dados: Documento }[]> {
+    const condicoes = filtros.map((f) => ({ fieldFilter: { field: { fieldPath: f.campo }, op: f.op, value: paraRest(f.valor) } }));
+    const corpo = {
+      structuredQuery: {
+        from: [{ collectionId: colecao, allDescendants: true }],
+        where: condicoes.length === 1 ? condicoes[0] : { compositeFilter: { op: "AND", filters: condicoes } },
+        limit: limite,
+      },
+    };
+    const resp = await this.chamar(`${this.base}:runQuery`, { method: "POST", body: JSON.stringify(corpo) });
+    await garantirOk(resp, "runQuery");
+    const itens = (await resp.json()) as { document?: { name: string; fields?: Record<string, ValorRest> } }[];
+    return itens
+      .flatMap((i) => (i.document ? [i.document] : []))
+      .map((d) => ({ caminho: d.name.slice(this.raiz.length + 1), dados: camposDeRest(d.fields ?? {}) }));
+  }
+
   /** Grava e apaga atomicamente, sem transação de leitura. */
   async commit(escritas: Escrita[]): Promise<void> {
     await this.enviarCommit(escritas);
